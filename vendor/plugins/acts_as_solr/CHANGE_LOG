@@ -1,0 +1,46 @@
+[CHANGE_LOG]
+11-07-2006:
+========================
+[NEW] Added :background option, which takes and integer value (in minutes) to wait before committing the changes to Solr.  This depends on rail_cron being installed.  By setting up the background job we prevent the users from having to wait for Solr records to be created, and we keep from updating the index over and over for quickly successive changes. (Rob Kaufman)
+
+11-02-2006: Version 0.03
+========================
+[PLUGIN]
+[NEW] Added a method (Model.count_by_solr) that returns the total number of documents found based on query passed
+[NEW] Added configuration for production and development environments
+
+10-21-2006: Version 0.02
+========================
+[PLUGIN]
+[FIX] Fixed bug when mixing search-by-field and 'free' search: Model.find_by_solr 'solr AND name:Thiago'
+[FIX] Fixed bug with multi-terms search: Book.find_by_solr 'anteater john'
+[FIX] Fixed bug when including more than one search field: Model.find_by_solr 'name:Thiago AND engine:Solr'
+[FIX] Fixed bug when rebuilding the index, it wasn't saving the data
+[NEW] Added the ability to index custom methods from a model as search fields
+[NEW] Added a search method (Model.find_id_by_solr) that will return only the id of the results
+
+[SCHEMA.XML]
+[NEW] Added a new field: <field name="default" type="text" indexed="true" stored="true" /> 
+[NEW] Added a default search field: <defaultSearchField>default</defaultSearchField>
+[FIX] Changed the defaultOperator to AND instead of OR
+
+09-29-2006: Version 0.01
+========================
+[PLUGIN]
+[NEW] Included the option of having a Solr config file inside the rails env.
+[NEW] Added the ability of indexing only certain fields, if you chose to.
+[NEW] Added configuration options
+[NEW] Changed the way the search was done:
+  	  Old: You were forced the specify the field you wanted to look for 
+      	('field:value') and you had to specify a default search field as 
+       	well, for when you didn't include the 'field' in the search term
+  	  New: The new search features include: 
+        - You don't have to specify a default search field; 
+        - You are not forced to include the field name in the search term, 
+          unless you choose to search for a specific field ('name:Thiago');
+        - You can pass the starting row and the number of rows per page,
+          which is usefull for pagination
+[NEW] Included a method to rebuild the index files
+
+[SCHEMA.XML]
+[NEW] Created an optimized version of the config file to better work with this plugin

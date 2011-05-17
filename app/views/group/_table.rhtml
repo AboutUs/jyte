@@ -1,0 +1,41 @@
+<% cols = 6.0 %>
+<% rows = (the_groups.size / cols).ceil %>
+<% tcount = 0 %>
+
+<table class="group_table">
+
+  <% for r in 0...rows %>
+  <tr>
+    
+    <% for c in 0...cols %>
+    <td style="padding:5px;width:85px;">
+
+      <% g = the_groups[tcount] %>
+      <% if g %>
+      <%= group_icon(:group=>g,:size=>'thumb')%>
+      <a href="<%=gurl(g)%>"><%=truncate(h(g.name),50)%></a><br/>
+
+      <span style="font-size:smaller;">
+        <%= pluralize(g.users.size, 'member','members') %>
+        
+        <% if g.respond_to? 'contacts_count' %> 
+        <br/><%= pluralize(g.contacts_count, 'contact', 'contacts') %> 
+        <% end %>
+
+        <% if g.respond_to? 'interests_count' %> 
+        <br/><%= pluralize(g.interests_count, 'interest', 'interests') %> 
+        <% end %>
+      </span>
+
+      <% else %>
+      &nbsp;
+      <% end %>
+      
+      <% tcount += 1%>
+    </td>
+    <% end %>
+
+  </tr>
+  <% end %>
+
+</table>

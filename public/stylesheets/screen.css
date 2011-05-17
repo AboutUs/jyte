@@ -1,0 +1,239 @@
+* {font-family:sans-serif;}
+body {
+  margin:0;
+  padding:0;
+  background: url('/images/bg.png') repeat-x #fff;
+}
+
+div {padding:.5em;}
+a {color: #333;}
+a:hover {color: #555;}
+h3 {margin-top:0;padding-top:0;}
+.h {color: #2659b5;}
+.subtle {color:#333;}
+.small {font-size:smaller;}
+.tiny {font-size:xx-small;}
+.nom {margin:0;}
+.nop {padding:0;}
+.bold {}
+.flash_notice {border:1px solid red;}
+.important {color:#700;}
+.success {font-color:#070;}
+
+#top_accent_line {
+  height:10px;
+  background: url('/images/header_accent.png') repeat-x;
+  padding:0;
+}
+
+
+#j_wrap {
+  height: 2em;
+  padding:0;
+}
+
+
+.j_menu_section a {
+  margin:0;
+  padding-top:.5em;
+  padding-bottom:.5em;
+}
+#j_menu {float:right;font-size:smaller;}
+#j_logo {float:left; font-weight:bold;}
+#j_logo a {text-decoration:none;color:#000;}
+#j_slogan {
+  font-size:0.5em;
+  color:#444;
+  font-weight:normal;
+  padding:0;
+  padding-left:1.5em
+}
+#greek_letter {
+  font-size:0.4em;
+  font-weight:normal;
+  color:#556;
+  vertical-align:110%;
+}
+
+
+/* openid */
+#openid_url {
+  background: url('/images/openid-icon-small.gif') no-repeat;
+  background-position: 0 50%;
+  padding:2px;
+  padding-left: 18px;
+  width:14em;
+  font-size:smaller;
+}
+#content_wrap {font-size:.9em;}
+
+#right_bar {float:right; width: 300px}
+
+.side_box {
+  border: 1px solid #aaa;
+  background: url('/images/fade.png') repeat-x;
+}
+
+.comment {
+  background: #eee;
+  padding:.3em;
+  margin-top:.5em;
+  margin-bottom:.5em;
+  width:40em;
+}
+.agree_comment {
+  background: #e0ffe0;
+  padding:.3em;
+  margin-top:.5em;
+  margin-bottom:.5em;
+  width:40em;
+}
+.disagree_comment {
+  background: #ffe0e0;
+  padding:.3em;
+  margin-top:.5em;
+  margin-bottom:.5em;
+  width:40em;
+}
+.comment_header {
+  float: left;
+  width: 6em;
+}
+.comment_body {
+  float: left;
+  background: #fff;
+  width:25em;
+  padding:.3em;
+  margin-top:.3em;
+  margin-bottom:.3em;
+}
+.children {
+  padding-left: 2em;
+}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul li.selected { background-color: #ffb;}
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  height:32px;
+  cursor:pointer;
+}
+#claim_box {
+  font-size:1.3em;
+  padding: 5px;
+  width: 30em;
+}
+
+.claim_header {
+  height:48px;
+  margin:0;
+  padding:0;
+  margin-bottom:1em;
+}
+.header_icon {
+  float:left;
+  height:48px;
+  border:1px solid black;
+}
+.claim_title {
+  font-size:1.2em;
+  font-weight:bold;
+}
+.left {float:left;}
+.lm {margin-left:2px;}
+.novp {padding-top:0;padding-bottom:0;}
+.novm {margin-top:0;margin-bottom:0;}
+.nobm {margin-bottom:0;}
+.notm {margin-top:0;}
+.agree {color:#39983f;}
+.disagree {color:#a42d2d;}
+.subtle_line {border:none;border-top:1px solid #aaa;}
+.vote_summary {padding:.2em;}
+.iconborder {border:1px solid #000;}
+.map {padding:0px;margin:0px;margin-bottom:.5em;width:250px;height:250px;border:1px solid #000;overflow:hidden;}
+.r_image {border:1px solid #000;margin-bottom:.5em;}
+.resources_section {margin:0;padding:0;width:250px;}
+#r_sidebar {float:right;width:250px;padding:0;margin-right:1em;overflow:clip;}
+#r_map div {margin:0;padding:0;}
+.r_widget {margin:0;padding:0;margin-bottom:.5em;}
+#r_sidebar ul {padding-left:1em;margin-left:0;}
+
+#qc {
+  display:none;
+  position:absolute;
+  width:30em;
+  height:5em;
+  left:50%;
+  top:50%;
+  margin-left:-15em;
+  margin-top:-2.5em;
+
+  border:3px solid #444;
+  background: #fff;
+}
+#qc_close {
+  float:right;
+  margin:0;
+  padding:0;
+  width:2em;
+  height:1em;
+}
+.voteimg {border:none;}
+.pmenu {
+  position:absolute;
+  border:1px solid black;
+  background:#fff;
+  margin-left:6em;
+}
+.pmenu ul {
+  margin:0;
+  padding:1em;
+}
+.vote_highlight {
+  position:absolute;
+  width:34px;
+  height:52px;
+  zindex: 0;
+}
+
+.form_section {
+  margin-bottom: 1em;
+}
+.form_label {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.form_label_subtle {
+  font-size:.8em;
+  font-color: #333;
+}
+.form_section input[type=text], .form_section textarea, .form_section input[type=file] {
+  width: 300px;
+  padding: 3px;
+  font-size: 1em;
+}
+
+.com_header {
+  height:250px;
+  margin:0;
+  padding:0;
+  margin-bottom:1em;
+}
+.com_title { font-size:2em;font-weight:bold; }
+.com_icon {border:1px solid black;}
+.com_meta {width:25em;}

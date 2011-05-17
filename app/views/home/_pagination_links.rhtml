@@ -1,0 +1,3 @@
+  <%= link_to('Previous',{:page=>@paginator.current.previous}) if @paginator.current.previous %>
+  <%= pagination_links(@paginator) %>
+  <%= link_to('Next',{:page=>@paginator.current.next}) if @paginator.current.next %>

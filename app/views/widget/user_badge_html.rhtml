@@ -1,0 +1,70 @@
+<% if @user -%>
+<% unless params['styled'] == 'false' -%>
+<style type="text/css">
+#jyte_container {font-family:sans-serif;font-size:12px;}
+#jyte_container {width:150px;border:1px solid #aaa;padding:5px;}
+#jyte_top_table {width:100%;}
+#jyte_top_table td {text-align:center;}
+#jyte_cred_total {font-size:30px;font-weight:bold;}
+#jyte_container p {font-size:12px;margin-bottom:0;}
+#jyte_container a {text-decoration:none;}
+#jyte_container a:hover {text-decoration:underline;}
+#jyte_best_qualaties_header {font-weight:bold;}
+.jyte_bq_score {text-align:right;}
+#jyte_best_qualaties_table {width:100%;font-size:12px;}
+#jyte_more {text-align:right;}
+#jyte_more a {color:#aaa;}
+</style>
+<% end -%>
+
+<div id="jyte_container">
+
+  <table id="jyte_top_table">
+    <tr>
+      <td><img id="jyte_icon" src="<%=@stuff['thumb_icon_url']%>"/></td>
+      <td>
+        <span id="jyte_cred_total"><%=@stuff['cred_total']%></span>
+        <br/>
+        <span id="jyte_cred_tagline">Jyte Cred</span>
+      </td>
+    </tr>
+  </table>
+
+  <p id="jyte_summary">
+    <span id="jyte_display_name"><%=user_link(:user=>@user)%></span>
+    has received cred from <%=@stuff['incoming_cred_count']%> people,
+    made 
+    <%=link_to("#{@stuff['claims_count']} claims",:controller=>'claim',:action=>'find',:by=>@user.s,:only_path=>false)%>,
+    <a href="<%=url_for(:controller=>'claim',:action=>'find',:comments_by=>@user.s,:only_path=>false)%>"><%=@stuff['comments_count']%> comments</a>,
+    and voted on <%=@stuff['votes_count']%> claims.
+  </p>
+
+  <% if @stuff['top_cred_tags'].length > 0 -%>
+  <p>
+    <span id="jyte_best_qualaties_header">Best qualities</span><br/>
+    <table id="jyte_best_qualaties_table">
+    <% @stuff['top_cred_tags'].each { |tag,score|-%>
+    <tr>
+      <td><a href="<%=url_for(:controller=>'user',:action=>'tag',:by=>'cred',:tag=>tag,:only_path=>false)%>"><%=h(tag)%></a></td>
+      <td class="jyte_bq_score">
+        <img src="http://jyte.com/images/dots/<%=cred_n_for_score(score)%>.png"
+             title="<%= display_cred(score).to_s + ' '+h(tag)+' cred' %>" 
+             />
+      </td>
+    </tr>
+    <% } -%>
+  </table>
+  </p>
+  <% end -%>
+
+  <p id="jyte_more">
+    <a href="<%=xprofile_url(@user.s)%>">More at Jyte.com &rarr;</a>
+  </p>
+
+</div>
+
+<% else -%>
+<div style="border:2px solid red;">
+  Invalid Jyte user: <%= h(params[:openid]) %>
+</div>
+<% end -%>

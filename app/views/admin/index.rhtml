@@ -1,0 +1,112 @@
+<h2>Jyte User Stats</h2>
+<p>
+<table>
+
+  <tr>
+    <td width="80%">Users</td>
+    <td><%= @unique_users %></td>
+  </tr>
+
+  <tr>
+    <td>Verified identifiers</td>
+    <td><%= @verified_identifers %></td>
+  </tr>
+
+  <tr>
+    <td>New users today</td>
+    <td><%= @todays_users %></td>
+  </tr>
+
+  <tr>
+    <td>New users yesterday</td>
+    <td><%= @yesterdays_users %></td>
+  </tr>
+  
+  <tr>
+	<td>Users last 7 days</td>
+	<td><%= @seven_day_users%>
+  </tr>
+  <tr>
+	<td>Users last 30 days</td>
+	<td><%= @thirty_day_users%>
+  </tr>
+</table>
+
+<br><br>
+
+<h2>Jyte Group Stats</h2>
+<p>
+<table>
+  <tr>
+	<td width="80%">Total Groups</td>
+	<td><%= @total_groups%></td>
+  </tr>
+  <tr>
+	<td width="80%">Groups Claims</td>
+	<td><%= @total_group_claims%></td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td>There are <%= @num_users_ingroups%> users who have joined groups <%= @num_groups_joined%> times</td>
+  </tr>
+</table>	
+</p>
+
+<br><br>
+<h2>Jyte Claim Stats</h2>
+<p>
+<table>
+  <tr>
+    <td width="80%">Total Claims</td>
+    <td><%= @total_claims %></td>
+  </tr>
+
+  <tr>
+    <td>Total Votes</td>
+    <td><%= @total_votes %></td>
+  </tr>
+
+  <tr>
+    <td>Total Comments</td>
+    <td><%= @total_comments %></td>
+  </tr>
+
+  <tr>
+	<td>Today's claims</td>
+	<td><%= @todays_claims%></td>
+  </tr>
+
+  <tr>
+	<td>Today's votes</td>
+	<td><%= @todays_votes%></td>
+  </tr>
+  
+  <tr>
+  	<td>Today's comments</td>
+	<td><%= @todays_comments%></td>
+  </tr>
+</table>
+</p>
+
+<br><br>
+<h2>Jyte Cred Stats</h2>
+<p>
+<table>
+  <tr>
+    <td width="80%">Cred entries</td>
+    <td><%= @total_creds %></td>
+  </tr>
+  <tr>
+	<td width="80%">Creds entries today</td>
+	<td><%= @todays_creds %></td>
+  </tr>
+</table>
+</p>
+
+<br/><br/>
+<h2>User Admin</h2>
+<% form_tag :action => 'user' do %>
+OpenID: <%= text_field_tag :openid %>
+<%= submit_tag 'Show user' %>
+<% end %>

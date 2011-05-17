@@ -1,0 +1,111 @@
+<tr id="claim_<%=claim.id%>"
+    <% if defined? tr_class and tr_class %>class="<%= tr_class%>"<% end %>
+    <%- if logged_in? -%>
+    onmouseover="Element.show('claim_marking_<%= claim.id %>');"
+    onmouseout="var cm = $('claim_marking_<%= claim.id %>');
+                if(! cm.hasClassName('flagged')) Element.hide(cm);"
+    <%- end -%>
+    >
+  <td class="claim_score">
+    <%= render :partial => '/claim_votes', :locals => {:claim=>claim} %>
+  </td>
+  
+  <td class="claim_text">
+    <a id="claim_title_<%=claim.id%>" class="claim_title"
+       <% if claim.trashed_by(liu) %>style="text-decoration: line-through;"<% end %>
+       href="<%= claim_url :urlslug=>claim.urlslug%>">
+      <%= render_claim_title(claim,false) %>
+    </a>
+    
+    <div class="claim_attributes">
+      
+      <% if (claim.body and !claim.body.strip.empty?) or claim_has_image?(claim) -%>
+      <a href="<%=claim_url :urlslug=>claim.urlslug%>">
+        <img src="/images/picture.png"
+             style="float:left;margin:0;margin-top:-3px;margin-right:5px;border:none;"
+             title="This claim has a description or image." />
+      </a>
+      <% end -%>
+
+      <span class="claim_author">
+        By <%= cred_img(claim.user_id) %> <%= user_link :user_id => claim.user_id %>
+        <%- if claim.group -%>
+         for <%=link_to(h(claim.group.name), group_url(:urlslug=>claim.group.urlslug))%>
+        <%- end -%>
+        <%= time_ago_in_words(claim.created_at) %> ago
+        <% if claim.comments_count > 0 %>
+        &nbsp;&rarr;
+        <a href="<%=claim_url :urlslug=>claim.urlslug,:anchor=>'comments'%>"><%= pluralize(claim.comments_count,'comment','comments')%></a>
+        <% end -%>
+      </span>
+
+    </div>
+   
+  </td>
+  <% if logged_in? %>
+  <td>
+    <div style="width: 20px;"/>
+    <% flag = claim.flag_by(liu) %>
+    <div id="claim_marking_<%= claim.id %>"
+    class="claim_marking <% if flag and (flag.watch or flag.trash) %>flagged<% else %>" style="display:none;<%end%>">
+      <div id="stop_watching_claim_<%= claim.id %>" 
+      <% unless flag and flag.watch %>style="display:none;"<% end %>
+      title="Stop watching this claim"
+      >
+        <%= link_to_remote t_image_tag('eye.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => claim.id, :watch => 'n'},
+        :after => "Element.hide('stop_watching_claim_#{claim.id}');
+                   Element.show('watch_claim_#{claim.id}');
+                   $('claim_marking_#{claim.id}').removeClassName('flagged');
+                   Element.show('trash_claim_#{claim.id}');
+                   " },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => claim.id, :watch => 'n'})}
+        %>
+      </div>
+      <div id="watch_claim_<%= claim.id %>"
+      <% if flag and (flag.watch or flag.trash) %>style="display:none;"<% end %>
+      title="Watch this claim"
+      >
+        <%= link_to_remote t_image_tag('eye_faint.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => claim.id, :watch => 'y'},
+        :after => "Element.hide('watch_claim_#{claim.id}');
+                   $('claim_marking_#{claim.id}').addClassName('flagged');
+                   Element.hide('trash_claim_#{claim.id}');
+                   Element.show('stop_watching_claim_#{claim.id}');" },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => claim.id, :watch => 'y'})}
+        %>
+      </div>
+      <div style="padding-top:5px; padding-left: 2px;
+      <% if flag and (flag.watch or flag.trash) %>display:none;<% end %>"
+      id="trash_claim_<%= claim.id %>"
+      title="Filter out this claim"
+      >
+        <%= link_to_remote t_image_tag('trash.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => claim.id, :trash => 'y'},
+        :after => "Element.hide('trash_claim_#{claim.id}');
+                   Element.hide('watch_claim_#{claim.id}');
+                   Element.show('untrash_claim_#{claim.id}');
+                   $('claim_marking_#{claim.id}').addClassName('flagged');
+                   $('claim_title_#{claim.id}').style.textDecoration = 'line-through';" },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => claim.id, :trash => 'y'})}
+        %>
+      </div>
+      <div style="padding-top:5px; padding-left: 2px;
+      <% unless flag and flag.trash %>display:none;<% end %>"
+      id="untrash_claim_<%= claim.id %>"
+      title="Unfilter this claim"
+      >
+        <%= link_to_remote t_image_tag('trash_remove.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => claim.id, :trash => 'n'}, 
+        :after => "Element.hide('untrash_claim_#{claim.id}');
+                   Element.show('trash_claim_#{claim.id}');
+                   Element.show('watch_claim_#{claim.id}');
+                   $('claim_marking_#{claim.id}').removeClassName('flagged');
+                   $('claim_title_#{claim.id}').style.textDecoration = '';" },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => claim.id, :trash => 'n'})}
+        %>
+      </div>
+    </div>
+  </td>
+  <% end %>
+</tr>

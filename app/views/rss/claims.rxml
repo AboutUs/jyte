@@ -1,0 +1,21 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0") {
+  xml.channel {
+    xml.title('jyte - ' + @title)
+    xml.link(@rss_channel_link)
+    xml.language("en-us")
+    @claims.each {|c| u = c.user 
+      xml.item {
+        xml.pubDate(c.created_at.rfc2822)
+        xml.title(h(c.title))
+        xml.author(u.openid)
+        xml.description("#{user_link(:user=>u,:only_path=>false)} made this claim.")
+        xml.link(claim_url(:only_path => false,:urlslug=>c.urlslug))
+        xml.guid(claim_url(:only_path => false,:urlslug=>c.urlslug))
+        c.tags.each { |t|
+          xml.category(h(t.name))
+        }       
+      }
+    }
+  }
+}

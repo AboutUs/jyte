@@ -1,0 +1,17 @@
+<p>
+Find Jyte friends using your contacts list on these services:
+</p>
+
+<span style="float:left">
+<%= t_image_tag 'logo_gmail.gif' %>
+</span>
+<p>
+Gmail access:
+<% if GMail.authorization_token_for(liu) %>
+ Authorized (<%= link_to "Deauthorize", :controller => :oauth, :action => :gmail_deauthorize%>)
+ Step 2: <%= link_to "Compare", :action => :compare_gmail %>
+<% else %>
+Step 1:  <%= link_to "Authorize", :controller => :oauth, :action => :gmail_start %>
+<% end %> 
+</p>
+<br clear="all"/>

@@ -1,0 +1,7 @@
+<div class="spy_section">
+  <%= user_link({:user => cred.source}, :target=>'jyte_spy') %> gave
+
+  <%= linked_tags(cred.tags, true, {:controller=>'user',:action=>'tag',:by=>'cred'}, ', ') %>
+  
+  cred to <%= user_link({:user => cred.sink}, :target=>'jyte_spy') %>.
+</div>

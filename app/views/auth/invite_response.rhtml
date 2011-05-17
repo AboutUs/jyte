@@ -1,0 +1,9 @@
+<h3>Welcome to Jyte!</h3>
+<b>Sign in with your OpenID</b>
+<% form_tag :controller => 'auth', :action => 'openid_start' do %>
+ <%= text_field_tag :openid_identifier, {}, {:id=>'openid_url'}%>
+ <%= submit_tag 'Login' %>
+<% end %>
+
+Or, <a href="https://www.jyte.magbox.com/signup">Sign up</a> for <i>you</i>.jyte.com
+

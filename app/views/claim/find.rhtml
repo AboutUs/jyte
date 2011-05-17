@@ -1,0 +1,172 @@
+<div id="content_lead">
+<% if @search_name %>
+  <h1><%= @search_name %></h1>
+<% end %>
+  <div id="sub_navigation">
+    <div id="simple_claims_nav">
+    <% o = (params[:order] or 'recent')
+       par = params.dup
+    %>
+      <a href="<%= url_for par.update(:order => 'featured') %>" <% if o == 'featured' %>class="selected"<% end %>>Featured</a>&nbsp;
+      <a href="<%= url_for par.update(:order => '') %>" <% if o == 'recent' %>class="selected"<% end %>>Newest</a>&nbsp;
+      <a href="<%= url_for par.update(:order => 'voted') %>" <% if o == 'voted' %>class="selected"<% end %>>Most Votes</a>&nbsp;
+      <a href="<%= url_for par.update(:order => 'discussed') %>" <% if o == 'discussed' %>class="selected"<% end %>>Discussed</a>&nbsp;
+      <a href="<%= url_for par.update(:order => 'solid') %>" <% if o == 'solid' %>class="selected"<% end %>>Solid</a>&nbsp;
+      <a href="<%= url_for par.update(:order => 'contested') %>" <% if o == 'contested' %>class="selected"<% end %>>Contested</a>&nbsp;
+      <a href="<%= url_for par.update(:order => 'recently_commented') %>" <% if o == 'recently_commented' %>class="selected"<% end %> rel="nofollow">Recently Commented</a>&nbsp;
+      &nbsp;
+      <% if logged_in? %>
+      &nbsp;&nbsp;&nbsp;
+      <a href="<%= find_claims_url :order => '', :watched => 'on' %>">My watched</a>
+      &nbsp;
+      <a href="<%= find_claims_url :order => '', :watched => 'on', :new_comments => 'on' %>">Watched conversation</a>
+      <% end %>
+      
+<% if logged_in? and saved_searches = liu.settings[:saved_searches] %>
+    </div>
+    <div id="saved_search_links">
+    <% saved_searches.sort{|(a,z),(b,y)|a<=>b}.each{|(n, p)| %>
+      <%= link_to h(n), p %>&nbsp;
+    <% } %>
+<% end %>
+    </div>
+  <%= link_to "Advanced Search", params.merge(:action => 'advanced_search') if logged_in? %>
+  </div>
+</div>
+
+<div id="results_box">
+  <% if @rss_link -%>
+  <a href="<%=@rss_link%>"
+     title="<%=h(@title)%> feed">
+    <img src="<%=image_path('feed-icon-16x16.gif')%>"
+         style="float:right;" />
+  </a>
+  <% end -%>
+  <h2><%= @search_title %></h2>
+
+
+<h4 id="results_headline">
+<% if @claim_count > 10 %>
+Showing <%= @start_n %> to <%= @end_n %> of <%= @claim_count %> total.
+<% unless @page == 1 %>
+<% prev_params = params.dup; prev_params[:page] = @page-1 %>
+<%= link_to "Previous 10", prev_params %>
+<% end %>
+<% unless @end_n == @claim_count %>
+<% next_params = params.dup; next_params[:page] = @page+1 %>
+<%= link_to "Next 10", next_params %>
+<% end %>
+<% elsif @claim_count > 1 %>
+Showing all <%= @claim_count %>
+<% elsif @claim_count == 1 %>
+Just one.
+<% elsif @claim_count == 0 %>
+No such claims.
+<% end %>
+</h4>
+ 
+  <div id="listing_container">
+
+    <table>
+      <%= render :partial => '/claim', :collection => @claims %>
+    </table>
+
+  </div>
+<% if @claim_count > 10 %>
+<hr/>
+<% unless @page == 1 %>
+<%= link_to "Previous 10", prev_params %>
+<% end %>
+<% unless @end_n == @claim_count %>
+<%= link_to "Next 10", next_params %>
+<% end %>
+<br/>
+<%= i=1; link_to("#{i}", params.merge(:page => i))%>
+...
+
+<% ipstart = @page-5 > 1 ? @page-5 : 2 %>
+<% ipend = @page+5 > (@claim_count/10) ? (@claim_count/10)-1 : @page+5 %>
+<% ipstart.upto(ipend) do |i| %>
+ <% if i == @page %>
+  <%= i %>
+ <% else %>
+  <%= link_to("#{i}", params.merge(:page => i))%>
+ <% end %>
+<% end %>
+...
+<%= i=(@claim_count/10.0).ceil; link_to("#{i}", params.merge(:page => i))%>
+<% end %>
+</div>
+
+<div id="left_side_box">
+  <% if @similar_tags and not @similar_tags.empty? %>
+    <ul class="plain_list">
+      <li><h4>Related Tags</h4></li>
+      <% @similar_tags.each {|t| %>
+        <li><%= link_to "#{h(t.name)}", find_claims_url(:tag=>t.name),:title=>"Claims about #{h(t.name)}" %></li>
+      <% } %>
+    </ul>
+    <br/>
+  <% end %>
+  <% if @static_tags %>
+    <ul class="plain_list">
+      <li><h4>Tags</h4></li>
+      <% @static_tags.each {|t| %>
+        <li><%= link_to t, find_claims_url(:tag=>t),:title=>"Claims about #{t}" %></li>
+      <% } %>
+    </ul>
+    <br/>
+  <% end %>
+  <% if @interests %>
+    <ul class="plain_list">
+      <li><h4>Your Interests</h4></li>
+      <% @interests.each {|t| %>
+        <li><%= link_to "#{h(t.name)}", find_claims_url(:tag=>t.name),:title=>"Claims about #{h(t.name)}" %></li>
+      <% } %>
+    </ul>
+    <br/>
+  <% end %>
+  <% if @users %>
+    <ul class="plain_list">
+      <li><h4><%= @users_title %></h4></li>
+      <% if @users_link_to_claims %>
+        <% @users.each {|u| %>
+          <li><%= link_to truncate("#{u.display_name}", 20), find_claims_url(:by => u.s), :title => "#{u.claim_count} votes on claims made today by #{u.ss}" %></li>
+        <% } %>
+      <% else %>
+        <% @users.each {|u| %>
+          <li><%= link_to truncate("#{u.display_name}", 20), xprofile_url(u.s), :title => "Profile for #{u.ss}" %></li>
+        <% } %>
+      <% end %>
+    </ul>
+  <% end %>
+  <% if @more_users %>
+  <br/>
+    <ul class="plain_list">
+      <li><h4><%= @more_users_title %></h4></li>
+      <% if @more_users_link_to_claims %>
+        <% @more_users.each {|u| %>
+          <li><%= link_to truncate("#{u.display_name}", 20), find_claims_url(:by => u.s), :title => "Claims by #{u.ss}" %></li>
+        <% } %>
+      <% else %>
+        <% @more_users.each {|u| %>
+          <li><%= link_to truncate("#{u.display_name}", 20), xprofile_url(u.s), :title => "Profile for #{u.ss}" %></li>
+        <% } %>
+      <% end %>
+      <% if @more_users.length >= 10 -%>
+      <%=link_to('more...',:controller=>'user',:action=>'tag',:by=>'interest',:tag=>@tag.name)%>
+      <% end -%>
+    </ul>
+  <% end %>
+  <br/>
+  <h4>
+  <%= link_to "More Rankings", :controller => 'user', :action => 'rank' %>
+  <% if logged_in? and @tagnames -%>
+  <%=link_to('Claimroll',:action=>'tagroll_setup',:tags=>@tagnames.join(', '))%>
+  <% end -%>
+  </h4>
+  <br/>
+  <p>Want OpenID on your other favorite sites? 
+  <a href="http://demand.openid.net/">Demand OpenID!</a>
+  </p>
+</div>

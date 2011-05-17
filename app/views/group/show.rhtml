@@ -1,0 +1,151 @@
+<style type="text/css">
+  #listings_container td.claim_text {padding-left:1em;padding-bottom:1em;}
+</style>
+
+<div id="user_info_box">
+  <h1><%= h(@group.name) %> Group</h1>
+
+  <div id="user_contact" class="fine_print">
+    <span>Created by 
+      <span class="<%= cred_class(@group.user_id) %>"><%= cred_img @group.user_id %><%= user_link :user => @group.user %></span>
+      <%= time_ago_in_words(@group.created_at) %> ago
+      <% if liuid and @group.can_edit?(liu) -%>
+      <%= link_to 'edit group',:action => 'edit',:id=>@group.id %>
+      <% end -%>
+    </span>
+  </div>
+  
+  <% if @group.description -%>
+  <p><%= safe_formatted(@group.description) %></p>
+  <% end -%>
+  
+  <h4 id="user_interests">Interests</h4>
+  <p>
+    <% if @group.tags.empty? -%>
+    This group isn't interested in anything.
+    <% else -%>
+    <%= linked_tags(@group.tags,false) %>
+    <% end -%>
+  </p>
+
+  <h4>Membership</h4>
+  <p>
+    <% if @group.invite_only -%>
+    <span class="disagreed">Invite only</span>
+    <% else -%>
+    <span class="agreed">Open membership</span>
+    <% end -%>
+    <% if liu and !@group.member?(liu) and (!@group.invite_only?  or @group.can_edit?(liu))-%>
+    (<%= link_to 'add yourself', :action => 'add_yourself', :group_id => @group.id %>)
+    <% end -%>
+
+    <% if liu and @group.member?(liu) -%>
+    - You are a member.
+    <span class="small">(<%=link_to 'remove', :action =>'remove_yourself', :group_id => @group.id %>)</span>
+    <% end -%>
+  </p>
+
+   <% if @invite -%>
+   <p>
+   <%= user_link :user_id => @invite.sender_id %> invited you to this
+   group.
+   -
+   <span class="small">
+     <%= link_to 'accept', :controller => 'group', :action =>
+     'invite_decision', :invite_id => @invite.id, :decision => 'accept' %> -
+     <%= link_to 'decline', :controller => 'group', :action =>
+     'invite_decision', :invite_id => @invite.id, :decision =>
+     'decline' %></span>
+   </p>
+   <% end -%>
+   <br/>
+    <% if liuid and @group.can_invite?(liu) -%>
+    <%= render :partial => 'invite_form' %>
+    <% end -%>
+
+
+
+</div>
+
+<div id="profile_left_side_box">
+  <div class="purple_border_box">
+    <div class="purple_box_top">
+      <div class="purple_box_left"></div>
+      <div class="purple_box_right"></div>
+    </div>
+    <div class="purple_box_content" style="padding: 0 6px;">
+      <img id="profile_image"
+           src="<%= group_icon(:group=>@group,:size=>'big',:url=>1) %>"
+           alt="image" />&nbsp;
+      
+    </div>
+
+    <div class="purple_box_bottom">
+      <div class="purple_box_left"></div>
+      <div class="purple_box_right"></div>
+    </div>
+  </div>
+
+  <%- if @group.member?(liu) -%>
+  <div class="accent_box" style="margin-top:1em;">
+    <a href="<%=url_for(:controller=>'claim',:action=>'new',:group_id=>@group.id)%>"
+       style="font-size:larger;">Make a group claim</a>
+  </div>
+  <%- end -%>
+</div>
+
+<div class="clear" style="margin-bottom:2em;"></div>
+
+
+<% if @group.moderators.length > 0 %>
+<h2>Moderators (<%= @group.moderators.length %>)</h2>
+<p>
+<% @group.moderators.each {|u| -%>
+<%= user_link(:user => u) %>
+<% } -%>
+</p>
+<% end -%>
+
+<h2>Members (<%=@group.users.length%>)</h2>
+<p>
+<% if @group.users.length > 0 -%>
+  <% @group.users.each {|u| -%>
+  <%= user_link(:user => u) %>
+  <% } -%>
+<% else -%> 
+ No members yet.
+<% end -%>
+</p>
+
+<% if @claims and !@claims.empty? %>
+<h2 style="margin-bottom:.5em;">Group only claims
+(<%=link_to(@group_claim_count, :controller=>'claim',:action=>'find',:group_id=>@group.id)%>)</h2>
+<div id="listings_container">
+  <table>
+    <%= render :partial => '/claim', :collection => @claims %>
+  </table>
+</div>
+ <%- remaining = @group_claim_count - @claims.size -%>
+ <%- if remaining > 0 -%>
+ <a style=""
+    href="<%=
+    url_for(:controller=>'claim',:action=>'find',:group_id=>@group.id,:page=>2)
+    %>">All claims for <%=h(@group.name)%> &rarr;</a>
+  <%- end -%>
+<%- end -%>
+
+<p>
+<%= link_to "Public claims by #{h(@group.name)} members &rarr;", :action => 'claims', :id => @group.id %>
+</p>
+
+<br/>
+<h3 class="api">Group API</h3>
+<div class="api" style="font-size:smaller;">
+  <b><%= url_for :action => 'api_is_member', :slug => @group.urlslug,
+  :only_path=>false %>?openid=URLENCODE(openid)</b> returns text 'true' or 'false'<br/>
+  <b><%=
+  url_for(:action=>'api_roster',:slug=>@group.urlslug,:only_path=>false)
+  %></b> returns newline separated list of member OpenIDs
+</div>
+
+

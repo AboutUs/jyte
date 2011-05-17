@@ -1,0 +1,11 @@
+<% if @g -%>
+<span class="">
+ <a href="<%= url_for :action => 'show', :id => @g.id %>"><%= h(params[:name]) %></a> is already taken
+</span>
+<% elsif @valid -%>
+ <span class="success">is available</span>
+<% elsif !params[:name] or params[:name].empty? %>
+ &nbsp;
+<% else -%>
+ is an invalid.  Try using just letters and numbers.
+<% end -%>

@@ -1,0 +1,92 @@
+<h2>
+  <%= liuid == @user.id ? 'Your' : @user.dn+"'s" %>
+  Contacts (<%=@contacts.length%>)</h2>
+
+<% if @contacts.length > 0 -%>
+
+<div class="contacts_list">
+  <% @contacts.each_with_index {|c,i| -%>
+  <div class="contact <%= 'alternate' if i.odd? %>">
+      <%= icon_image(:user=>c.contact,:size=>'thumb',:style=>"float:left;margin-right:1em;") %>
+      <div>
+        <%= user_link(:user=>c.contact)%>
+        <br/>
+        <span style="font-size:smaller;">
+          <%= c.tag_list %>
+          <br/>
+          <%= link_to 'make a claim',:controller=>'claim',:action=>'new',:text=>c.contact.s %>
+          <%= link_to 'edit', :action=>'edit', :user_id=>c.contact.id%>
+          <% if liu == @user -%>
+	    <%= link_to 'remove',:action=>'remove_submit',:user_id=>c.contact.id %>
+	  <% end -%>
+        </span>
+      </div>
+      <div style="clear:both;"></div>
+  </div>
+
+  <% } -%>
+</div>
+
+<% else -%>
+No contacts yet.
+<% end -%>
+
+<br/><br/>
+
+<% if @contact_of.length > 0 -%>
+<h2 id="contact_of"><%= liuid == @user.id ? 'You are' : @user.dn + " is" %> a contact of
+<%= pluralize @contact_of.size, "person" %></h2>
+
+<div class="contacts_list">
+  <% @contact_of.each_with_index {|c,i| -%>
+  <div class="contact <%= 'alternate' if i.odd? %>">
+      <%= icon_image(:user=>c.contacter,:size=>'thumb',:style=>"float:left;margin-right:1em;") %>
+      <div>
+        <%= user_link(:user=>c.contacter)%>
+        <br/>
+        <span style="font-size:smaller;">
+          <%= c.tag_list %>
+          <br/>
+          <%= link_to 'make a claim',:controller=>'claim',:action=>'new',:text=>c.contacter.s %>
+        </span>
+      </div>
+      <div style="clear:both;"></div>
+  </div>
+
+  <% } -%>
+</div>
+
+<% else -%>
+No contacts yet.
+<% end -%>
+
+<br/><br/>
+<a class="api"
+   onclick="new Effect.Appear('contacts_api');return false;"
+   style="font-size:smaller;"
+   >Contacts API</a>
+<div id="contacts_api" style="display:none;">
+  <p>
+    Jyte exposes a simple REST api for accessing membership of a user's
+    contacts.
+  </p>
+
+  <p>
+  The <b>is_member</b> method returns 'true' if contact_openid is in openid's
+  contacts.  returns 'false' if not a contact.<br/>
+  <b style="font-size:smaller;"><%=
+  url_for(:action=>'api_is_member',:only_path=>false)%>?openid=<%=CGI.escape(@user.s)%>&contact_openid=URLENCODE(openid)</b>
+</p>
+<p>The <b>roster</b> method returns a newline separated list of all of the specified OpenID's contacts OpenIDs
+  <b style="font-size:smaller;">
+    <%rurl=url_for(:action=>'api_roster',:only_path=>false)+'?openid='+CGI.escape(@user.s)%>
+    <a href="<%=rurl%>"><%=rurl%></a>
+ </b></p>
+
+<p>Both methods accept an optional <b>tag</b> parameter.  Use the tag parameter to filter for contacts of a
+  certain type like 'family' or 'friend'.  Also, you may pass
+  in <b>primary</b>=true for the methods to use only the contact's
+  primary OpenID. If primary is not specified, the methods will use all
+  of a contact's verified identifiers.</p>
+</div>
+

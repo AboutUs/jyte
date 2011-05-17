@@ -1,0 +1,41 @@
+/*
+
+	Table of Contents:
+
+		Jyte Defaults
+		
+*/
+
+
+
+/* Jyte Defaults
+---------------------------------------------------------------------------------------------------- */
+@import "global.css";
+
+
+
+
+/* Profile Layout Right Side ( Username, Description, OpenID, ect. )
+---------------------------------------------------------------------------------------------------- */
+#content_lead { padding-bottom: 1em; border-bottom: 1px solid #e6f0f8; margin-bottom: 2em; }
+	#headline { margin-bottom: .2em; }
+	#sub_navigation { font-size: 11px; font-family: Arial, Verdana, sans-serif; }
+		#sub_navigation a.selected { color: black; font-weight: bold; text-decoration: none; }
+
+#results_box { float: right; width: 465px; }
+	#results_headline { margin-bottom: 1em; }
+	
+
+	
+/* Profile Layout Left Side ( User Avatar, Stats, & Qualities)
+---------------------------------------------------------------------------------------------------- */
+#left_side_box { float: left; width: 140px; }
+		
+		/* List of Stats */
+		#left_side_box ul { list-style-type: none; padding-left: .1em; margin: 0; }
+				
+			#left_side_box li#show_more_stats { padding-bottom: 1em; }
+				#left_side_box li#show_more_stats a { color: #666; padding-left: 0; margin-left: 0; }
+				
+		/* Hidden Stats */
+		ul#remaining_stats { padding-bottom: 1em; }

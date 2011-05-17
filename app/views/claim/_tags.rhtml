@@ -1,0 +1,28 @@
+<div id="show_tags">
+<% if claim.tags.length > 0 %>
+  Tags: <%= linked_tags(claim.tags, false, :action => 'find', :group_id => claim.group_id) %>
+<% else -%>
+  No Tags
+<% end -%>
+<% if liuid.to_i == claim.user_id.to_i %>
+  <br/>
+  <a id="edit_tags_link" href="#" style="font-size: smaller;"
+     onclick="Element.show('edit_tags'); 
+              Element.hide('show_tags');
+              return false;"
+    >Edit Tags<noscript> (requires javascript)</noscript></a>
+</div>
+<div id='edit_tags' style="display:none;">
+  <% form_remote_tag :url => {:action => 'change_tags'}, :update => 'claim_tags' do %>
+    <%= hidden_field_tag 'claim_id', claim.id %>
+    Tags: <%= text_field_tag 'tags', claim.tag_list, :spellcheck=>'true' %>
+    <input type="submit" value="Submit Tags" onclick="Element.hide('edit_tags'); 
+                                                      Element.show('show_tags');" />
+  <% end %>
+  <a href="#" style="font-size: smaller;"
+     onclick="Element.hide('edit_tags'); 
+              Element.show('show_tags');
+              return false;"
+    >Cancel</a>
+<% end %>
+</div>

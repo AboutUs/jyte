@@ -1,0 +1,9 @@
+<% start_n = 10 * @paginator.current_page.number - 9 %>
+<% end_n = 10 * @paginator.current_page.number %>
+<% end_n = @claim_count if end_n > @claim_count %>
+
+<h4 id="results_headline">
+Showing <%= start_n %> to <%= end_n %> of <%= @claim_count %> total.
+  <%= link_to('Previous',{:page=>@paginator.current.previous}) if @paginator.current.previous %>
+  <%= link_to('Next',{:page=>@paginator.current.next}) if @paginator.current.next %>
+</h4>

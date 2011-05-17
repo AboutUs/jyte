@@ -1,0 +1,38 @@
+<h1>Create a Group</h1>
+<br/>
+<div style="width:30em;">
+  A <span class="form_label">group</span> is an online gathering
+  of like minded people.  You may create one below, and memebership
+  may be open to the public or invite only. <span class="agreed">Start by giving your group
+  a name.</span>
+</div>
+<br/><br/>
+<% form_tag({:action => 'new_submit'}) do %>
+
+<div>
+  <h2>Group Name</h2>
+  <input type="text"
+         name="group[name]"
+         id="group_name"
+         style="font-size:1.5em;padding:4px;"/>
+  <span id="gnamestatus"></span>
+</div>
+
+<div style="margin-top:.5em;">
+  <input class="form_label"
+         type="submit"
+         value="Create Group"
+         id="group_submit" />
+  or <a href="#" onclick="history.go(-1);return false;">cancel</a>
+</div>
+
+<% end %>
+
+<script type="text/javascript">
+function nameChanged() {
+  var url = '<%= url_for :action => "name_status" %>';
+  url += '?name='+encodeURIComponent($F('group_name'));
+  var na = new Ajax.Updater('gnamestatus',url,{});
+}
+var o = new Form.Element.Observer('group_name', .5, nameChanged);
+</script>

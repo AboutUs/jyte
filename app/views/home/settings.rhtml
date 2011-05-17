@@ -1,0 +1,48 @@
+<%= render :partial => 'tabs' %>
+<div id="history_box" class="history_box"
+     style="margin-top:2em;padding-left:0;">
+
+<h2>Jyte Account Settings</h2>
+<br/>
+
+<div class="accent_box">
+<h4>Pibb</h4>
+<img src="/images/pibbme.png" style="float:right;" />
+<p>
+<a href="https://pibb.com/">Pibb</a> is an OpenID based discussion
+tool.  You may optionally show a "Pibb Me" button on your Jyte profile
+page.
+
+<% form_tag :action => 'pibbme' do %>
+ <% if liu.pibbme? %>
+  <%= submit_tag 'Hide the &quot;Pibb Me&quot; button' %>
+ <% else %>
+  <%= submit_tag 'Show the &quot;Pibb Me&quot; button' %>
+ <% end %>
+<% end %>
+<br/>
+</p>
+</div>
+<h4>Claimrolls</h4>
+<p>
+Click <a href="<%=url_for(:controller=>'user',:action=>'claimroll_setup')%>">here</a> to create a personal claimroll.
+</p>
+
+<% unless liu.blocked_users.empty? %>
+  <h4>Ignored Users</h4>
+  <% liu.blocked_users.each {|u| %>
+    <span id="ignoring_<%= u.id %>">
+    <%= render :partial => 'user/ignoring', :locals => {:user => u, :ignoring => true} %>
+    </span>
+    <br/>
+  <% } %>
+<% end %>
+
+<br/>
+
+
+<h4>Delete your Jyte Account</h4>
+<a href="<%=url_for(:controller=>'user',:action=>'delete_account_submit')%>">Click here</a> to delete your Jyte account.
+
+</div>
+

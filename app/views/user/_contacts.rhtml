@@ -1,0 +1,45 @@
+<h2><%=@user.dn%>'s Contacts (<%=@contacts.size%>)</h2>
+
+<table>
+<% cols = 6.0 %>
+<% rows = (@contacts.size / cols).ceil %>
+<% count = 0 %>
+
+<% for row in 0...rows %>
+   <tr>
+   <%- for col in 0...cols -%>
+   <td style="padding:3px;width:60px;">
+     <% if count < @contacts.size %>
+     <%- c = @contacts[count] -%>
+     <%- u = c.contact -%>
+     <%- profile_contact_tab = OpenID::Util.append_args(xprofile_url(u.s),{'show'=>'contacts'})  -%>
+     <%= icon_image(:user => u,:size=>'thumb',:linked=>profile_contact_tab)%>
+     <a href="<%=xprofile_url(u.s)%>"><%=truncate(u.dn,14)%></a>
+       <% if c.tags.size > 0 %>
+       <br/>
+       <span style="font-size:smaller;">
+         <%= c.tags.collect {|t| h(t.name)}.join(' ') %>
+       </span>
+       <% end%>
+     <%- else -%>
+     &nbsp;
+     <%- end -%>
+   </td>
+   <% count += 1%>
+   <%- end -%>
+   </tr>
+<%- end -%>
+</table>
+
+<br/>
+
+<% if @contact_of_count > 0 %>
+<a href="<%= url_for(:controller=>'contacts',:id=>@user.id,:anchor=>'contact_of') %>">
+  <%=pluralize(@contact_of_count,'person','people')%></a> call <%= @user.dn %> a contact. 
+<% else %>
+  Nobody calls <%= @user.dn %> a contact.
+<% end %>
+
+
+
+

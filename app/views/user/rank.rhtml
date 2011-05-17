@@ -1,0 +1,62 @@
+<div id="content_lead">
+  <h1>User Rankings</h1>
+  <div id="sub_navigation">
+    <form action="<%= url_for :action => 'rank' %>" method="get">
+      <label for="by">Rank by:</label>
+      <select name="by"> 
+        <option value="claims" <%= 'selected="true"' if @sort == 'claims' %>>Most claims</option>
+        <option value="comments" <%= 'selected="true"' if @sort == 'comments' %>>Most comments</option>
+        <option value="votes" <%= 'selected="true"' if @sort == 'votes' %>>Most votes</option>
+        <option value="votes_on_claims" <%= 'selected="true"' if @sort == 'votes_on_claims' %>>Votes on their claims</option>
+        <option value="votes_per_claim" <%= 'selected="true"' if @sort == 'votes_per_claim' %>>Votes per claim</option>
+        <option value="yeas_on_claims" <%= 'selected="true"' if @sort == 'yeas_on_claims' %>>Agreement with their claims</option>
+        <option value="nays_on_claims" <%= 'selected="true"' if @sort == 'nays_on_claims' %>>Disgreement with their claims</option>
+        <option value="contested_claims" <%= 'selected="true"' if @sort == 'contested_claims' %>>Contested claims</option>
+        <option value="discussed_claims" <%= 'selected="true"' if @sort == 'discussed_claims' %>>Discussed claims</option>
+        <option value="watched_claims" <%= 'selected="true"' if @sort == 'watched_claims' %>>Watched claims</option>
+        <option value="trashed_claims" <%= 'selected="true"' if @sort == 'trashed_claims' %>>Trashed claims</option>
+        <option value="cred_score" <%= 'selected="true"' if @sort == 'cred_score' %>>Cred score</option>
+        <option value="creds_given" <%= 'selected="true"' if @sort == 'creds_given' %>>Creds given</option>
+        <option value="creds_gotten" <%= 'selected="true"' if @sort == 'creds_gotten' %>>Creds gotten</option>
+        <option value="contacted" <%= 'selected="true"' if @sort == 'contacted' %>>Most called a contact</option>
+        <option value="agreeability" <%= 'selected="true"' if @sort == 'agreeability' %>>Agreeability</option>
+        <option value="personal_agreeability" <%= 'selected="true"' if @sort == 'personal_agreeability' %>>Agreeing with you</option>
+        <option value="personal_disagreeability" <%= 'selected="true"' if @sort == 'personal_disagreeability' %>>Disagreeing with you</option>
+        <option value="your_votes_on_claims" <%= 'selected="true"' if @sort == 'your_votes_on_claims' %>>Claims you've voted on</option>
+      </select>
+      <label for="tag">Tag:</label>
+      <input type="text", name="tag", value="<%= @tag %>", size="20" />
+      <input type="submit", value="Go" />
+    </form>
+  </div>
+</div>
+
+<div id="user_list">
+<h2><%= h(@title) %></h2>
+
+<table>
+<tr>
+<td/><td/><td/><td><%= @cnt_title %></td>
+<% @users.each_with_index{|u,i| %>
+  <tr class="<%= 'alternate' if i.odd? %>">
+    <td><span class="rank_number"><%= (@page - 1) * 23 + i + 1 %></span></td>
+    <td><%= icon_image :user_id=>u.id, :size=>'thumb'%></td>
+    <td>
+      <%= user_link :user_id => u.id %>
+    </td>
+    <td>
+      <% if @sort == 'cred_score' %>
+        <%= display_cred(u.cnt.to_f) %>
+      <% else %>
+        <%= u.cnt %>
+      <% end %>
+    </td>
+<% } %>
+</table>
+</div>
+
+<% if @page > 1 %>
+<%= link_to "Previous Page", :by => @sort, :page => @page - 1, :tag => @tag_name %>
+&nbsp; &nbsp;
+<% end %>
+<%= link_to "Next Page", :by => @sort, :page => @page + 1, :tag => @tag_name %>

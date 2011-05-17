@@ -1,0 +1,28 @@
+<%= render :partial => 'tabs' %>
+<div id="history_box" class="history_box"
+     style="margin-top:2em;padding-left:0;">
+
+<h2>Your Draft Claims</h2>
+
+<%- if @draft_claims.empty? -%>
+<p>No drafts.</p>
+<%- else -%>
+<p>Click a claim below to continue editing.</p>
+<table>
+<%- @draft_claims.each_with_index {|c,i| -%>
+<tr class="<%='alternate' if i.even?%>">
+  <td style="padding:.5em;">
+    <%= link_to render_claim_title(c, false),
+        claim_preview_url(:urlslug => c.urlslug) %>
+  </td>
+</tr>
+<%- } -%>
+</table>
+<br/>
+<% form_tag( {:action => 'clear_drafts'}, 
+             {:onsubmit => 'return confirm("Really delete all your draft claims?");'}) do %>
+<%= submit_tag 'Clear Drafts' %>
+<% end %>
+<%- end -%>
+
+</div>

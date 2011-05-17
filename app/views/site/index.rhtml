@@ -1,0 +1,79 @@
+<% token_url = url_for(:controller=>'auth',:action=>'rpx_response',:only_path=>false) %>
+
+<div id="feature">
+  <div id="feature_content">
+    <h1>Make claims and share cred</h1>
+    <a id="sign_up" title="Sign Up for jyte" class="rpxnow"
+       href="https://rpxnow.com/openid/v2/signin?rp_id=23&token_url=<%=CGI.escape(token_url)%>">
+      <% if !liuid -%>
+      <img alt="Sign Up" src="<%=image_path('homepage/btn_sign_up.gif')%>"/>
+      <% end -%>
+    </a> 
+    <h2><%= Claim.count(:conditions => 'state = 1') %> claims to vote on right now</h2>
+    <p class="fine_print">
+      Including claims about 
+      <%= link_to @three_tag_names[0], find_claims_url(:tag => @three_tag_names[0]) %>,
+      <%= link_to @three_tag_names[1], find_claims_url(:tag => @three_tag_names[1]) %> and
+      <%= link_to @three_tag_names[2], find_claims_url(:tag => @three_tag_names[2]) %>.
+    </p>
+  </div>
+</div>
+
+<table id="supporting_qualities">
+  <tr>
+    <td>
+      <h2>Claim anything!</h2>
+      <p>
+Yes, anything. <%=link_to('Make a claim',:controller=>'claim',:action=>'new')%> and
+let the community vote on it. Put your stake in the ground and see where the votes go!</p>
+    </td>
+    <td>
+      <h2>Spread the Cred</h2>
+      <p>
+        Is your friend an expert at something, or do they have a
+        notable personality trait?  Give them <a href="http://jyte.com/help#cred">cred</a> and help build their reputation on Jyte.
+      </p>
+    </td>
+    <td>
+      <h2>Connect with people</h2>
+      <p>
+        Add a new dimension to your social network using Jyte <a href="http://jyte.com/help#contacts">contacts</a>.
+        Follow the claims of people you know.
+      </p>
+    </td>
+  </tr>
+</table>
+
+<br/>
+<hr/>
+<br/>
+
+<!-- right side -->
+<div id="results_box">
+  <h4 id="results_headline">
+    <%= link_to('Recent claims',:controller=>'claim',:action=>'find') %>
+  </h4>
+  
+  <div id="listing_container">
+    <table>
+      <%= render :partial => '/claim', :collection => @recent_claims %>
+    </table>
+    <div style="text-align:right;">
+    <%= link_to('All claims &rarr;',:controller=>'claim',:action=>'find') %>
+    </div>
+  </div>
+</div>
+
+<!-- left side -->
+<div id="homepage_left_side_box" class="">
+  <ul class="plain_list">
+    <li><h4>Tags</h4></li>
+    <% @toptags.each {|t| -%>
+    <li><%= link_to h(t.name), :controller=>'claim',:action=>'find',:tag=>t.name%></li>
+    <% } -%>
+  </ul>
+</div>
+
+
+
+

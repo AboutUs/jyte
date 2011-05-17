@@ -1,0 +1,19 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0"){
+    xml.channel{
+        xml.title("Recent claims about #{@openid}")
+        xml.link("http://www.recentrambles.com/pragmatic/rss")
+        xml.description("Recent claims about #{@openid}")
+        xml.language('en-us')
+        for claim in @recent_claims
+            xml.item do
+                xml.title(claim.title)
+#                 xml.category(post.category)
+#                 xml.description(post.description)
+                xml.pubDate(claim.created_at.strftime("%a, %d %b %Y %H:%M:%S %z"))
+                xml.link(url_for(:only_path=>false, :controller => 'claim', :action => 'show', :id => claim.id))
+#                 xml.guid("http://www.recentrambles.com/pragmatic/view/" + post.id.to_s)
+            end
+        end
+    }
+}

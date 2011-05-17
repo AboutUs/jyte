@@ -1,0 +1,94 @@
+/* accent box */
+.accent_box {
+  background-color: #ebf3fa; -moz-border-radius:5px; color: #59788f;padding:.7em;margin-bottom:.5em;
+}
+.accent_box a {color:#59788f; margin-left: .3em;}
+.alternate {background-color: #F4F8FC;}
+#contacts_list {margin-top:1em;}
+.contact {margin:.5em;padding:.5em;margin-left:0;padding-left:0;}
+
+.dark_accent_box {
+  background: url('../images/dark_accent_box_bg.png') repeat-x;
+  background-color: #5757a9;                        
+  //-moz-border-radius:5px;
+  color:#fff;
+  padding:.7em;
+  margin-bottom:.5em;
+}
+
+#openid_login_big {
+  font-size:20px;
+  background: url('../images/openid_login_box_big.png') no-repeat;
+  background-position: 3px 2px;
+  background-color: #fff;
+  padding:2px;
+  padding-left:28px;
+  width: 18em;
+}
+
+.edit_section {margin-bottom:1.5em;}
+.edit_note {margin-bottom:0;}
+
+.claim_edit_box {
+  border: 1px solid #000;
+  padding:4px;
+}
+.claim_text_size {
+  font-size:1.8em;
+}
+.claim_edit_width {
+  width:550px;
+}
+#claim_body {
+  border: 1px solid #000;
+  padding:4px;
+  height:8em;
+}
+
+.new_claim_box_w {
+  width:632px;
+}
+
+.under_claim {  
+  background:url('../images/claimpage/at_the_polls_box_bg.gif') repeat-x;
+  background-color: #f2f9ff;
+  padding-top:1em;
+}
+
+.highlight {
+  background-color: #5757a9;
+  color: #fff;
+}
+
+#footer {
+  margin-top:3em;
+  padding:4px;
+  border-top:1px solid #ccc;
+  text-align:center;
+  color:#ccc;
+}
+#footer a {color:#ccc;}
+#footer a:hover {color:#333;}
+
+.claim_tags {text-align:center;color:#999;}
+.claim_tags a {color:#999;}
+
+.api {color:#ccc;}
+.api a {color:#ccc;}
+
+div#flag_box {
+  position: absolute;
+  z-index: 31;
+  padding:2px;
+  top: -20px;
+  right:0px;
+  height: 14px;
+  font-size:10px;
+  cursor: pointer;
+  text-align:right;
+  overflow: hidden;
+}
+div#flag_box a {
+  color:red;
+  text-decoration:none;             
+}

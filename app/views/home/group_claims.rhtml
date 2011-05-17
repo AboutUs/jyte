@@ -1,0 +1,88 @@
+<%= render :partial => 'tabs' %>
+<div id="history_box" class="history_box"
+     style="margin-top:2em;padding-left:0;">
+
+<h2>Group Claims</h2>
+<p>
+All of the claims from <a href="/group">your groups</a> are listed below.
+</p>
+
+<div id="listing_container">
+
+<div id="results_box">
+
+<%- if @groups.size > 0 -%>
+
+  <%- if @claims.size > 0 -%>
+  <%= page_entries_info @claims %>
+  <table>
+    <%= render :partial => '/claim', :collection => @claims %>
+  </table>
+  <%- else -%>
+  No claims in your <a href="/group">groups</a>.
+  <%- end -%>
+
+  <%= will_paginate @claims %>
+
+<%- else -%>
+
+You don't belong to any <a href="/group">groups</a>.
+
+<% if @suggested_groups.size > 0 %>
+  Here are some you might find interesting:
+  <table style="border-collapse:collapse;">
+    <% cols = 5.0 %>
+    <% rows = (@suggested_groups.size / cols).ceil %>
+    <% g = 0 %>
+    
+    <% for i in 0...rows %>
+    <tr>
+      <% for j in 0...cols %>
+      <td style="padding:5px;">
+        <% if g < @suggested_groups.size %>
+        <%= group_icon(:group => @suggested_groups[g]) %>
+        <%= h(@suggested_groups[g].name)  %>
+        <% else %>
+        &nbsp;
+        <% end %>
+        <% g += 1 %>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
+
+
+<%- end -%>
+
+</div>
+</div>
+
+<div id="left_side_box">
+
+  <table style="border-collapse:collapse;">
+    <% cols = 2.0 %>
+    <% rows = (@showing_groups.size / cols).ceil %>
+    <% g = 0 %>
+    
+    <% for i in 0...rows %>
+    <tr>
+      <% for j in 0...cols %>
+      <td style="padding:5px;">
+        <% if g < @showing_groups.size %>
+        <%= group_icon(:group => @showing_groups[g]) %>
+        <% else %>
+        &nbsp;
+        <% end %>
+        <% g += 1 %>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </table>
+
+</div>
+
+
+</div>

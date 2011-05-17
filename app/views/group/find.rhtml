@@ -1,0 +1,22 @@
+<div class="accent_box" style="float:right;">
+  <form action="<%=url_for(:action=>'find')%>"
+        method="GET">
+    <input type="hidden" name="by" value="search" />
+    Find a group <input type="text" name="q" /> 
+    <%= submit_tag 'Go'%>
+  </form>
+</div>
+
+<h1>
+<%= @g_title %>
+
+(<%= @g_count%>)
+</h1>
+
+<p><%= @g_subtitle %></p>
+
+<div class="clear" style="margin-bottom:1em;"></div>
+
+<%= render :partial => 'table', :locals => {:the_groups => @groups} %>
+
+<%= will_paginate @group_pages %>

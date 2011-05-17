@@ -1,0 +1,91 @@
+<div id="claimroll_preview">
+Loading preview...
+</div>
+
+<script type="text/javascript">
+function updateCode() {
+  var jsurl = "<%= url_for :only_path => false, :controller => 'widget', :action => 'claimroll', :openid => liu.s %>"
+  if (String.indexOf(jsurl,'?') != -1) {
+    jsurl += '&';
+  } else {
+    jsurl += '?';
+  }
+  jsurl += Form.serialize($('claimroll_form'));
+
+  var code = "<scr"+"ipt type='text/javascript' src='"+jsurl+"'></scr"+"ipt>";
+  new Ajax.Updater($('claimroll_preview'), jsurl+'&preview=y', {asynchronous:true, evalScripts:true});
+  code += "<noscript><a href=\"<%=xprofile_url(liu.s)%>\" title=\"My Jyte profile\" rel=\"me\">My Jyte profile</a></noscript>"
+  $('claimroll_code').innerHTML = code;
+};
+function updatePreview() {
+};
+function doUpdate() {
+  updateCode();
+  updatePreview();
+};
+</script>
+
+<h1>Personal Claimroll Creator</h1><br/>
+
+<div id="claimroll_form_wrap">
+<div class="accent_box">
+  <p style="color:#1e1858;">
+    A claimroll is a set of Jyte claims that you can add to any
+    webpage.  Use the form below to configure your roll,
+    and then copy and paste the code snippet below onto your blog
+    or website.  <span class="agreed">A preview of your claimroll is displayed to the right.</span>
+  </p>
+
+  <form id="claimroll_form" action="" onsubmit="return false;">
+    <h4>Claimroll content</h4>
+    Show the 
+    <input name="count" type="text" size="2" maxlength="2" value="5"
+           onchange="if (isNaN(this.value)) {this.value = 5}; doUpdate();" /> 
+    most recent claims
+    <select name="type" onchange="doUpdate();">
+      <option value="by">I made</option>
+      <option value="voted">I voted on</option>
+      <option value="about">about me</option>
+      <option value="watched">I'm watching</option>
+      <option value="commented">I commented on</option>
+    </select>
+
+    <br/><br/>
+
+    <h4>Options</h4>
+    <p>
+      <input type="checkbox" name="no_css" id="no_css_checkbox" onclick="doUpdate();"/>
+      <label for="no_css_checkbox">I will style the widget with my own
+        CSS</label>
+      <br/>
+      
+      <input type="checkbox" name="no_show_vote" id="no_show_vote_checkbox"
+             onchange="doUpdate();"/>
+      <label for="no_show_vote_checkbox">Don't show my vote</label>
+      
+      <br/>
+      <input type="checkbox" name="no_votes" id="no_vote_checkbox" onchange="doUpdate();"/>
+      <label for="no_vote_checkbox">Don't show vote counts</label>
+      <br/>
+      <input type="checkbox" name="no_profile_link" id="no_profile_link_checkbox" onchange="doUpdate();"/>
+      <label for="no_profile_link_checkbox">Don't show profile link</label>
+      <br/>
+      <input type="checkbox" name="no_title" id="no_title_checkbox" onchange="doUpdate();"/>
+      <label for="no_title_checkbox">Don't show title</label>
+    </p>
+  </form>
+
+
+  <h4>Claimroll Code</h4>
+  <p>Copy and past the code below into your page</p>
+  <textarea id="claimroll_code" cols="40" rows="3" onclick="this.select();" >
+  </textarea>
+</div>
+<h2 style="margin-top:1em;">
+Or, create a <%= link_to('tag claimroll',:controller=>'claim',:action=>'tagroll_setup')%> 
+</h2>
+</div>
+
+<script type="text/javascript">
+  doUpdate();
+</script>

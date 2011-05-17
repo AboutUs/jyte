@@ -1,0 +1,73 @@
+<% @n = 0 unless @n; @n += 1 -%>
+
+<%
+if @liu_votes
+  liuvote = @liu_votes[claim.id]
+else
+  liuvote = logged_in? ? liu.vote_on(claim) : nil
+end
+%>
+
+<script type="text/javascript">
+liu_current_votes[<%=claim.id%>] = <%= liuvote.nil? ? 'null' : (liuvote.vote ? 'true' : 'false') %>;
+</script>
+
+<% if logged_in? -%>
+    <% vote_up_url =
+    url_for(:controller=>'claim',:action=>'vote',:claim_id=>claim.id,:vote=>'yes')-%>
+    <% vote_down_url =
+       url_for(:controller=>'claim',:action=>'vote',:claim_id=>claim.id,:vote=>'no')-%>
+<% else -%>
+<%vote_up_url=vote_down_url=url_for(:controller=>'auth',:action=>'login',:dest=>claim_url(:urlslug=>claim.urlslug))%>
+<% end -%>
+
+<div class="claim_voting_widget">
+
+  <div id="showing_vote_<%=@n%>"
+       class="showing_votes <%= cw_class(claim) %>"
+       onmouseover="open_polls(<%=@n%>);">
+
+    <a id="votes_left_<%=@n%>"
+         rev="vote-for"
+       class="left_value big_number <%='selected' if (liuvote and liuvote.vote==true)%>"
+       href="<%=vote_up_url%>" rel="nofollow">
+      <span id="votes_left_text_<%=@n%>" style="color:#fff;"><%= claim.yeas %></span>
+    </a>
+    <a id="votes_right_<%=@n%>"
+       rev="vote-against"
+       class="right_value big_number <%='selected' if (liuvote and liuvote.vote==false)%>"
+       href="<%=vote_down_url%>" rel="nofollow">
+      <span id="votes_right_text_<%=@n%>" style="color:#fff;"><%= claim.nays %></span>
+    </a>    
+  </div>
+
+  <div id="making_vote_<%=@n%>" class="making_a_vote"
+       onmouseover="keep_open(this);"
+       onmouseout="close_polls(this);"
+       style="display:none;">
+
+    <a href="<%= vote_up_url %>"
+       id="votes_for_<%=@n%>" class="left_value big_number"
+       rev="vote-for"
+       onmouseover="position_background(this);"
+       onmouseout="reposition_background(this);"
+       <% if liuid-%>onclick="vote_for(this,'left',<%=@n%>,'<%=vote_up_url%>',<%=claim.id%>);return false;"<% end -%>
+       rel="nofollow">
+      <span id="voting_left_text_<%=@n%>"
+            style="color:#fff;"><%=claim.yeas%></span>
+    </a>
+
+    <a href="<%= vote_down_url %>"
+       id="votes_against_<%=@n%>" class="right_value big_number"
+       rev="vote-against"
+       onmouseover="position_background(this);"
+       onmouseout="reposition_background(this);"
+       <% if liuid -%>onclick="vote_for(this,'right',<%=@n%>,'<%=vote_down_url%>',<%=claim.id%>);return false;"<% end -%>
+       rel="nofollow">
+      <span id="voting_right_text_<%=@n%>"
+            style="color:#fff;"><%=claim.nays%></span>
+    </a>
+    
+  </div>
+
+</div>

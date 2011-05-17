@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <% if @microids and @microids.length > 0 -%>
+    <% @microids.each {|m| -%>
+    <meta name="microid" content="<%=m%>" />
+    <% } -%>
+    <% end -%>
+
+    <title>Jyte<% unless @title.nil? %> - <%= h(@title) %><% else %>: Spread the Cred<% end %></title>
+
+    <% if @meta_tags %>
+      <% @meta_tags.each {|name, content| %>
+      <meta name="<%= h(name) %>" content="<%= h(content) %>" />
+      <% } %>
+    <% end %>
+
+    <link title="Jyte" rel="search" type="application/opensearchdescription+xml" href="http://jyte.com/jyte_search.xml"/>
+    <link href="/stylesheets/j.css?3" media="screen" rel="Stylesheet" type="text/css" />
+    
+    <% if RAILS_ENV == 'production' -%>
+    <link rel="icon" type="image/x-icon" href="http://jyte.com/images/thumbs_up_16.png" />
+    <script src="/javascripts/j.js?2" type="text/javascript"></script>
+    <% else -%>
+    <link rel="icon" type="image/x-icon" href="<%= front_url(:only_path => false).chomp('/') + image_path("yellow_pinwheel_16.png") %>" />
+    <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag 'global' %>
+    <%= javascript_include_tag 'claimpage' %>
+    <%= javascript_include_tag 'prototype_extensions' %>
+
+    <% end -%>
+
+    <% if @rss_links and @rss_links.length > 0 -%>
+    <% @rss_links.each {|rl| -%>
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="<%=rl%>" />
+    <% } -%>
+    <% end -%>
+  </head>
+
+  <body>
+
+    <% if @flash_notice or flash[:notice] -%>
+    <div id="flash_notice_box">
+      <span id="flash_pinwheel">
+        <% if @flash_notice -%>
+        <%= h(@flash_notice) %>
+        <% else -%>
+        <%= h(flash[:notice]) %>
+        <% end -%>
+    &nbsp;<a href="#" onclick="close_notice();return false;">close</a> this message</span></div>
+    <% else %>
+     <% if !logged_in? %>
+     <div id="flash_notice_box">
+        <span id="flash_pinwheel">
+          Jyte is now owned by <a href="http://www.aboutus.org/">AboutUs</a>.  Read all about it <a href="http://blog.aboutus.org/2010/01/13/aboutus-acquires-jyte-com/">here</a>.
+        </span>
+     </div>
+     <% end -%>
+    <% end -%>
+    
+    <div id="global_container">
+      <div id="constraints_box">
+
+        <div id="login_info_box">
+
+          <% if logged_in? and (liu.description.nil? or liu.description.empty?) and (liu.nickname.nil? or liu.nickname.empty?) and liu.image.nil? %>
+          <span id="action_item_box">
+            To do: 
+            <%= link_to "Complete your profile", :controller => 'user', :action => 'account' %>
+          </span>
+          <% end %>
+
+          <ul>
+            <% if liu -%>
+            <li>Signed in as <%= liu.s %></li>
+            <li>(<%= link_to 'Sign Out', :controller => 'auth', :action => 'logout' %>)</li>
+            <% else -%>
+            <li>
+              <b><a class="rpxnow" href="https://rpxnow.com/openid/v2/signin?rp_id=23&token_url=<%=CGI.escape(url_for(:controller=>'auth',:action=>'rpx_response',:only_path=>false))%>" onclick="return false;">Sign in</a></b>
+            </li>
+            <% end -%>
+            <li><%= link_to 'Help',:controller=>'help' %></li>
+          </ul>          
+
+        </div>
+        <div class="clear"></div>
+
+        <!-- Site Nav -->
+        <div id="site_nav_box">
+          <ul>
+            <li>
+              <a href="<%= url_for :controller=>'site'%>">
+                <img src="<%=image_path 'logo.gif'%>" id="logo" alt="Jyte" />
+              </a>
+            </li>
+            <% if logged_in? -%>
+	    <li class="nav_item">
+              <a href="<%=url_for :controller=>'home'%>">
+                <img src="<%= image_path 'nav_home_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_home_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_home_off.gif")%>'"
+                     alt="Home" />
+              </a>
+            </li>
+
+	    <li class="nav_item">
+              <a href="<%=xprofile_url(liu.s)%>">
+                <img src="<%= image_path 'nav_you_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_you_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_you_off.gif")%>'"
+                     alt="You" />
+              </a>
+            </li>
+
+	    <li class="nav_item">
+              <a href="<%=url_for :controller=>'claim',:action=>'new'%>">
+                <img src="<%= image_path 'nav_make_claim_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_make_claim_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_make_claim_off.gif")%>'"
+                     alt="Make a claim" />
+              </a>
+            </li>
+
+	    <li class="nav_item">
+              <a href="<%=url_for :controller=>'group'%>">
+                <img src="<%= image_path 'nav_groups_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_groups_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_groups_off.gif")%>'"
+                     alt="Groups" />
+              </a>
+            </li>
+
+
+            <% else -%>
+
+	    <li class="nav_item">
+              <a href="<%=url_for :controller=>'site'%>">
+                <img src="<%= image_path 'nav_home_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_home_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_home_off.gif")%>'"
+                     alt="Home" />
+              </a>
+            </li>
+
+	    <li class="nav_item">
+              <a class="rpxnow" href="https://rpxnow.com/openid/v2/signin?rp_id=23&token_url=<%=CGI.escape(url_for(:controller=>'auth',:action=>'rpx_response',:only_path=>false))%>" onclick="return false;">
+                <img src="<%= image_path 'nav_sign_up_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_sign_up_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_sign_up_off.gif")%>'"
+                     alt="All claims" />
+              </a>
+            </li>
+
+            <% end -%>
+
+	    <li class="nav_item">
+              <a href="<%=url_for :controller=>'claim',:action=>'find'%>">
+                <img src="<%= image_path 'nav_everybody_off.gif' %>"
+                     onmouseover="this.src = '<%=image_path("nav_everybody_on.gif")%>'"
+                     onmouseout="this.src = '<%=image_path("nav_everybody_off.gif")%>'"
+                     alt="All claims" />
+              </a>
+            </li>
+
+          </ul>
+          
+          <div id="search_box">
+            <form action="<%= url_for :controller=>'site',:action=>'search' %>"
+                  style="display:inline;">
+              <input type="text" class="textbox"
+                     name="q" value="Search"
+                     onfocus="if(this.value=='Search'){this.value='';this.style.color='#41525f';}"
+                     onblur="if(this.value==''){this.value='Search';this.style.color='#839caf';}"
+              />
+              <input id="btnGo" type="image" src="<%=image_path 'go.gif'%>" />
+            </form>
+          </div>
+
+          <div class="clear"></div>
+        </div>
+
+        <%= @content_for_layout %>
+
+        <div class="clear"></div>
+
+        <div id="footer">
+
+          <%= link_to 'help', :controller=>'help' %> - 
+          <a href="http://blog.aboutus.org/tag/jyte/">blog</a> - 
+          <%= link_to 'spy', :controller=>'spy',:action=>'index' %> -
+          <%= link_to 'random claim', :controller=>'claim',:action=>'random' %> -
+          <%= link_to 'api', :controller=>'site',:action=>'api' %> - 
+          <%= link_to 'terms of service', :controller=>'site',:action=>'tos' %> - 
+          <a href="http://aboutus.org/jyte.com">about jyte</a>
+          
+          
+        </div>
+
+      </div>
+    </div>
+    <div id="overlay" style="display:none;<%= ie_overlay_style %>" />
+
+  <% if !liu %>
+  <script type="text/javascript"
+  src="https://rpxnow.com/openid/v2/widget"></script>
+<script type="text/javascript">
+  RPXNOW.token_url = "<%=url_for(:controller=>'auth',:action=>'rpx_response',:only_path=>false)%>";
+  RPXNOW.rp_id = 23;
+  RPXNOW.overlay = true;
+
+<% if @action_name == 'login' %>
+  RPXNOW.always_open = true;
+  RPXNOW.show();
+<% end %>
+</script>
+  <% end %>
+
+
+  <% if RAILS_ENV == 'production' -%>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3697105-6");
+pageTracker._trackPageview();
+</script>
+  <% end -%>
+
+
+  </body>
+
+</html>

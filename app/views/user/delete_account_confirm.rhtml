@@ -1,0 +1,28 @@
+<h1>Really delete your Jyte account?</h1>
+
+<br/>
+
+<div class="accent_box" style="width:20em;">
+<h4>All account data will be destroyed.</h4>
+<p>
+All your claims, votes and comments will be deleted.  This action cannot be undone.
+</p>
+<form method="POST" id="dform"
+      action="<%=url_for :action=>'delete_account_final'%>"
+      onsubmit="Form.Element.disable($('del_submit'));Element.toggle('del_wait_msg');return true;"
+      >
+
+  <input type="button"
+         value="Yes, delete account"
+         style="font-size:1.5em;"
+         id="del_submit"
+         onclick="this.disabled=true;Element.toggle('del_wait_msg');$('dform').submit();"
+         />
+
+</form>
+
+<div id="del_wait_msg" style="color:red;padding-top:1em;display:none;">
+Deleting account.  This may take a moment...
+</div>
+
+</div>

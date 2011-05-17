@@ -1,0 +1,196 @@
+/*
+
+	Table of Contents:
+
+		Jyte Defaults
+		Claim Box ( title, description )
+		Big 'Ol Voting Widget
+		Tug-of-war Status Bar
+		
+		flagging box	
+*/
+
+
+
+/* Jyte Defaults
+---------------------------------------------------------------------------------------------------- */
+@import "global.css";
+
+
+
+
+/* Claim Box ( title, description )
+---------------------------------------------------------------------------------------------------- */
+#claim_box { border: 1px solid #000; padding: 25px 0 75px 10px; text-align: center; }
+	h1#claim { color: #000; margin-bottom: 10px; }
+	h4#claim_made_by { color: #888; font-weight: normal; }
+	
+	#supporting_material { margin: 1.8em 3em; border-top: 1px solid #ccc; padding: 1.4em 0 .2em 0; text-align: left; font: 1em Verdana, Arial, sans-serif; line-height: 1.6em; }
+		#supporting_material h4 { margin-bottom: 7px; }
+		#supporting_material img { margin: 1em auto .6em auto; }
+
+
+/* Big 'Ol Voting Widget
+---------------------------------------------------------------------------------------------------- */		
+#at_the_polls_box { background: #f2f9ff url(../images/claimpage/at_the_polls_box_bg.gif) repeat-x; position: relative; padding-bottom: 20px; }
+
+	div#make_a_vote_box { position: relative;	position: absolute; z-index: 30; top: -55px; left: 241px; width: 160px; height: 80px; cursor: pointer; overflow: hidden; }
+
+		div#make_a_vote_box div.showing_votes { width: 160px; height: 80px; cursor: pointer; }
+			div#make_a_vote_box div.showing_votes a.selected { background-position: -80px 0 !important; }
+			
+			div#make_a_vote_box a.left_value { display: block; width: 76px; height: 75px; float: left; color: #fff; font: bold 1.9em Arial; text-align: center; text-decoration: none; padding: .4em 0 0 4px; cursor: pointer; }
+			div#make_a_vote_box a.right_value { display: block; width: 78px; height: 75px; float: right; color: #fff; font: bold 1.9em Arial; text-align: center; text-decoration: none; padding: .4em 0 0 2px; cursor: pointer; }
+			
+			div#make_a_vote_box div.highest_green_value a.left_value { background: url(../images/claimpage/vote_button/green_highest_l.png) no-repeat; }
+			div#make_a_vote_box div.highest_green_value a.right_value { background: url(../images/claimpage/vote_button/green_highest_r.png) no-repeat; }
+
+			div#make_a_vote_box div.higher_green_value a.left_value { background: url(../images/claimpage/vote_button/green_higher_l.png) no-repeat; }
+			div#make_a_vote_box div.higher_green_value a.right_value { background: url(../images/claimpage/vote_button/green_higher_r.png) no-repeat; }
+
+			div#make_a_vote_box div.high_green_value a.left_value { background: url(../images/claimpage/vote_button/green_high_l.png) no-repeat; }
+			div#make_a_vote_box div.high_green_value a.right_value { background: url(../images/claimpage/vote_button/green_high_r.png) no-repeat; }
+
+			div#make_a_vote_box div.low_green_value a.left_value { background: url(../images/claimpage/vote_button/green_low_l.png) no-repeat; }
+			div#make_a_vote_box div.low_green_value a.right_value { background: url(../images/claimpage/vote_button/green_low_r.png) no-repeat; }
+
+			div#make_a_vote_box div.lowest_green_value a.left_value { background: url(../images/claimpage/vote_button/green_lowest_l.png) no-repeat; }
+			div#make_a_vote_box div.lowest_green_value a.right_value { background: url(../images/claimpage/vote_button/green_lowest_r.png) no-repeat; }
+
+			div#make_a_vote_box div.even_value a.left_value { background: url(../images/claimpage/vote_button/grey_l.png) no-repeat; }
+			div#make_a_vote_box div.even_value a.right_value { background: url(../images/claimpage/vote_button/grey_r.png) no-repeat; }
+
+			div#make_a_vote_box div.lowest_pink_value a.left_value { background: url(../images/claimpage/vote_button/pink_lowest_l.png) no-repeat; }
+			div#make_a_vote_box div.lowest_pink_value a.right_value { background: url(../images/claimpage/vote_button/pink_lowest_r.png) no-repeat; }
+
+			div#make_a_vote_box div.low_pink_value a.left_value { background: url(../images/claimpage/vote_button/pink_low_l.png) no-repeat; }
+			div#make_a_vote_box div.low_pink_value a.right_value { background: url(../images/claimpage/vote_button/pink_low_r.png) no-repeat; }
+
+			div#make_a_vote_box div.high_pink_value a.left_value { background: url(../images/claimpage/vote_button/pink_high_l.png) no-repeat; }
+			div#make_a_vote_box div.high_pink_value a.right_value { background: url(../images/claimpage/vote_button/pink_high_r.png) no-repeat; }
+
+			div#make_a_vote_box div.higher_pink_value a.left_value { background: url(../images/claimpage/vote_button/pink_higher_l.png) no-repeat; }
+			div#make_a_vote_box div.higher_pink_value a.right_value { background: url(../images/claimpage/vote_button/pink_higher_r.png) no-repeat; }
+
+			div#make_a_vote_box div.highest_pink_value a.left_value { background: url(../images/claimpage/vote_button/pink_highest_l.png) no-repeat; }
+			div#make_a_vote_box div.highest_pink_value a.right_value { background: url(../images/claimpage/vote_button/pink_highest_r.png) no-repeat; }
+
+		div#make_a_vote_box div.making_a_vote { width: 160px; height: 80px; cursor: pointer; position: absolute; z-index: 50; top: 0; }
+
+			div#make_a_vote_box div.making_a_vote a.left_value { display: block; width: 76px; height: 75px; float: left; color: #fff; font: bold 1.9em Arial; text-align: center; text-decoration: none; padding: .4em 0 0 4px; background: url(../images/claimpage/vote_button/vote_for.png) no-repeat 0 0; cursor: pointer; }
+			div#make_a_vote_box div.making_a_vote a.left_value:hover { background-position: -80px 0; }
+			div#make_a_vote_box div.making_a_vote a.left_value.selected { background-position: -160px 0; }
+			div#make_a_vote_box div.making_a_vote a.left_value.selected:hover { background-position: -240px 0; }
+			
+			div#make_a_vote_box div.making_a_vote a.right_value { display: block; width: 78px; height: 75px; float: right; color: #fff; font: bold 1.9em Arial; text-align: center; text-decoration: none; padding: .4em 0 0 2px; background: url(../images/claimpage/vote_button/vote_against.png) no-repeat 0 0; cursor: pointer; }
+			div#make_a_vote_box div.making_a_vote a.right_value:hover { background-position: -80px 0; }
+			div#make_a_vote_box div.making_a_vote a.right_value.selected { background-position: -160px 0; }
+			div#make_a_vote_box div.making_a_vote a.right_value.selected:hover { background-position: -240px 0; }
+			/* End of Widget */
+	
+	
+	
+	/* List of all the voters names
+	---------------------------------------------------------------------------------------------------- */
+	
+	#agreed_disagreed_box { background: url(../images/claimpage/dotted_border.gif) repeat-y center 0; padding-bottom: 10px; }
+		#agreed_disagreed_box .biggest_purple_dot { background-image: url(../images/dots/purple/12px_blue_dot.gif); }
+		#agreed_disagreed_box .bigger_purple_dot { background-image: url(../images/dots/purple/10px_blue_dot.gif); }
+		#agreed_disagreed_box .big_purple_dot { background-image: url(../images/dots/purple/8px_blue_dot.gif); }
+		#agreed_disagreed_box .small_purple_dot { background-image: url(../images/dots/purple/6px_blue_dot.gif); }
+		#agreed_disagreed_box .smaller_purple_dot { background-image: url(../images/dots/purple/4px_blue_dot.gif); }
+		#agreed_disagreed_box .smallest_purple_dot { background-image: url(../images/dots/purple/3px_blue_dot.gif); }
+		
+		/* Left Side */
+		#votes_for_box { float: left; width: 50%; text-align: right; position: relative; z-index: 10; }
+			#votes_for_box h4 { border-bottom: 1px solid #bdd7ed; padding: 65px 25px 10px 10px; margin: 0 0 15px 20px; }
+			#votes_for_box h4 span { font-weight: normal; }
+			#votes_for_box table { margin-right: 27px; }
+			html[xmlns] #votes_for_box table { float: right; margin-right: 25px; width: 275px; }
+			#votes_for_box table td { width: 50%; }
+			#votes_for_box .your_vote  { background-color: #c5efbf; color: #000; padding-left: 5px; margin-left: 15px; }
+				html[xmlns] #votes_for_box .your_vote.biggest_purple_dot { background-image: url(../images/dots/purple/12px_green_dot.gif); }
+				html[xmlns] #votes_for_box .your_vote.bigger_purple_dot { background-image: url(../images/dots/purple/10px_green_dot.gif); }
+				html[xmlns] #votes_for_box .your_vote.big_purple_dot { background-image: url(../images/dots/purple/8px_green_dot.gif); }
+				html[xmlns] #votes_for_box .your_vote.small_purple_dot { background-image: url(../images/dots/purple/6px_green_dot.gif); }
+				html[xmlns] #votes_for_box .your_vote.smaller_purple_dot { background-image: url(../images/dots/purple/4px_green_dot.gif); }
+				html[xmlns] #votes_for_box .your_vote.smallest_purple_dot { background-image: url(../images/dots/purple/3px_green_dot.gif); }
+		
+		/* Right Side */
+		#votes_against_box { float: right; width: 50%; position: relative; z-index: 10; }
+			#votes_against_box h4 { border-bottom: 1px solid #bdd7ed; padding: 65px 10px 10px 25px; margin: 0 20px 15px 0; }
+			#votes_against_box h4 span { font-weight: normal; }
+			#votes_against_box table { margin-left: 25px; width: 275px; }
+			#votes_against_box table td { width: 50%; }
+			#votes_against_box .your_vote  { background-color: #efcde1; color: #000; padding-right: 5px; margin-right: 15px; }
+				html[xmlns] #votes_against_box .your_vote.biggest_purple_dot { background-image: url(../images/dots/purple/12px_pink_dot.gif); }
+				html[xmlns] #votes_against_box .your_vote.bigger_purple_dot { background-image: url(../images/dots/purple/10px_pink_dot.gif); }
+				html[xmlns] #votes_against_box .your_vote.big_purple_dot { background-image: url(../images/dots/purple/8px_pink_dot.gif); }
+				html[xmlns] #votes_against_box .your_vote.small_purple_dot { background-image: url(../images/dots/purple/6px_pink_dot.gif); }
+				html[xmlns] #votes_against_box .your_vote.smaller_purple_dot { background-image: url(../images/dots/purple/4px_pink_dot.gif); }
+				html[xmlns] #votes_against_box .your_vote.smallest_purple_dot { background-image: url(../images/dots/purple/3px_pink_dot.gif); }
+		
+		/* Groups */		
+		.list_of_groups { color: #666; margin: 0 25px; }
+			.list_of_groups a { text-decoration: none; }
+			.list_of_groups a:hover { text-decoration: underline; }
+	
+	
+	
+	/* Tug-of-war Status Bar
+	---------------------------------------------------------------------------------------------------- */
+	#tug_of_war_box { background-color: #fff; margin: 0 20px; }
+		.tug_of_war_box_top { height: 7px; overflow: hidden; background: url(../images/rounded_boxes/white/border.gif) repeat-x; }
+			.tug_of_war_box_top .tug_of_war_box_left { height: 7px; width: 7px; float: left; overflow: hidden; background: url(../images/rounded_boxes/white/top_left.gif) no-repeat; }
+			.tug_of_war_box_top .tug_of_war_box_right { height: 7px; width: 7px; float: right; overflow: hidden; background: url(../images/rounded_boxes/white/top_right.gif) no-repeat; }
+			
+		.tug_of_war_box_content { border-left: 1px solid #bed7ee; border-right: 1px solid #bed7ee; height: 77px; padding: 7px 23px; }
+			h3#total_votes_for { float: left; height: 1.4em; color: #319440; font: bold 1.4em Arial; }
+			h3#total_votes_against { float: right; height: 1.4em; color: #e54c8c; font: bold 1.4em Arial; }
+			#tug_of_war_bar { clear: both; border-left: 1px solid #568c5d; border-right: 1px solid #e54c8c; height: 29px; background: url(../images/claimpage/tug_of_war_bar.png) no-repeat; margin-bottom: 3px; }
+			span#votes_for_percentage { color: #319440; font: .9em Arial; float: left; height: 1em; }
+			span#votes_against_percentage { color: #e54c8c; font: .9em Arial; float: right; height: 1em; }
+		
+		.tug_of_war_box_bottom { height: 7px; overflow: hidden; background: url(../images/rounded_boxes/white/border.gif) repeat-x 0 6px; }
+			.tug_of_war_box_bottom .tug_of_war_box_left { height: 7px; width: 7px; float: left; overflow: hidden; background: url(../images/rounded_boxes/white/bottom_left.gif) no-repeat; }
+			.tug_of_war_box_bottom .tug_of_war_box_right { height: 7px; width: 7px; float: right; overflow: hidden; background: url(../images/rounded_boxes/white/bottom_right.gif) no-repeat; }
+	
+	
+#claim_actions_box { padding: 2em 2em 2em 2.1em; border-bottom: 1px solid #cbddee; }
+	#claim_actions_box input { background: #f7f6fe url(../images/purple_text_box_bg.gif) repeat-x; border: 1px solid #bdacfc; font: 1em Arial; padding: 3px 0 3px 5px; width: 250px; color: #8c72db; overflow-x: hidden; overflow-y: visible; margin-left: 3px; }
+	#claim_actions_box a { margin-left: 30px; }
+	
+#claim_comments { float: left; padding: 20px 0; width: 65%; }
+	#claim_comments h2 { padding-bottom: 20px; }
+	
+	.comment { margin: 0 0 35px 3px; }
+		.comment .user_who_commented { margin-bottom: .6em; }
+		.avatar { float: left; margin-right: 15px; }
+			.avatar img { display: block; }
+		.their_words { font: 1em Verdana, Arial, sans-serif; line-height: 1.6em; margin-bottom: .6em; }
+		
+		.comment_actions { font: .9em Arial; }
+			.comment_actions span { color: #777; margin-right: 10px; }
+			.comment_actions a.reply { margin-right: 8px; text-decoration: none; }
+			.comment_actions a.reply:hover { text-decoration: underline; }
+			.comment_actions a { display: inline; }
+				.comment_actions a img { display: inline; vertical-align: bottom; }
+				
+		.open_follow_up_comments { background-color: #f2f9ff; border-top: 1px solid #ccc; padding: 4px 7px; margin: 7px 0; color: #888; font: .9em Arial; }
+			.open_follow_up_comments a { text-decoration: none; }
+			
+		.follow_up_comments { margin-top: 20px; }
+		
+	#claim_comments #new_comment { color: #2c8439; }
+	#claim_comments textarea { width: 100%; height: 150px; background-color: #f7fcff; border: 1px solid #9cc3e4; display: block; margin: 7px 0 15px 0; overflow: auto; }
+
+	
+#claims_spun_off_this { float: right; width: 30%; padding: 20px 0; }
+	#claims_spun_off_this h2 { margin-bottom: 5px; }
+	#claims_spun_off_this ul { margin-bottom: 25px; }
+		#claims_spun_off_this ul li { margin-bottom: 7px; }
+			#claims_spun_off_this  a { text-decoration: none; }
+			
+
+#flagging_box a { font-size: 9px; text-decoration: none; }
+#flagging_help { border: 1px solid #bdacfc; padding: 3px; position: relative; z-index: 2; top: 0px; left: 0px; width: 500px;} */

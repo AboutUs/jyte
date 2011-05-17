@@ -1,0 +1,42 @@
+What is acts_as_solr?
+======================
+This plugin adds full text search capabilities using Solr to any Rails model.
+It was based on the first draft by Erik Hatcher.
+
+Current Release: 0.04
+====================
+Released on 11-07-06
+
+Changes I made:
+===============
+Please refer to the change log
+
+Usage:
+======
+Just include the line below to any of your ActiveRecord models:
+
+  acts_as_solr
+
+Or if you want, you can specify only the fields that should be indexed:
+
+  acts_as_solr :fields => [:name, :author]
+
+Then to find instances of your model, just do:
+
+  Model.find_by_solr(query) or Model.find_id_by_solr(query)
+
+Or if you want to specify the starting row and the number of rows per page:
+
+  Model.find_by_solr(query, :start => 0, :rows => 10)
+
+Authors:
+========
+Erik Hatcher  => First draft
+Thiago Jackiw => tjackiw@gmail.com
+
+Special Thanks to:
+==================
+Mingle, LLC (www.mingle.com) for the opportunity
+
+
+Released under the MIT license.

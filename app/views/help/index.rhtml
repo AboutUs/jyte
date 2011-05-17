@@ -1,0 +1,165 @@
+<div id="content_lead">
+	<table>
+		<tr><td><h1>Help!</h1></td></tr>
+		<tr><td>&nbsp;</td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#signin">How do I sign in to Jyte?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#claims">How do I make a claim?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#dot">What does the dot next to my name mean?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#cred">What is cred and how do I get some?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#givecred">How do I give someone cred?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#tags">What are tags?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#someone">How do I make a claim about someone?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#votechange">Can I change my votes?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#video">How do I add a video to my claim or comment?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#pictures">Can I add a picture to my claim or comment?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#authgroups">Can I use Jyte groups and OpenID for authorization on my site?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#contacts">What are Contacts and how do I use them?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#contact">Who do I contact for help?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#featurerequest">What if I have an idea for a cool new feature for Jyte?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#microid">Does Jyte support MicroID and ClaimID?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#delete_account">What if I want to delete my account?</a></td></tr>
+		<tr><td height="22" style="padding:0 10px 0 15px;"><a href="#whomade">Who is behind Jyte?</a></td></tr>
+		<tr><td height="22" style="padding:0 0px 0 15px;"><a href="#blog">Where can I go to find out the latest Jyte news?</a></td></tr>
+	</table>
+	
+<div id="helppage">
+
+<h2 id="signin">How do I sign in to Jyte?</h2>
+<p>
+Unlike other websites that require people to create a unique account for that website alone, Jyte allows visitors to sign in using <a href="http://en.wikipedia.org/wiki/OpenID">OpenID</a>. OpenID is a simple single sign-on mechanism that allows you to login at multiple websites with the same identity.
+</p>
+<p>
+You can sign in to Jyte using a login that you already have on AOL, Google (Gmail), Yahoo!, or an OpenID of your choice. You can get an OpenID to use on Jyte (and other websites) at <a href="http://www.myopenid.com/">myOpenID.com</a>. If you already have an OpenID from another provider such as <a href="http://www.livejournal.com/">LiveJournal</a>, <a href="http://pip.verisignlabs.com/">Verisign's PIP</a>, or <a href="http://claimid.com/">ClaimID</a>, you can use it to log into Jyte.
+</p>
+
+<h2 id="claims">How do I make a claim?</h2>
+<p>  
+You can claim anything, so have at it.  It's fun, and it's even more fun to get discussions and votes going.  All you have to do is click on the <strong>Make a Claim</strong> link at the top of the page and type your claim in the box.  For example, "Ferraris are fun to drive." You can add a description or video embeds to the claim, and tag it to make it easier to find. Then watch as your friends and the Jyte community vote and comment on your claim.  
+</p>
+
+<h2 id="dot">What does the dot next to my name mean?</h2>
+<p>
+	The dot represents your overall cred.  The more cred you have, the larger the dot will be.
+</p>
+
+<h2 id="cred">What is <em>cred</em> and how do I get some?</h2>
+<p>
+	Jyte uses a "gift-based economy" for people interested in developing their on-line credibility.  A similar reputation currency called "whuffie" is
+	featured in Cory Doctorow's science fiction novel, <a href="http://craphound.com/down/">Down and Out in the Magic Kingdom</a>.
+</p>
+<p>
+	You can give another user <em>cred</em> using <a href="#tags">tags</a> to signify that you respect their abilities or qualities in a certain area.  For
+	example, if you think your friend Jason is good at darts, you would give him cred using the tag "darts". If you are a dart expert, and already have lots
+	of "darts" cred, then Jason's "darts" cred will go up quite a bit. If you have no "darts" cred, Jason will get only a small amount of "darts" cred.
+</p>
+
+<h2 id="givecred">How do I give someone cred?</h2>
+<p>
+	Click the "Give cred" link on a person's profile page.  Then, in the box that pops up, type <a href="#tags">tags</a> that describe his or her best skills
+	or qualities.  In about an hour the person's cred score should reflect the new cred you've given.
+</p>
+<p>
+	You can take back cred you have given someone by following these steps, but removing tags that you have previously given to that person instead.</p>
+<p>
+	<%= link_to "Giving cred, step by step", :action => 'cred_step_by_step' %>
+</p>
+
+<h2 id="tags">What are <em>tags</em>?</h2>
+<p>
+	Tags are keywords that are associated with or describe a bit of information. Jyte users use tags to create categories for claims and cred, and to
+	indicate their interests. You can find out more about <a href="http://en.wikipedia.org/wiki/Tags">tags on Wikipedia</a>.
+</p>
+<p>
+        Separate multiple tags with commas. For example the following
+        input would yield the tags listed below.
+        <br/><br/>
+		<input size="43" value="full contact human chess, bicycles, coffee" />
+	<br>
+	<ul style="margin-left:5%; margin-bottom:2em;">
+		<li>full contact human chess</li>
+		<li>bicycles</li>
+		<li>coffee</li>
+	</ul>
+</p>
+
+<h2 id="someone">So, how do I make a claim about someone?</h2>
+<p>
+	In order for Jyte to know that your claim is about a person, you have to refer to your friend by their OpenID (<a href="#openid">What is OpenID?</a>).
+</p>
+
+<h2 id="votechange">Can I change my votes?</h2>
+<p>
+	As many times as you like.
+</p>
+
+<h2 id="video">How do I add a video to my claim or comment?</h2>
+<p>
+	Jyte doesn't host video files on its website, but you can embed videos that are hosted on video sharing sites such as YouTube. Just browse to the YouTube
+	video that you'd like to embed in your claim. The copy the HTML code that YouTube shows in the <strong>Embed</strong> box that is to the right of the
+	video. Paste that link into the <strong>Description</strong> box on the claim preview page, or the <strong>Make a new comment</strong> box on a published
+	claim. A video will display!
+</p>
+
+<h2 id="pictures">Can I add a picture to my claim or comment?</h2>
+<p>
+	Yes! You can either upload a photo that is associated with a claim, or embed a link to a photo.
+</p>
+<p>
+	To link to an external photo, you simply add HTML code in the <strong>Description</strong> box for your claim like this: &lt;img src="URL to photo"
+	title="snide comment (optional)" /&gt;
+</p>
+<p>
+	To upload a photo, please use the <strong>Add an image</strong> feature when building your claim.
+</p>
+
+<h2 id="authgroups">Can I use Jyte groups and OpenID for authorization on my site?</h2>
+<p>
+	Yes!  That's what the API urls on the bottom of the group page are for.  Feel free to <a href="mailto:jyte@aboutus.org">mail us</a> if you need help.
+</p>
+
+<h2 id="contacts">What are Contacts and how do I use them?</h2>
+<p>
+	If you add a user as a contact you will be able to keep track of their activity on Jyte from your personal home page.  To add a user, go to their profile
+	page, and click the "Add to your contacts" link.
+</p>
+
+<h2 id="contact">Who do I contact for help?</h2>
+<p>
+	Please send your Jyte support requests by email: <a href="mailto:jyte@aboutus.org">jyte@aboutus.org</a>
+</p>
+
+<h2 id="featurerequest">What if I have an idea for a cool new feature for Jyte?</h2>
+<p>
+	Make a claim about it!  Tag the claim with 'jyte' and 'feature request' and we should see it.
+</p>
+
+<h2 id="microid">Does Jyte support MicroID and ClaimID?</h2>
+<p>
+	Jyte embeds MicroIDs of your verified OpenID identifiers in your profile page. In short this means that third party services may now programatically
+	verify that you do indeed own your Jyte profile page. For an excellent example of this, see claimid.com's link verification.
+</p>
+
+<p>
+	From microid.org:
+	<br><br>
+	MicroID enables anyone to claim verifiable ownership over content hosted anywhere on the web (social networking sites, discussion forums, blogs, etc.).
+	MicroID is not an authentication or single-sign-on service, just a straightforward method for identifying content ownership that complements existing
+	technologies such as OpenID and microformats.
+</p>
+
+<h2 id="delete_account">How can I have my account deleted?</h2>
+<p>
+If you send a message to <a href="mailto:Jyte@AboutUs.org">Jyte@AboutUs.org</a>, we can delete your account.
+</p>
+
+<h2 id="whomade">Who is behind Jyte?</h2>
+<p>
+<a href="http://www.janrain.com">JanRain</a> created Jyte. In January 2010 Jyte was <a href="http://blog.aboutus.org/2010/01/13/aboutus-acquires-jyte-com/">acquired</a> by <a href="http://www.aboutus.org">AboutUs</a>.
+</p>
+
+<h2 id="blog">Where can I keep track of news related to Jyte?</h2>
+<p>
+The AboutUs Weblog's <a href="ttp://blog.aboutus.org/tag/jyte/">posts about Jyte</a>, <a href="http://twitter.com/Jyte">@Jyte on Twitter</a>, and <a href="http://www.facebook.com/pages/Jytecom/263904119042">Jyte's Facebook page</a>.
+</p>
+
+</div>

@@ -1,0 +1,14 @@
+<h3>Welcome to Jyte, <%=logged_in_user.nickname%>!</h3>
+<p>
+Here are some claims you might want to make about yourself:
+</p>
+<% form_tag :controller => 'site', :action => 'new_user_submit' do %>
+<% i = 0 %>
+<% @autoclaims.each do |c| %>
+  <%= check_box_tag "approve#{i}", '1', true %>
+  <%= hidden_field_tag "claim#{i}", c %>
+  <%= c %><br>
+  <% i += 1 %>
+<% end %>
+<%= submit_tag "Make these claims" %>
+<% end %>

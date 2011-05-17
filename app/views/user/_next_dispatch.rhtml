@@ -1,0 +1,15 @@
+<% if logged_in? and d = liu.next_dispatch -%>
+<div id="next_dispatch">
+ <% if d.class == Claim -%>
+  <%= render :partial => '/claim', :locals => {:claim => d} %>
+ <% elsif d.class == Group -%>
+  <%= render :partial => '/group', :locals => {:one_liner => d} %>
+ <% elsif d.class == User -%>
+  <%= user_link(:user => d) %> is interested in <%= d.tag_list %>
+ <% elsif d.class == Comment -%>
+  <%= link_to "New comment by #{d.user}", {:controller => 'claim', :action => 'show', :urlslug => d.claim.urlslug, :anchor => "comment_#{d.id}" } %> on <%= render :partial => '/claim', :locals => {:claim => d.claim, :hide_votes => true} %>
+ <% else -%>
+  Class not handled: <%= d.class.to_s %> (id: <%= d.id %>)
+ <% end -%>
+</div>
+<% end -%>

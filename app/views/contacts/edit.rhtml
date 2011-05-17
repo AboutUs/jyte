@@ -1,0 +1,33 @@
+<h2>Describe your connection with <%= @contact.contact.dn %></h2>
+<br/>
+<% form_tag :action => 'edit_submit', :user_id => @contact.contact.id do %>
+
+<div class="accent_box" style="width:30em;">
+
+<span style="">
+<% if @all_tags.length > 0 %>
+Your other relations:
+<% @all_tags.each {|t| -%>
+  <%= contact_rel_link(t) %>
+<% } -%>
+<% else %>
+Examples:
+<%= contact_rel_link 'friend' %>
+<%= contact_rel_link 'family' %>
+<%= contact_rel_link 'met' %>
+<%= contact_rel_link 'co-worker' %>
+<% end %>
+</span>
+
+<input type="text"
+       name="contact_tags"
+       id="contact_tags"
+       value="<%= @contact.tags.collect{|t|t.name}.join(', ') %>"
+       style="width:27em;margin-top:.2em;" />
+
+</div>
+
+<%= submit_tag 'Save' %> or
+<a href="#" onclick="history.go(-1);return false;">cancel</a>
+<% end %>
+

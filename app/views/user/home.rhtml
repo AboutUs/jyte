@@ -1,0 +1,73 @@
+<div id="content_lead">
+  <div>
+    <%= icon_image :user=>liu,:size=>'thumb',:style=>'float:left;' %>
+  </div>
+  <div style="float:left;padding-left:1em;">
+    <h1>Hello, <%=liu.dn%></h1>
+  </div>
+  <div style="margin-bottom:.3em;" class="clear"></div>
+
+<div id="sub_navigation" style="font-size:120%">
+
+<%= link_to "edit profile", :action => 'account' %>&nbsp;
+<%= link_to "contacts", :controller=>'contacts',:id=>liu.id %>&nbsp;
+<%= link_to "make a claim about yourself", :controller => 'claim',:action => 'new', :text => liu.s %>
+<%= link_to "widgets", :controller=>'user',:action=>'claimroll_setup'%>
+<%= link_to "account settings",:action =>'settings'%>
+
+</div>
+</div>
+<div id="results_box">
+  <div id="listing_container">
+  <!-- XXX: invitations go here -->
+  <% unless @draft_claims.empty? %>
+    <h4>Your Unfinished Claims</h4>
+    <ul class="plain_list">
+    <% @draft_claims.each{|c| %>
+      <li><%= link_to render_claim_title(c, false), claim_preview_url(:urlslug => c.urlslug) %></li>
+    <% } %>
+  </ul>
+  <% end %>
+  <% unless @comment_claims.empty? %>
+    <h4 style="margin-bottom:1em">New Comments On:</h4>
+    <table>
+    <%= render :partial => '/claim', :collection => @comment_claims %>
+    </table>
+  <% end %>
+  <% unless @claims.empty? %>
+  <span style="float:right;">
+    clear <%=link_to('page',:action=>'clear',:t=>'page')%>
+    <%=link_to('all',:action=>'clear',:t=>'all')%>
+  </span>
+  <h4 style="margin-bottom:1em">Claims we suspect will interest you (<%=@claims_count%>)</h4>
+  
+  <table>
+  <%= render :partial => '/claim', :collection => @claims %>
+  </table>
+  <% end %>
+  </div>
+</div>
+
+<div id="left_side_box">
+  <% unless @user_dispatches.nil? or @user_dispatches.empty? %>
+  <ul class="plain_list">
+    <% @user_dispatches.each {|d| -%>
+     <li>
+     <%= user_link d.dispatchable %> <%= d.reason %>
+     <%= link_to 'dismiss notice', {:action => 'clear', :t => d.id}, {:style => 'font-size: smaller;'} %>
+     </li>
+    <% } -%>
+  </ul>
+  <% end %>
+
+  <% if @group_invites.length > 0 -%>
+  <h4>Group invites</h4>
+  <ul class="plain_list">
+    <% @group_invites.each {|inv| -%>
+    <% group = inv.group %>
+    <li><a href="<%=gurl(group)%>"><%=h(group.name)%></a></li>
+    <% } -%>
+  </ul>
+  <% end -%>
+
+</div>

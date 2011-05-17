@@ -1,0 +1,70 @@
+<% c = comment if defined? comment and not comment.nil? %>
+<% raise "comment partial rendered with no comment" unless c %>
+<% uv = c.user_vote %>
+<% if @blocked_user_ids and @blocked_user_ids.member? c.user_id
+     comment_blocked = true
+   else 
+     comment_blocked = false
+   end
+%>
+
+<table class="comment">
+  <% if comment_blocked %>
+  <tr id="comment_blocked_<%= c.id %>">
+    <td></td>
+    <td style="color: #888; font-size: 90%">
+      Comment from <%= user_link :user_id => c.user_id %>, who you are ignoring.
+      <a href="#" onclick="Element.show('comment_<%= c.id %>');Element.hide('comment_blocked_<%= c.id %>');return false;">Show</a>
+    </td>
+  </tr>
+  <% end %>
+  <tr id="comment_<%= c.id %>" <% if comment_blocked %>style="display: none;"<% end %>>
+    <td>
+      <a href="<%=xprofile_url(find_user(:user_id => c.user_id).s) %>" class="avatar">
+        <%= icon_image :user_id => c.user_id, :size => 'thumb', :linked=>false %>
+      </a>
+    </td>
+    <td>
+      <h4 class="user_who_commented">
+        <span class="<%=cred_class(c.user_id)%>">
+          <%= cred_img c.user_id %>
+          <%= user_link :user_id => c.user_id %>
+          <% if uv.nil? -%>
+          who hasn't voted, says
+          <% elsif uv.vote -%>
+          who <span class="agreed">agreed</span>, says
+          <% else -%>
+          who <span class="disagreed">disagreed</span>, says
+          <% end -%>
+        </span>
+      </h4>
+      <div class="their_words">
+       <p>
+        <%= safe_formatted(c.body, user_allowed_links?(c.user_id)) %>
+       </p>
+      </div>
+      <div class="open_follow_up_comments">
+      <% if c.id # don't show this stuff in the preview -%>
+
+        <%- unless @claim.group_id -%>  
+        <span style="float:right;">
+        <%= link_to('Make a related claim',:controller=>'claim',:action=>'new',:claimable_id=>c.id,:claimable_type=>'Comment')%>
+        </span>
+        <%- end -%>
+
+        <span><%= time_ago_in_words(c.created_at) %> ago</span>
+        <span style="font-size: smaller; margin: 0 1em;">(<%= link_to 'link', claim_url(:urlslug => @claim.urlslug, :anchor => "comment_#{c.id}") %>)</span>
+        <div class="clear"></div>
+        <% if c.inspired_claims.length > 0 -%>
+        <div style="font-size:smaller;margin-top:1em;">
+          <h4>Claims inspired by this comment</h4>
+          <% c.inspired_claims.each {|ic| -%>
+          <%= link_to(render_claim_title(ic,false),:controller=>'claim',:action=>'show',:urlslug=>ic.urlslug) %><br/>
+          <% } -%>
+        </div>
+        <% end -%>
+      <% end -%>
+      </div>
+    </td>
+  </tr>
+</table>

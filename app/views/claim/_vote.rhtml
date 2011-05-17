@@ -1,0 +1,14 @@
+<div class="vote_summary" style="" style="padding-left:0;">
+
+<%= icon_image :user_id => vote.user_id, :size => 'favicon', :class => 'iconborder' %>
+<% if vote.user_id != liuid -%>
+<%= user_link :user_id => vote.user_id %>
+<% else %>
+You
+<% end -%>
+
+<span class="<%= vote.vote == true ? 'agree' : 'disagree'%>">
+  <%= vote.vote == true ? 'Agreed' : 'Disagreed' %></span>
+<span class="subtle small"><%= time_ago_in_words(vote.created_at)  %> ago</span>
+
+</div>

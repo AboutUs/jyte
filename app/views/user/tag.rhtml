@@ -1,0 +1,83 @@
+<h1>
+  <% clink = link_to(h(@tag),{:controller=>'claim',:action=>'find',:tag=>@tag},{:title=>'claims about '+h(@tag)})%>
+  <% if @by == :interest %>
+  Users interested in <%= clink %>
+  <% elsif @by == :cred %>
+  Users with <%= clink %> cred
+  <% elsif @by == :gave_cred %>
+  Users who have given <%= clink %> cred
+  <% end %>
+  (<%=@user_count %>)</h1>
+
+<br/>
+<div id="sub_navigation">
+  <a href="<%=url_for(:action=>'tag',:by=>'interest',:tag=>@tag)%>"
+     class="<%='selected' if @by == :interest%>"
+     >interested in <%=h(@tag)%></a> -
+  <a href="<%=url_for(:action=>'tag',:by=>'cred',:tag=>@tag)%>"
+     class="<%='selected' if @by == :cred%>"
+     >with <%=h(@tag)%> cred</a> -
+  <a href="<%=url_for(:action=>'tag',:by=>'gave_cred',:tag=>@tag)%>"
+     class="<%='selected' if @by == :gave_cred%>"
+     >given <%=h(@tag)%> cred</a> - 
+  <a href="<%=url_for(:controller=>'claim',:action=>'find',:tag=>@tag)%>">claims</a>
+</div>
+
+<br/>
+
+<% if @users.length > 0 %>
+<table>
+<% start = 0 %>
+<% @users.each_with_index { |u,i_| -%>
+
+  <% if i_ % 6 == 0 -%>
+    <tr>
+    <% start = 0 %>
+  <% end -%>
+  
+  <td style="padding:.5em;">
+    <%= icon_image(:user => u,:size=>'thumb') %>
+    <%= cred_img_for_score(@cred_scores[u.id]) %>
+    <a href="<%=xprofile_url(u.s)%>">
+      <%= truncate(u.dn,18) %></a>
+    <% start += 1 %>
+  </td>
+  
+  <% if (start-6) == 0 or i_ == @users.length-1 -%>
+    </tr>
+  <% end -%>
+    
+<% } -%> 
+</table>
+
+<% if @users.length > 0 -%>
+ <% p_params = params.dup %>
+ <% if @page > 1 %>
+  <% p_params[:page] = @page-1 %>
+  <%= link_to("Previous", p_params) %>
+ <% end %>
+
+  <% if @page > 2  && @page < @last_page_number %>
+   <% (@page..@last_page_number).each do |i| %>
+    <%= link_to("#{i}", p_params.merge(:page => i))%>
+   <% end %>
+  <% end %>
+
+ <% if @page < @last_page_number %>
+  <% p_params[:page] = @paginator.current.next %>
+  <%= link_to("Next", p_params) if @paginator.current.next %> 
+ <% end -%>
+<% end -%>
+
+<% end -%>
+
+<%- if @similar_tags and !@similar_tags.empty? -%>
+<br/><br/>
+  <%- if @by == :interest -%>
+  <h5>Commonly shared interests</h5>
+  <%= linked_tags(@similar_tags,false,{:controller=>'user',:action=>'tag',:by=>'interest'}) %>
+  <%- elsif @by == :cred -%>
+  <h5>Commonly shared cred</h5>
+  <%= linked_tags(@similar_tags, false, {:controller=>'user',:action=>'tag',:by=>'cred'}) %>
+  <%- end -%>
+<%- end -%>

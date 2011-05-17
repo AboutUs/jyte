@@ -1,0 +1,89 @@
+<h1>Jyte API</h1>
+
+<hr/>
+<br/>
+
+<p class="accent_box">
+Share your Jyte hacks on the <a href="http://jyte.pbwiki.com/">wiki</a>!
+</p><br/>
+
+<h2 id="groups_api">Groups API</h2>
+<p>
+Jyte groups expose two api methods:
+</p>
+<p>
+<b>is_member</b><br/>
+This methods tests whether an OpenID belongs to a
+group.  Response is plain text and will either be 'true', 'false', or
+'error:message'.
+
+Full API URL is available at the bottom of every group page, and is of
+the format:<br/>
+<span style="font-size:smaller;">http://jyte.com/api/group/GROUP/is_member?openid=URLENCODE(openid)</span>
+</p>
+
+<p>
+<b>roster</b><br/>
+This method returns a plain text, newline separated list OpenID
+identifiers that are members of the group.  Specific API roster URLs
+are available at the bottom of your group's page, and are of the
+format:<br/>
+<span style="font-size:smaller;">http://jyte.com/api/group/GROUP/roster</span>
+</p>
+
+<br/>
+
+
+<h2 id="contacts_api">Contacts API</h2>
+<p>Contact lists are available via an API, and like groups are useful
+  for "social whitelisting" applications.  Two methods are exposed,
+  both of which accept an optional tag parameter. Use the tag parameter
+ to filter for contacts of a certain type like 'family' or
+ 'friend'. Also, you may pass in primary=true for the methods to use
+ only the contact's primary OpenID. If primary is not specified, the
+ methods will use all of a contact's verified identifiers.
+</p>
+<p>
+<b>is_member</b><br/>
+This methods tests whether an OpenID belongs to one of a user's
+Jyte contacts.  Response is plain text and will either be 'true', 'false', or
+'error:message'.
+
+Full API URL is available at the bottom of a user's contacts page, and is of
+the format:<br/>
+<span style="font-size:smaller;">http://jyte.com/api/contacts/is_member?openid=URLENCODE(openid)&contact_openid=URLENCODE(contact_openid)</span>
+</p>
+
+<p>
+<b>roster</b><br/>
+This method returns a plain text, newline separated list of OpenID
+identifiers that are the specified OpenID's contacts.  Specific API roster URLs
+are available at the bottom of a user's contacts page, and are of the
+format:<br/>
+<span style="font-size:smaller;">http://jyte.com/api/contacts/roster?openid=URLENCODE(openid)</span>
+</p>
+
+
+<br/>
+
+<h2 id="cred_api">Cred API</h2>
+<p>A full API for interacting with live cred data is on the way.</p>
+<p>Interested in the cred graph data? <a href="http://jyte.com/static/misc/cred.txt.gz">Download</a> our nightly graph data, which
+is available under the
+Creative Commons <a
+      href="http://creativecommons.org/licenses/by-nc-sa/2.5/">Attribution-NonCommercial-ShareAlike 2.5</a> license.
+</p>
+
+<h2>API FAQ</h2>
+<p>
+<b>What is URLENCODE?</b><br/>
+This syntax means that the parameter needs to be URL escaped when
+building your API URL.  This generally means that URL specific and
+other characters need to be percent escaped. Some examples:
+
+<ul class="plain_list">
+  <li><b>Ruby:</b> require 'cgi'; CGI.escape(openid)</li>
+  <li><b>Python:</b> import urllib; urllib.quote(openid)</li>
+</ul>
+</p>
+

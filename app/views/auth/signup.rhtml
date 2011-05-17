@@ -1,0 +1,45 @@
+<div id="what_is_openid"
+     style="width:35em;">
+
+  <h1>Jyte uses OpenID</h1>
+
+  <p><a target="_blank" href="http://openid.net/">OpenID</a> is an internet-wide identity system that lets you sign in
+  to different <a target="_blank"
+  href="http://www.myopenid.com/directory/">websites</a> with a
+  single account.  In OpenID, your identifier is
+  a <a href="http://en.wikipedia.org/wiki/Url">URL</a>, and all OpenID
+  does is provide a way to prove that you are owner of your URL.</p>
+</div>
+
+<div style="margin-top:2em;">
+  <h1><a href="<%=sign_up_url%>">Sign Up</a> for Jyte</h1>
+  <p>You'll get your own OpenID to use all over the web.</p>
+</div>
+
+<div class="accent_box" style="width:42em;margin-top:3em;">
+  <h3>Already have an OpenID?  Just sign in.</h3>
+  <% form_tag :controller=>'auth', :action=>'openid_start' do %>
+  <input type="text"
+         name="openid_identifier"
+         id="openid_login_big"
+         value="<%=strip_tags(@openid)%>"
+         style="margin-top:.3em;"
+         />
+  <%= submit_tag 'Sign in', :style=>'font-size:20px;' %>
+  <br/><br/>
+  <h4>Examples:</h4>
+  http://openid.aol.com/<i>AIMscreenname</i><br/>
+  http://<i>you</i>.myopenid.com/<br/>
+  http://first.last.name/<br/>
+  <% end %>
+
+  <br/>
+
+  <h2>Sign in using your Yahoo! or Flickr account:</h2>
+  <span>Your Yahoo! account is OpenID enabled.  Click the button below to get started.</span><br/>
+  <a href="<%=url_for(:controller=>'auth', :action=>'openid_start', :dest=>params[:dest],:openid_identifier=>'yahoo.com')%>"><img src="http://us.i1.yimg.com/us.yimg.com/i/reg/openid/buttons/14.png"/></a>
+
+</div>
+
+
+

@@ -1,0 +1,18 @@
+You've been invited to Jyte, the site where you can claim anything!
+
+<%= @inviter_names.join ", aka " %> invites you to
+<% if @invitation.group -%>
+join the group '<%= @invitation.group.name %>'
+<% elsif @invitation.claim -%>
+discuss and vote on the claim '<%= @invitation.claim.title %>'
+<% end -%>
+
+If you join Jyte by clicking the link below, you can make claims about yourself,
+your friends, or anything at all.  And you can discuss and vote on claims that
+other people have made.
+
+<%= @response_url %>
+
+We hope to see you soon on Jyte!
+
+*** This is an automated message.  Replies will be lost. ***

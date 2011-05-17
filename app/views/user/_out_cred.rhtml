@@ -1,0 +1,21 @@
+    <h2><%= user.dn %> has given cred to <%= pluralize out_users.size, "person" %>:</h2>
+    <% if out_users.empty? -%>
+    No cred given.
+    <% else -%>
+    <table>
+      <% out_users.each_with_index {|u,i| -%>
+      <tr class="<%= 'alternate' if i.odd? %>">
+        <td><%= icon_image :user_id=>u.id, :size=>'thumb'%></td>
+        <td class="">
+          <%= user_link :user_id => u.id %>:
+	  <%= linked_tags(out_tags_by_user_id[u.id], true, {:controller=>'user',:action=>'tag',:by=>'cred'}) %>
+          <% if user == liu %>
+          <span style="float: right; font-size: 9px">
+          <%= link_to_remote "Take back", :url => {:action => 'give_cred_submit', :remove_all => 'y', :user_id => u.id, :render => 'out_cred'}, :update => 'history_box', :confirm => "Really take back the cred you've given to #{u.dn}?" %>
+          </span>
+          <% end %>
+        </td>
+      </tr>
+      <% } -%>
+    </table>
+    <% end -%>

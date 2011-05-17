@@ -1,0 +1,127 @@
+<div style="float:right;" class="accent_box">
+  <a href="<%=url_for(:controller=>'claim',:action=>'random')%>"
+  target="jyte_spy">Random claim</a> &rarr; 
+</div>
+
+<h1>Jyte Spy!</h1>
+
+<p>See what is happening on Jyte right now.  Links will open in a new window.
+<form id="what_to_show">
+Show:
+<input type="checkbox" id="show_votes" checked="true" name="show_votes" /> 
+<label for="show_votes">Votes</label>
+&nbsp;
+<input type="checkbox" id="show_claims" checked="true" name="show_claims" /> 
+<label for="show_claims">Claims</label>
+&nbsp;
+<input type="checkbox" id="show_comments" checked="true" name="show_comments" /> 
+<label for="show_comments">Comments</label>
+&nbsp;
+<input type="checkbox" id="show_cred" checked="true" name="show_cred" /> 
+<label for="show_cred">Cred</label>
+</form>
+</p>
+
+<br/>
+
+<style type="text/css">
+.spy_section {
+  font-size:1.2em;
+  margin-bottom:1em;
+  padding-bottom:1em;
+  border-bottom:1px solid #eee;
+}
+</style>
+
+<script type="text/javascript">
+
+/* constants */
+var appear_interval = 2500;
+var slow_fetch_interval = 5000;
+
+var t = 0;
+var first = true;
+var ajaxer = null;
+var to_add = [];
+var what_to_show = Form.serialize($('what_to_show'));
+var spy_init;
+
+function ajax_complete(req) {
+  json = eval('('+req.responseText+')');
+
+  for(var i=0;i < json['u_count']; i++) {
+    to_add.push(json['u_'+i]);
+  }
+
+  t = json['t'];
+
+  if (first) add_all();
+  
+  /* schedule next ajax request */
+  if (to_add.length > 0) {
+    setTimeout('do_update()', (to_add.length + 1) * appear_interval);
+  } else {
+    setTimeout('do_update()', slow_fetch_interval);
+  }
+}
+
+function do_update() {
+  if (what_to_show != Form.serialize($('what_to_show'))) {
+    t = 0;
+    first = true;
+    $('spy').innerHTML = spy_init;
+    what_to_show = Form.serialize($('what_to_show'));
+  }
+  var u = '<%=url_for(:action=>'update')%>' + '?t=' + t;
+  ajaxer = new Ajax.Request(
+    u, {onComplete:ajax_complete,
+        parameters:what_to_show,
+        onException:function() {
+            setTimeout('do_update()',slow_fetch_interval)}} );
+}
+
+function add_all() {
+  while (to_add.length > 0) {
+    do_add_to_page();
+  }
+
+  if (to_add.length != 0) {alert('Bummer');}
+
+  first = false;
+  do_add_to_page();
+}
+
+function do_add_to_page() {
+   /* pump the add_to_page loop */
+  if (!first) setTimeout('do_add_to_page()', appear_interval);
+  if(to_add.length == 0) return;
+
+  var s = to_add.shift();
+  var d = document.createElement('DIV');
+  if (!first) d.setAttribute('style','display:none;')
+  d.innerHTML = s;
+
+  var spy = $('spy');
+  spy.insertBefore(d, spy.firstChild);
+
+  if (!first) {
+    if (spy.childNodes.length > 10) {
+      Element.remove(spy.lastChild);    
+    }
+    new Effect.Appear(d);
+  }  
+
+
+}
+
+</script>
+
+
+<div id="spy">
+  <div id="spy_first">&nbsp;</div>
+</div>
+
+<script type="text/javascript">
+  spy_init = $('spy').innerHTML;
+  do_update();
+</script>

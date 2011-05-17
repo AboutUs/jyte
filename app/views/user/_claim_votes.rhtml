@@ -1,0 +1,49 @@
+<% if @voted_claims.empty? -%>
+<h2><%= @user.dn %> has not voted on any claims</h2>
+<% else -%>
+<h2><%= @user.dn %> voted on these claims</h2>
+<table>
+
+  <% if @voted_claims.size == 10 -%>
+  <h4><%=link_to('More...',find_claims_url(:voted_by=>@user.s,:page=>2))%></h4>
+  <% end -%>
+
+  <% @voted_claims.each_with_index {|c,i| -%>
+  <tr class="<%= 'alternate' if i.odd? %>">
+    <td class="claim_score"><%= render :partial => '/claim_votes', :locals => {:claim=>c} %></td>
+    <td class="claim_text">
+      <a id="claim_title_<%=c.id%>" class="claim_title"
+         href="<%= claim_url :urlslug=>c.urlslug%>">
+        <%= render_claim_title(c,false) %>
+      </a>
+      <% if c.user_vote == '1' -%>
+      <span class="agreed">agreed</span>
+      <% else -%>
+      <span class="disagreed">disagreed</span>
+      <% end -%>
+
+      <div class="claim_attributes">
+        <% if (c.body and !c.body.strip.empty?) or claim_has_image?(c) -%>
+        <a href="<%=claim_url :urlslug=>c.urlslug%>">
+          <img src="/images/picture.png"
+               style="float:left;margin:0;margin-top:-3px;margin-right:5px;border:none;"
+               title="This claim has a description or image." />
+        </a>
+        <% end -%>
+
+        <span class="claim_author">
+          By <%= cred_img(c.user_id) %> <%= user_link :user_id => c.user_id %>
+          <%= time_ago_in_words(c.created_at) %> ago
+          <% if c.comments_count > 0 %>
+          &nbsp;&rarr;
+          <a href="<%=claim_url :urlslug=>c.urlslug,:anchor=>'comments'%>"><%= pluralize(c.comments_count,'comment','comments')%></a>
+          <% end -%>
+        </span>
+      </div>
+      
+    </td>
+  </tr>
+  <% } -%>
+</table>
+<% end -%>
+

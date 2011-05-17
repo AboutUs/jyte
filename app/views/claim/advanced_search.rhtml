@@ -1,0 +1,301 @@
+  <h3>Advanced Search</h3>
+  <br/>
+  <h2>Find Claims</h2>
+  <div id="advanced_search">
+    <form id="find_claims_form" action="<%= find_claims_url %>" method="get">
+    <table>
+    <tr>
+    <td class="key">
+    <label for="order">Ordered by:</label>
+    </td>
+    <td>
+    <select name="order">
+      <option value="" 
+         <% unless params[:order] %>selected="true"<% end %>
+         >Newest</option>
+      <option value="oldest" 
+         <% if params[:order] == "oldest" %>selected="true"<% end %>
+         >Oldest</option>
+      <option value="featured" 
+         <% if params[:order] == "featured" %>selected="true"<% end %>
+         >Recently Featured</option>
+      <option value="voted" 
+         <% if params[:order] == "voted" %>selected="true"<% end %>
+         >Most Votes</option>
+      <option value="discussed" 
+         <% if params[:order] == "discussed" %>selected="true"<% end %>
+         >Most Comments</option>
+      <option value="solid" 
+         <% if params[:order] == "solid" %>selected="true"<% end %>
+         title="Solidity index: Votes in majority less 4 times votes in minority"
+         >Solid</option>
+      <option value="contested"
+         <% if params[:order] == "contested" %>selected="true"<% end %>
+         title="Number of votes in the minority"
+         >Contested</option>
+      <option value="recently_commented" 
+         <% if params[:order] == "recently_commented" %>selected="true"<% end %>
+         >Recently Commented</option>
+      <option value="recently_voted"
+         <% if params[:order] == "recently_voted" %>selected="true"<% end %>
+         >Recently Voted</option>
+      <option value="relevance" 
+         <% if params[:order] == "relevance" %>selected="true"<% end %>
+         title="Number of tags, comments and votes matching your criteria"
+         >Relevance</option>
+      <option value="watched"
+         <% if params[:order] == "watched" %>selected="true"<% end %>
+      >Most Watched</option>
+      <option value="trashed"
+         <% if params[:order] == "trashed" %>selected="true"<% end %>
+      >Most Trashed</option>
+    </select>
+    </div>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="voted">Filtered by your vote:</label>
+    </td>
+    <td>
+    <select name="voted">
+      <option value="" <% unless params[:voted] %>selected="true"<% end %>></option>
+      <option value="no" <% if params[:voted] == 'no' %>selected="true"<% end %>>not yet voted on</option>
+      <option value="yes" <% if params[:voted] == 'yes' %>selected="true"<% end %>>voted on</option>
+      <option value="up" <% if params[:voted] == 'up' %>selected="true"<% end %>>agreed</option>
+      <option value="down" <% if params[:voted] == 'down' %>selected="true"<% end %>>disagreed</option>
+      <option value="minority" <% if params[:voted] == 'minority' %>selected="true"<% end %>>in minority</option>
+      <option value="majority" <% if params[:voted] == 'majority' %>selected="true"<% end %>>in majority</option>
+    </select>
+    </div>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="new_comments">With new comments</label>
+    </td>
+    <td>
+    <input type="checkbox" name="new_comments" id="new_comments" <% if params[:new_comments] %>checked<% end %> />
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="visited">Visited</label>
+    </td>
+    <td>
+    <input type="checkbox" name="visited" id="visited" <% if params[:visited] %>checked<% end %> />
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="watched">Watched</label>
+    </td>
+    <td>
+    <input type="checkbox" name="watched" id="watched" <% if params[:watched] %>checked<% end %> />
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="trashed">Trashed</label>
+    </td>
+    <td>
+    <input type="checkbox" name="trashed" id="trashed" <% if params[:trashed] %>checked<% end %> />
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <div style="padding-top: 0.6em;"
+    <label for="tags">Tagged with:</label>
+    </div>
+    </td>
+    <td>
+    <% if logged_in? %>
+    <div style="padding-bottom: 1px;"><label for="interests">
+    <input type="checkbox" name="interests" id="interests" 
+    onclick="$('tags').disabled = this.checked;"
+    <% if params[:interests] %>checked<% end %>
+    />
+    your interests</label>
+    </div>
+    <% end %>
+    <% tags = (params[:tags] or params[:tag]) %>
+    <input type="text" name="tags" id="tags"
+    <% if params[:interests] %>disabled<% end %> 
+    value="<%= tags %>" />
+    <br/>
+    <span class="field_description">comma separated tags</span>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+
+    <label for="tags">Not tagged with:</label>
+    </td>
+    <td>
+    <input type="text" name="filter_tags" value="<%= params[:filter_tags] %>" />
+    <br/>
+    <span class="field_description">comma separated tags</span>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+
+    <label for="by">By:</label>
+    </td>
+    <td>
+    <input type="text" name="by" value="<%= params[:by] %>" />
+    <br/>
+    <span class="field_description">space separated OpenIDs
+    <% if logged_in? %>
+    or 'contacts'
+    <% end %>
+    </span>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+
+    <label for="not_by">Not by:</label>
+    </td>
+    <td>
+    <input type="text" name="not_by" value="<%= params[:not_by] %>" />
+    <br/>
+    <span class="field_description">space separated OpenIDs
+    <% if logged_in? %>
+    or 'contacts'
+    <% end %>
+    </span>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+
+    <label for="comments_by">Comments By:</label>
+    </td>
+    <td>
+    <input type="text" name="comments_by" value="<%= params[:comments_by] %>" />
+    <br/>
+    <span class="field_description">space separated OpenIDs
+    <% if logged_in? %>
+    or 'contacts'
+    <% end %>
+    </span>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+
+    <label for="voted_by">Voted on by:</label>
+    </td>
+    <td>
+    <input type="text" name="voted_by" value="<%= params[:voted_by] %>" />
+    <br/>
+    <span class="field_description">space separated OpenIDs
+    <% if logged_in? %>
+    or 'contacts'
+    <% end %>
+    </span>
+    </td>
+    </tr>
+
+    <tr>
+
+    <td class="key">
+
+    <label for="about">About:</label>
+    </td>
+    <td>
+    <input type="text" name="about" value="<%= params[:about] %>" />
+    <br/>
+    <span class="field_description">space separated OpenIDs
+    <% if logged_in? %>
+    or 'contacts'
+    <% end %>
+    </span>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="min_votes">With at least</label>
+    </td>
+    <td>
+    <input type="text" name="min_votes" class="number" value="<%= params[:min_votes] %>" /> votes
+    </td>
+    </tr>
+
+    <tr>
+    <td class="key">
+    <label for="min_votes">Whose author has at least</label>
+    </td>
+    <td>
+    <input type="text" name="min_score" class="number" value="<%= params[:min_score] %>" /> cred points
+    </td>
+    </tr>
+    <tr>
+    <td/>
+    <td>
+    
+    <div class="form_element">
+    <%= submit_tag "Find Claims" %>
+    </div>
+    </td>
+    </tr>
+    </table>
+    </form>
+  </div>
+  <br/><br/>
+  <div id="javascripty_stuff" style="display:none;">
+    <table width="100%">
+    <tr><td>
+    <div id="js_save_search">
+      <h2>Save this search</h2>
+      <label for="search_name">as:</label>
+      <input type="text" id="search_name_textbox" name="search_name" size="15" />
+      <input name="save_search" onclick="new Ajax.Updater('saved_searches', '<%= url_for :action => "save_search" %>', {asynchronous:true, evalScripts:true, parameters:Form.serialize($('find_claims_form'))+'&search_name='+$('search_name_textbox').value}); return false;" type="button" value="Save Search" />
+    </div>
+    </td><td>
+    <div id="user_find">
+      <%= render :partial => '/user_find' %>
+    </div>
+    </td></tr>
+    </table>
+  </div>
+  <script type="text/javascript">Element.show("javascripty_stuff");</script>
+
+  <noscript>
+    <p>
+    Without javascript you can't use the "Find OpenIDs" feature on this page,
+    and to create a search and then save it requires the following steps:
+    <ol>
+    <li>Set up the search the way you want it</li>
+    <li>click "Find Claims"</li>
+    <li>on the resulting page, click "Advanced Search" to get back to this page 
+        with the changed parameters pre-loaded. </li>
+    <li>name your search and click the "Save Search" button</li>
+    </ol>
+    </p>
+    <% form_tag params.update(:action => 'save_search') do %>
+      <label for="search_name">Save search (unchanged) as:</label>
+      <input type="text" name="search_name" style="width: 15em;" />
+      <%= submit_tag "Save Search" %>
+    <% end %>
+  </noscript>
+  <br/><br/>
+
+  <h2>Saved Searches</h2>
+  <div id="saved_searches">
+    <%= render :partial => 'saved_searches' %>
+  </div>
+    

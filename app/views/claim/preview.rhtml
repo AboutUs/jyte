@@ -1,0 +1,213 @@
+<h2>Is your claim a duplicate?</h2>
+<table>
+  <% @similar.each {|c| -%>
+  <tr style="padding-top: 1em;">
+   <td style="text-align: right;padding-top: 1em; width: 7em; ">
+    <a class="claim_title" href="<%= claim_url :urlslug=>c.urlslug %>">
+      <span class="inline_score <%= cw_class(c) %>">
+        <%= c.yeas.to_s+'-'+c.nays.to_s %>
+      </span>
+    </a>
+   </td><td style="padding-top: 1em;">
+    <a class="claim_title" href="<%= claim_url :urlslug=>c.urlslug %>">
+      <%= render_claim_title(c,false) %>
+    </a>
+   </td>
+  </tr>
+  <% } -%>
+</table>
+<br/>
+<h3 style="font-weight: bold;">
+    <%= link_to('scrap claim',
+        {:action=>'discard_claim',:id=>@claim.id},
+        :confirm=>'Really discard this claim?'
+    ) %>
+</h3>
+<br/>
+<h2>Make sure your claim is the way you want it</h2>
+<p>Once your claim is published, you will be unable to change it.</p>
+<% if @claim.parsed.match(/\?/) %>
+<h2 style="color:red;">Claims should be phrased as statements rather than questions.</h2>
+<% end %>
+<% if (" " + @claim.parsed + " ").match(/ I /) %>
+<h2>Your claim will be interpreted as being about the voters, not about yourself exclusively.</h2>
+<p>Use your OpenID to make claims about yourself.</p>
+<% end %>
+<table>
+<tr><td>
+<div id="claim_box" style="padding-bottom:1em;">
+  <h1 id="claim"><%= render_claim_title(@claim) %></h1>
+  <h4 id="claim_made_by">
+    By
+    <span class="<%= cred_class(liu) %>" >
+      <%= cred_img liuid %>
+      <%= user_link(:user => @claim.user) %>
+    </span>
+    on <%= @claim.created_at.strftime('%B %d, %Y') %>
+    <%- if @claim.group_id -%>
+    for <%= link_to h(@claim.group.name), group_url(:urlslug=>@claim.group.urlslug) %>
+    <%- end -%>
+  </h4>
+
+  <% if @claim.has_supporting_material? -%>
+  <div id="supporting_material" style="">
+    <p>&nbsp;
+    <% if @claim.body -%>
+    <%= safe_formatted(@claim.body) %>
+    <% end -%>
+    </p>
+
+    <% if @claim.image -%>
+    <img src="<%=image_url(@claim.image,'claim')%>"
+         alt="claim image"
+         style="max-width:550px;"
+         />
+    <% end -%>
+
+    <% if @claim.tags.length > 0 %>
+    <div class="claim_tags">
+      Tags: <%= linked_tags(@claim.tags) %>
+    </div>
+    <% end -%>    
+
+  </div>
+  <% end -%>
+
+</div>
+</td></tr>
+<tr><td>
+<div class="under_claim">
+
+  <div style="padding:1em;">
+  <h3>Or, make changes:</h3>
+
+  <% form_tag({:action => 'preview_submit'},:multipart=>true) do %>
+  <%= hidden_field_tag :id, @claim.id %>
+
+  <div class="edit_section">
+    <label for="claim_text">
+    <h2>Claim</h2>
+    <input type="text"
+           name="claim_text"
+           id="claim_text"
+           value="<%=strip_tags(@claim.original.gsub('"','&quot;'))%>"
+           class="claim_edit_box claim_text_size claim_edit_width"
+           spellcheck="true"
+           />
+    </label>
+  </div>
+  
+  <div class="edit_section">
+    <label for="claim_body">
+    <h2>Description</h2>
+    <span class="edit_note">
+    Video embeds and some other HTML allowed.<br/>
+    Please do not quote wholesale from other sources.  Instead, include a link.
+    </span>
+    <textarea name="claim_body"
+              id="claim_body"
+              class="claim_edit_width"><%= @claim.body %></textarea>
+    </label>
+  </div>
+  
+  <div class="edit_section">
+    <label for="claim_tags">
+    <h2>Tags</h2>
+    <span class="edit_note">
+    Multi-word tags okay.  <span style="font-weight: bold">Separate tags with commas.</span>
+    </span>
+    <input type="text"
+           name="claim_tags"
+           id="claim_tags"
+           class="claim_edit_box claim_edit_width"
+           spellcheck="true"
+           value="<%=@claim.tag_list%>" />
+    </label>
+  </div>
+
+  <%- liu_groups = liu.groups -%>
+  <%- if liu_groups.length > 0 -%>
+  <div class="edit_section">
+    <label for="claim_group_id">
+    <h2>Group</h2>
+    <span class="edit_note">Make this claim visible and votable only
+    to members of </span>
+    <%= select(:claim, :group_id, liu_groups.collect {|g| [h(g.name),g.id]},{:include_blank=>true}) %>
+    </label>
+  </div>
+  <%- end -%>
+
+  <div class="edit_section">
+    <label for="claim_image">
+    <h2>
+      <% if @claim.image -%>
+      Replace current image
+      <% else -%>
+      Add an image
+      <% end -%>
+    </h2>
+    <input type="file"
+           name="claim_image"
+           id="claim_image"
+           class="claim_edit_box"
+           onchange="claimChanged();"
+           />
+    </label>
+    <% if @claim.image -%>
+    <%= link_to 'Delete current image', :action=>'delete_image',:id=>@claim.id %>
+    <% end -%>
+  </div>
+
+  <div class="edit_section">
+  <% if @claim.claimings.length > 0 -%>
+  <b>Inspired by</b>
+      <% @claim.inspired_by_claims.each {|c| -%>
+        <a href="<%= claim_url :urlslug=>c.urlslug %>">
+          <span class="inline_score <%= cw_class(c) %>">
+            <%= c.yeas.to_s+'-'+c.nays.to_s %>
+          </span>
+          <%= render_claim_title(c,false) %>
+        </a>
+      <% } -%>
+      <% @claim.inspired_by_comments.each {|c| -%>
+        <%=user_link(:id=>c.user_id)%>'s comment on <a href="<%= claim_url :urlslug=>c.claim.urlslug %>">
+          <%= render_claim_title(c.claim,false) %>
+        </a>
+      <% } -%>
+  <% end -%>  
+  </div>
+
+  <div class="edit_section" style="text-align:right;">
+    <input type="submit"
+           name="commit"
+           value="Preview Changes"
+           style="font-size:1.8em;"/>
+    <br/><br/>
+    <input type="submit"
+           name="commit"
+           id="publish_button"
+           value="Publish"
+           style="font-size:1.8em;"/>
+    <br/><br/>
+    <%= link_to('scrap claim',
+        {:action=>'discard_claim',:id=>@claim.id},
+        :confirm=>'Really discard this claim?'
+    ) %>
+  </div>
+
+  <% end %>
+  
+  </div>
+
+</div>
+
+</td></tr></table>
+
+<script type="text/javascript">
+function claimChanged() {
+  $("publish_button").value="Publish Changes";
+}
+var o = new Form.Element.Observer('claim_text', .5, claimChanged);
+var o = new Form.Element.Observer('claim_body', .5, claimChanged);
+var o = new Form.Element.Observer('claim_tags', .5, claimChanged);
+</script>

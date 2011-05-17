@@ -1,0 +1,69 @@
+
+<div id="content_lead">
+
+  <div style="float:right;margin:1em;">
+
+    <% if liuid -%>
+    <%= link_to 'Create a group', :action => 'new' %>&nbsp;
+    <% end -%>
+
+    <div class="accent_box" style="margin-top:1em;">
+      <form action="<%=url_for(:action=>'find')%>"
+            method="GET">
+        <input type="hidden" name="by" value="search" />
+      Find a group <input type="text" name="q" /> 
+      <%= submit_tag 'Go'%>
+      </form>
+    </div>
+  </div>
+
+  <div style="">
+    <h1>Groups</h1>
+  </div>
+
+  <div style="">
+    Groups are an online gathering of like minded people.  You can add
+    youself to public groups, and create groups of you own.
+  </div>
+
+  <div style="" class="clear"></div>
+</div>
+
+<% if @your_groups.size > 0 %>
+<div class="accent_box">
+<h2>Your groups</h2>
+<%= render :partial => 'table', :locals=>{:the_groups=>@your_groups}%>
+</div>
+<% end %>
+
+<% if @contacts_groups.size > 0 %>
+<br/>
+<h2><%= link_to "Your contact's groups", :action => 'find', :by => 'contacts' %>
+</h2>
+
+<%= render :partial => 'table', :locals =>{:the_groups=>@contacts_groups}%>
+<% end %>
+
+<% if @interests_groups.size > 0 %>
+<br/>
+<h2><%= link_to 'Groups that match your interests', :action => 'find', :by => 'interests' %>
+</h2>
+
+<%= render :partial => 'table', :locals => {:the_groups=>@interests_groups}%>
+<% end %>
+
+<% if @hot_groups.size > 0 %>
+<br/>
+<h2><%= link_to('Popular groups', :action => 'find', :by=> 'hot') %>
+</h2> 
+
+<%= render :partial => 'table', :locals => {:the_groups=>@hot_groups}%>
+<% end %>
+
+<br/>
+<h2><%= link_to('All groups', :action => 'find', :by=> 'latest') %>
+</h2>
+<%= render :partial => 'table', :locals => {:the_groups=>@latest_groups}%>
+
+
+

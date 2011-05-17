@@ -1,0 +1,39 @@
+    <h2><%= @user.dn %>'s Cred</h2>
+      <table>
+      <% if @overall_score %>
+        <tr><td>
+        <%= cred_img @user.id %>
+        <span class="score" style="color: black; padding-right: 0.5em"> <%= display_cred((@overall_score or 0)) %></span>Overall
+        <div style="padding-top:0.1em">
+        from: <% @in_users.each {|u| %>
+         <span style="padding-right: 0.5em" class="<%= cred_class(u.id) %>">
+         <nobr>
+         <%= cred_img u.id %>
+         <%= user_link :user_id => u.id %></span>
+         <nobr>
+        <% } %>
+        </div>
+        </td></tr>
+      <% end %>
+      <% @in_tags.each_with_index {|t,i| %>
+        <tr class="<%= 'alternate' if i.even? %>"><td>
+        <span class="<%= cred_class(@user.id, :tag => t) %>">
+          <%= cred_img @user.id, :tag => t %>
+          <% if @overall_score %>
+            <span class="score" style="color: black; padding-right: 0.5em"> <%= display_cred((@tagged_scores[t.id] or 0)) %></span>
+          <% end %>
+          <%= link_to(h(t.name),:controller=>'user',:action=>'tag',:by=>'cred',:tag=>t.name)%>
+        </span>
+        <div style="padding-top:0.1em">
+          from:
+          <% @in_users_by_tag_id[t.id].each {|u| %>
+           <span style="padding-right: 0.5em;" class="<%= cred_class(u.id, :tag => t) %>">
+           <nobr>
+           <%= cred_img u.id, :tag => t %> <%= user_link :user_id => u.id %></span>
+           </nobr>
+          <% } %>
+          </div>
+        </td></tr>
+      <% } %>
+    </table>
+

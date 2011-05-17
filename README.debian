@@ -1,0 +1,18 @@
+Here are the packages you need to run jyte on debian.
+
+apt-get install:
+
+build-essential
+ruby1.8
+ruby1.8-dev
+irb
+rubygems
+libmysql-ruby
+libgraphicsmagick1-dev
+librmagick-ruby
+darcs
+
+gem install rails
+gem install ruby-openid --include-dependencies
+gem install mongrel
+gem install json

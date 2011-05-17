@@ -1,0 +1,25 @@
+<%
+if response_to
+  r = response_to
+  r_js = "$('qc_claimable_id').value = '#{response_to.id.to_s}';"
+  r_js += "$('qc_claimable_type').value = '#{response_to.class.to_s}';"
+
+  if response_to.class == Comment
+    reason = "inspired by #{user_display :id => r.user_id}&rsquo;s comment on &quot;#{render_claim_title(response_to.claim, false)}&quot;"
+  elsif response_to.class == Claim
+    reason = "inspired by - "+render_claim_title(response_to, false)
+  end
+  reason = reason.gsub('"','&quot;').gsub("'",'&rsquo;')
+  r_js += "$('qc_reason').innerHTML = '"+escape_javascript(reason)+"';"
+else
+  r_js = "$('qc_claimable_id').value = '';"
+  r_js += "$('qc_claimable_type').value = '';"
+end
+r_js += "$('claim_box').value='';"
+r_js += "window.scroll(0,100);"   
+%>
+
+<a
+href="#"
+onclick="<%= r_js %>$('qc').style.display='block';return false;"
+><%= text %></a>

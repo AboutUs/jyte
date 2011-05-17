@@ -1,0 +1,15 @@
+botbouncer:
+  apikey: ""
+rpxnow:
+  apikey: ""
+twitter:
+  oauth_key: ""
+  oauth_secret: ""
+gmail:
+  oauth_key: ""
+  oauth_secret: ""
+exceptions:
+  notify:
+  - someone@example.com
+  - thisone@example.com
+

@@ -1,0 +1,32 @@
+/*
+
+	Table of Contents:
+
+*/
+
+
+
+/* Jyte Defaults
+---------------------------------------------------------------------------------------------------- */
+@import "global.css";
+
+
+
+
+/* Feature
+---------------------------------------------------------------------------------------------------- */
+
+#feature { position: relative; top: -15px; width: 640px; height: 229px; background: url(../images/homepage/feature_background.jpg) no-repeat top left; }
+	#feature_content { position: relative; top: 60px; left: 30px; width: 240px; }
+		#feature_content h1 { font-size: 36px; line-height: 1em; color: #ffffff; letter-spacing: -1px; }
+		#feature_content h2 { float: left; width: 140px; margin: .5em 0; font-size: 18px; line-height: 1em; color: #d8afe0; }
+		#feature_content #sign_up { float: right; width: 80px; margin: 1em 0 0 0; }
+		#feature_content p.fine_print { clear: both; }
+		#feature_content p.fine_print, #feature_content p.fine_print a { color: #d8afe0; }
+
+/* Feature
+---------------------------------------------------------------------------------------------------- */
+
+#supporting_qualities td { width: 33%; padding: 0 1em; }
+
+

@@ -1,0 +1,57 @@
+<% unless params[:no_css] -%>
+<style type="text/css">
+.jyte-claimroll dt {margin-top:.5em;}
+.jyte-agree {color:#319440;}
+.jyte-disagree {color:#eb2175;}
+</style>
+<% end -%>
+
+<div class="jyte-claimroll">
+<% if @title and !params[:no_title] -%>
+<h2 class="jyte-claimroll-title"><%= h(@title) %></h2>
+<% end -%>
+
+<dl>
+<% @claims.each {|c| -%>
+<dt>
+  <% unless params[:no_votes] -%>
+  <span title="<%="#{c.yeas} users agreed"%>"
+        class="jyte-agree"><%=c.yeas%>&uarr;</span>
+  <span title="<%="#{c.nays} users disagreed"%>"
+        class="jyte-disagree"><%=c.nays%>&darr;</span>
+  <% end -%>
+  
+  <% if @rolltype == 'user' and v = @votes[c.id] -%>
+  <% if v and v.vote == true-%>
+  <span class="jyte-agree"
+        title="<%="#{h(@user.dn)} agreed"%>"
+        >Agreed</span>
+  <% elsif v and v.vote == false -%>
+  <span class="jyte-disagree"
+        title="<%="#{h(@user.dn)} disagreed"%>"
+        >Disagreed</span>
+  <% end -%>
+  <% end -%>
+  <a href="<%=claim_url(:urlslug=>c.urlslug)%>"
+       class="jyte-link"><%=render_claim_title(c,false)%></a>
+</dt>
+<% } -%>
+</dl>
+
+<% if @rolltype == 'user' and !params[:no_profile_link] %>
+<p class="jyte-byline">
+- <a href="<%=xprofile_url(@user.s)%>">My jyte profile</a>
+</p>
+<% end -%>
+<% if @rolltype == 'tag' and !params[:no_more_link] %>
+<p class="jyte-byline">
+- <a href="<%=url_for(:controller=>'claim',:action=>'find',:tags=>@tagnames,:only_path=>false)%>">
+More jyte claims
+</a>
+</p>
+<% end -%>
+
+
+</div>
+
+

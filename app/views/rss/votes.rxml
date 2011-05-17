@@ -1,0 +1,16 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0"){
+  xml.channel {
+    xml.title(@title)
+    xml.link(@link)
+    xml.description(@description) if @description
+    xml.language("en-us")
+    @votes.each {|v| u = v.user; c = v.claim
+      xml.item {
+        xml.pubDate(v.created_at.strftime("%a, %d %b %Y %H:%M:%S %z"))
+        xml.title("#{u.nickname}(#{u.openid}) #{v.vote?'':'dis'}agreed that '#{c.title}'")
+        xml.link(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => c.id))
+      }
+    }
+  }
+}

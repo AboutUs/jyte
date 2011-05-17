@@ -1,0 +1,40 @@
+<%= render :partial => 'tabs' %>
+<div id="history_box" class="history_box" style="margin-top:2em;padding-left:0;">
+<h2>Claims that match your interests</h2>
+<br/>
+
+<div id="listing_container">
+
+<div id="results_box">
+
+<%- if liu.tags.size > 0 -%>
+
+<%= page_entries_info @claims %>
+
+<div id="listings_container">
+  <%- if @claims.size > 0 -%>
+  <table>
+    <%= render :partial => '/claim', :collection => @claims %>
+  </table>
+  <%- else -%>
+  No claims match your interests.
+  <%- end -%>
+
+  <%= will_paginate @claims %>
+</div>
+
+<%- else -%>
+
+You don't have any interests.
+Add some by <a href="<%=url_for(:controller=>'user',:action=>'account')%>">editing your profile</a>.
+<%- end -%>
+
+</div>
+</div>
+
+<div id="left_side_box">
+<%= linked_tags(liu.tags) %>
+</div>
+
+
+</div>

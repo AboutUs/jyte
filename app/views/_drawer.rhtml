@@ -1,0 +1,35 @@
+<% 
+  label = name unless defined? label or label.nil?
+  alt_url = '#' unless defined? alt_url
+  open_up = false unless defined? open_up
+  opened = false unless defined? opened
+  partial_name = nil unless defined? partial_name
+  partial_locals = nil unless defined? partial_locals
+  text = nil unless defined? text
+%>
+<div class="help drawer">
+    <div class='drawer_top'>
+    <% unless open_up -%>
+    <a class='drawer_handle top' href='<%= alt_url %>' 
+      onclick='Element.toggle("drawer_contents_<%=name%>");
+      return false;
+      '><%=label%></a>
+    <% end -%>
+    </div>
+    <div class="drawer_contents" id="drawer_contents_<%=name%>">
+      <% if text %><%= text %><% end %>
+      <% unless partial_locals.nil? %>
+      <%= render :partial => partial_name, :locals => partial_locals %>
+      <% else %>
+      <%= render :partial => partial_name %>
+      <% end %>
+    </div>
+    <div class='drawer_bottom'>
+    <% if open_up -%>
+    <a class='drawer_handle bottom' href='<%= alt_url %>' 
+      onclick='Element.toggle("drawer_contents_<%=name%>");
+      return false;
+      '><%=label%></a>
+    <% end -%>
+    </div>
+</div>

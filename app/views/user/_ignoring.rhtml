@@ -1,0 +1,9 @@
+<% if ignoring %>
+  You are ignoring <%= user.dn %>.
+  <%= link_to_remote "Stop", :url => {:controller => 'user', :action => 'ignore', :remove => user.id},
+      :update => {:success => "ignoring_#{user.id}", :faliure => "ignoring_message_#{user.id}"} %>
+<% else %>
+  <%= link_to_remote "Ignore #{user.dn}", :url => {:controller => 'user', :action => 'ignore', :add => user.id},
+      :update => {:success => "ignoring_#{user.id}", :faliure => "ignoring_message_#{user.id}"} %>
+<% end %>
+ <span id="ignoring_message_<%= user.id %>"></span>

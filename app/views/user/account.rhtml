@@ -1,0 +1,127 @@
+<h2>Edit Profile</h2>
+<p>
+Your profile URL: <a href="<%=xprofile_url(@user.s)%>"><%=xprofile_url(@user.s)%></a>
+</p>
+
+<div id="user_info_box">
+<% form_tag({:action => 'account_submit'}, :multipart => true) do %>
+<div class="edit_section">
+<label for="display_name">
+<h4>Display Name</h4>
+<p class="edit_note">
+This will be shown at the top of your profile page, and used in claims
+about you.  <b><%= @user.ss %></b> will be displayed if
+left blank.
+<% if @user.nickname -%>
+If you change your name, your old name will still be visible to signed-in users
+on your profile page.
+<% end -%>
+</p>
+<%= text_field_tag 'display_name', logged_in_user.nickname, :class => 'edit_width'%>
+<% if @user.errors[:nickname] %>
+<span style="color:#900;"><%= @user.errors[:nickname] %></span>
+<% end %>
+</label>
+</div>
+
+<div class="edit_section">
+<label for="user_image">
+<h4>Picture</h4>
+<p class="edit_note">Any size will do, but something at least 180x180 
+  pixels works best.  We'll do our best to resize larger pictures.</p>
+<input type="file" id="user_image" name="image" />
+</label>
+</div>
+
+<div class="edit_section">
+<label for="description">
+<h4>Description</h4>
+<p class="edit_note">A little bit about yourself, to be displayed on your profile page.</p>
+<%= text_area 'user', :description, :size => '50x7', :class=>'edit_width'%>
+</label>
+</div>
+
+<div class="edit_section">
+<label for="tags">
+<h4>Interests</h4>
+<p class="edit_note">You will be notified on your home page when claims are made about your interests.</p>
+<p class="edit_note">Comma separated tags. Example: science fiction, photography, coffee</p>
+<%= text_area_tag 'tags', logged_in_user.tag_list, :size => '50x7', :class=>'edit_width'%>
+</label>
+</div>
+
+<div class="edit_section">
+<%= submit_tag 'Save Profile' %>
+<% if params[:new] %>
+<%= hidden_field_tag :new, params[:new] %>
+<% else %>
+or <a href="#" onclick="history.go(-1);return false;">cancel</a>
+<% end %>
+</div>
+
+<% end %>
+</div>
+
+<div id="profile_left_side_box">
+  <div class="purple_border_box">
+    <div class="purple_box_top">
+      <div class="purple_box_left"></div>
+      <div class="purple_box_right"></div>
+    </div>
+    <div class="purple_box_content" style="padding: 0 6px;">
+      <img id="profile_image"
+           src="<%= icon_image(:user=>@user,:url=>1,:size=>'big') %>"
+           alt="image" />
+
+      <div style="text-align:center;">
+      <% if @user.image -%>
+      <%= link_to 'Delete this icon', :action => 'delete_icon' %>
+      <% else %>
+      Upload a picture!
+      <% end -%>
+      </div>
+    </div>
+
+    <div class="purple_box_bottom">
+      <div class="purple_box_left"></div>
+      <div class="purple_box_right"></div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+<div style="clear:both;padding-top:2em;">
+  <h2>OpenID Identifiers</h2>
+  <div id="openid_url" style="float:none;margin-top:1em;">
+    <h4>Verified</h4>
+    <p style="color:#000;">Claims made about the identifiers below will be associated with
+      your account.</p>
+    <ul class="plain_list">
+      <% @user.identifiers.each {|i| -%>
+      <li>
+        <%= i.value %>
+        <% if i.primary -%>
+        <span style="color:#090;">primary</span>
+        <% else -%>
+        <span class="fine_print">
+          <%= link_to 'make primary',:action => 'set_primary',:primary_id=> i.id %>
+          <%= link_to 'remove', :action => 'del_identifier', :id => i.id %>
+        </span>
+        <% end -%>
+        
+      </li>
+      <% } -%>
+    </ul>
+    
+    <% form_tag :controller => 'auth', :action => 'openid_start' do %>
+    <label for="openid_identifier">
+    <h4>Verify another OpenID</h4>
+    <%= text_field_tag 'openid_identifier' %>
+    </label>
+    <%= submit_tag 'Verify' %>
+    <% end %>
+
+  </div>
+
+</div>

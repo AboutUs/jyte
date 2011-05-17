@@ -1,0 +1,341 @@
+<!-- right side -->
+<div id="user_info_box">
+
+  <%- if @user.pibbme? -%>
+  <div style="float:right;">
+    <script src="https://pibb.com/widget/pibbme?openid=<%=CGI.escape(@user.openid)%>" type="text/javascript"></script>
+  </div>
+  <%- end -%>
+
+  <h1 id="username"><%= @user.display_name %></h1>
+
+  <div id="user_contact" class="fine_print">
+    <span>User since <%= @user_since %>
+      <% if liuid == @user.id -%>
+      <%= link_to 'edit your profile', :action => 'account' %>
+      <% end -%>
+    </span>
+
+    <% if is_admin? -%>
+
+    <%= link_to('admin',{:controller=>'admin',:action=>'user',:user_id=>@user.id},{:style=>'color:red;'}) %>
+
+    <% end -%>
+  </div>
+
+  <div id="profile_info"
+       style="<%= 'display:none;' if params[:give_cred] %>">
+
+    <% if @user.description -%>
+    <p>
+      <%= safe_formatted(@user.description, user_allowed_links?(@user.id)) %>
+    </p>
+    <% end -%>
+
+  <div id="openid_url">
+    <% unless @non_primary_identifiers.empty? -%>
+    <b>OpenID Identifiers</b>
+    <ul class="plain_list" style="margin-bottom:0;">
+      <li>
+        <% if is_iname?(@user.openid) -%>
+        <%= @user.openid %>
+        <% else -%>
+        <a href="<%= @user.openid %>"><%= @user.openid %></a>
+        <% end -%>
+      </li>
+      <% @non_primary_identifiers.each {|i| -%>
+      <% if is_iname?(i.value) -%>
+        <li><%= i.value %></li>
+      <% else -%>
+        <li><a href="<%=i.value%>"><%= i.value %></a></li>
+      <% end -%>
+    <% } -%>
+    </ul>
+    <% else -%>
+    <b>OpenID</b>
+    <% if is_iname?(@user.openid) -%>
+    <%= @user.openid %>
+    <% else -%>
+    <a href="<%= @user.openid %>"><%= @user.openid %></a>
+    <% end -%>
+    <% end -%>
+  </div>
+  
+  <h4 id="user_interests">Interests</h4>
+  <p>
+    <% if @interests.empty? -%>
+    No interests yet.
+    <% else -%>
+    <%= linked_tags(@interests, false, {:controller=>'user',:action=>'tag',:by=>'interest'}, ', ') %>
+    <% end -%>
+  </p>
+
+  <h4 id="user_groups">Groups</h4>
+  <p>
+    <%= @user.nickname ? h(@user.nickname) : @user.s %>
+    <% if @groups.empty? -%>
+     does not belong to any groups.
+    <% else -%>
+     is a member of
+     <%= @groups.collect {|g|
+      link_to(h(g.name), gurl(g))}.join(', ') %>
+    <% end -%>
+  </p>
+
+  <h4>Stats</h4>
+  <p>
+  <%= @user.dn %> has made <%= pluralize @claim_count, 'claim' %>, 
+  <%= pluralize @comment_count, 'comment' %>,
+  agreed with <%= pluralize @agree_count, 'claim' %>,
+  disagreed with <%= @disagree_count %>, and changed positions 
+  <%= pluralize @flipflop_count, 'time' %>.
+  <% if @ignores_count > 0 %>
+    <% if @ignored_count > 0 %>
+      <%= @user.dn %> ignores <%= pluralize @ignores_count, 'person'%> and is ignored by <%= @ignored_count %>.
+    <% else %>
+      <%= @user.dn %> ignores <%= pluralize @ignores_count, 'person' %>.
+    <% end %>
+  <% else %>
+    <% if @ignored_count > 0 %>
+      <%= @user.dn %> is ignored by <%= pluralize @ignored_count, 'person' %>.
+    <% end %>
+  <% end %>
+  </p>
+
+  <% if @claim_count > 0 %>
+  <h4 id="user_claim_tags">Favorite Claim Tags</h4>
+  <p>
+    The top tags for <%= @user.dn %>'s claims:
+    <%= @claim_tags.map{|t| link_to t.name, find_claims_url(:by => @user.s, :tags => t.name), :title => "#{t.tag_count} claims by #{@user.dn} tagged with #{t.name}"}.join(', ') %>
+  </p>
+  <% end %>
+
+  <% if logged_in? and not (old_usernames = @user.old_usernames).empty? %>
+    <h4>Previously Known As</h4>
+    <ul>
+      <% old_usernames.each {|n| %>
+      <li><%= h(n.name) %> (before <%= n.created_at.strftime("%X %b %d %Y")%>)</li>
+      <% } %>
+    </ul>
+  <% end %>
+
+  </div>
+
+  <div id="give_cred"
+              style="<%= 'display:none;' if !params[:give_cred] %>">
+    <h4>What is cred?</h4>
+    <p>
+      Cred is a virtual high five.  It's a way to tell someone you think
+      they are great at something, and let the whole world know.  The
+      more people who give a person cred, the higher their score will be. <%= link_to('Learn more...',:controller=>'help', :action => 'index', :anchor =>'cred') %>
+
+      <h4>Rules</h4>
+      <ul style="margin-left:2em;">
+        <li>Give cred only to people who've earned your trust.</li>
+        <li>Avoid giving negative cred (see below).</li>
+      </ul>
+    </p>
+
+    <div class="accent_box" style="margin-bottom:1em;">
+    <% form_tag :action=>'give_cred_submit',:user_id=>@user.id do %>
+    <div class="edit_section">
+      <label for="cred">
+      <h4>Give cred to <%= @user.display_name %></h4>
+      <p class="edit_note" style="color:#000;">
+        Separate different kinds of cred with commas.<br/>
+        <% if @cred_from_liu -%>
+        You gave <%= @user.display_name %> the following cred:
+        <% else -%>
+        Example: science, cooking, intergalactic hitchhiking
+        <% end -%>
+      </p>
+      
+      <%= text_field_tag 'cred',@cred_from_liu_tags,:style=>'width:25em;', :spellcheck => 'true' %>
+      </label>
+      <br/>
+    </div>
+
+    <div class="edit_section" style="margin-bottom:0;">
+      <%= submit_tag @cred_from_liu ? 'Update Cred' : 'Give Cred' %>
+      or <a href="<%= url_for :action=>'profile',:openid=>@user.s %>" onclick="Element.toggle('give_cred','give_cred_link');new Effect.Appear('profile_info');return false;">cancel</a>
+    </div>
+    
+    <% end %>
+    </div>
+
+    <h4>Negative Cred?</h4>
+    <p>
+      Feeling the urge to give someone negative cred?  Giving cred like
+      "troll", "bully", or "creep" will boost their overall score and
+      reduce your own.  Also, if they are not part of the scored
+      network, your cred may add them to the network. <b>Consider making a
+        <%=link_to('claim about',:controller=>'claim',:action=>'new',:text=>@user.s)%> them
+      instead.</b>  Please report abuse to the <a href="/site/contact">jyte team</a>.
+    </p>
+
+  </div>
+
+  <% if liuid and liuid != @user.id -%>  
+  <!-- stuff you can do -->
+  <div id="special_message"
+       class="blue_box"
+       style="text-align:left;width:30em;">
+  
+    <div class="blue_box_top">
+      <div class="blue_box_left"></div>
+      <div class="blue_box_right"></div>
+    </div>					
+						
+    <div class="blue_box_content" style="text-align:left;">
+      <a id="dismiss_message" title="Close this message"
+         href="#">
+        <img alt="close this"
+             src="<%=image_path('rounded_boxes/blue/dismiss_message.gif')%>"
+             onclick="Element.hide('special_message');"
+             /></a>
+
+      <h2 style="margin-top:0;">Connect with <%=@user.dn%></h2>
+      <ul class="plain_list" style="padding-left:1em;">
+        <% if !params[:give_cred] -%>
+        <li>
+          <a href="<%= url_for :action=>'profile',:openid=>@user.s,:give_cred=>'y' %>"
+             onclick="Element.toggle('profile_info',this);new
+                      Effect.Appear('give_cred');return false;"
+             id="give_cred_link">Give cred</a></li>
+        <% end -%>
+
+        <li><%=link_to('Make a claim',
+                             :controller=>'claim',:action=>'new',:text=>@user.s) %>
+          about <%= @user.nickname ? h(@user.nickname) : @user.s %>
+        </li>
+      
+        <li>
+        <% unless liu.contact?(@user) -%>
+        <a href="<%= url_for(:controller=>'contacts',:action=>'add',:user_id=>@user.id)%>">Add to your contacts</a>
+        <% else -%>
+        <%= link_to('Remove from your contacts',
+            :controller=>'contacts',:action=>'remove_submit',:user_id=>@user.id)%>
+        <% end -%>
+        </li>
+        <li id="ignoring_<%= @user.id %>">
+          <%= render :partial => 'ignoring', :locals => {:user => @user, :ignoring => @ignoring} %>
+        </li>
+      </ul>
+      
+    </div>
+    
+    <div class="blue_box_bottom">
+      <div class="blue_box_left"></div>
+      <div class="blue_box_right"></div>
+    </div>					
+    
+  </div>
+  <% end -%>
+
+
+
+
+</div>
+
+<!-- left side (user image and cred) -->
+<div id="profile_left_side_box" class="purple_border_box">
+
+  <div class="purple_box_top">
+    <div class="purple_box_left"></div>
+    <div class="purple_box_right"></div>
+  </div>
+
+  <!-- box content -->
+  <div class="purple_box_content" style="padding: 0 6px;">
+    <img id="profile_image" src="<%= icon_image(:user=>@user,:url=>1,:size=>'big') %>" alt="image" />
+
+
+    <div id="user_creds_box">
+      <% if @overall_score %>
+        <% if @overall_score > 0 %>
+          <h1><%= display_cred(@overall_score) %></h1>
+        <% else %>
+          <h1 style="color: #999">0.0</h1>
+        <% end %>
+        <h3>Cred Points</h3>
+      <% end %><!-- XXX: Help popup here -->
+       <% if (ncreds = @user.creds.size) > 0 %>
+        <%= ncreds %> <%= ncreds > 1 ? 'people have' : 'person has' %> given cred to <%= @user.dn %>
+        <% if @overall_score.nil? %>
+         but they are not yet part of the scored network.
+        <% elsif @overall_score < 0 %>
+         but they have given cred to a known jyte abuser and had their score temporarily revoked.
+        <% end %>
+       <% else %>
+        No one has given <%= @user.dn %> cred.
+       <% end %>
+    </div>
+
+    <div id="user_stats_box">
+      <h4 id="best_qualities">Best Qualities</h4>
+      <% if @tagged_scores.empty? -%>
+        None yet.
+      <% else -%>
+        <ul>
+        <% @in_tags[0..5].each {|t| -%>
+          <li class="<%= cred_class @user.id, :tag_id => t.id %>">
+            <span class="attribute">
+            <%= cred_img @user.id, :tag_id => t.id %>
+            <%= link_to(h(t.name),{:controller=>'user',:action=>'tag',:by=>'cred',:tag=>t.name})%>
+            </span>
+            <% if @tagged_scores[t.id] %>
+            <span class="score" style="color:black;"><%= display_cred(@tagged_scores[t.id]) %></span>
+            <% end %>
+          </li>
+
+        <% } -%>
+        </ul>
+      <% end -%>
+    </div>
+
+    <div class="clear"></div>
+  </div>
+
+  <div class="purple_box_bottom">
+    <div class="purple_box_left"></div>
+    <div class="purple_box_right"></div>
+  </div>
+
+</div>
+
+<div id="history_container">
+  <div id="tab_nav">
+    <span>About:</span>
+
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'about_claims', :text => 'Claims' } %>
+
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'in_cred', :text => 'Cred' } %>
+
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'contacts', :text => 'Contacts' } %>
+    
+    <span>By:</span>
+
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'by_claims', :text => 'Claims' } %>
+    
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'comments', :text => 'Comments' } %>
+    
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'votes', :text => 'Votes' } %>
+    
+    <%= render :partial => 'history_tab', 
+               :locals => {:name => 'out_cred', :text => 'Cred' } %>
+
+    <div class="clear"></div>
+  </div>
+  
+  <div id="history_box" class="history_box">
+  <%= @history_box_content %>
+  </div>
+
+</div>
+

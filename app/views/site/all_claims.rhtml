@@ -1,0 +1,5 @@
+<h3>All Claims</h3>
+<%= "None yet." if @claims.empty? %>
+  <%= render :partial => 'claim', :collection => @claims, :spacer_template => 'br' %>
+
+<%= pagination_links @claim_pages %>

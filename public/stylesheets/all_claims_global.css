@@ -1,0 +1,28 @@
+/*
+
+	Table of Contents:
+
+		Includes only the "Blue message box" addendum to the global.css file. 
+		
+*/
+
+
+
+/* Blue message box */
+#special_message { margin-bottom: 1.5em; }
+.blue_border_box { }
+	.blue_box_top { height: 6px; overflow: hidden; background: url(../images/rounded_boxes/blue/top.gif) repeat-x; }
+		.blue_box_top .blue_box_left { height: 6px; width: 6px; float: left; overflow: hidden; background: url(../images/rounded_boxes/blue/top_left.gif) no-repeat; }
+		.blue_box_top .blue_box_right { height: 6px; width: 6px; float: right; overflow: hidden; background: url(../images/rounded_boxes/blue/top_right.gif) no-repeat; }
+		
+	.blue_box_content { border-left: 1px solid #9cc3e4; border-right: 1px solid #9cc3e4; text-align: center; padding: .5em; }
+		#dismiss_message { float: right; }
+		.blue_box_content  h2 { color: #4d7fb0; margin-top: .5em; }
+		.blue_box_content .fine_print, .blue_box_content .fine_print a { color: #4d7fb0; }
+	
+	.blue_box_bottom { height: 8px; overflow: hidden; background: url(../images/rounded_boxes/blue/bottom.gif) repeat-x; }
+		.blue_box_bottom .blue_box_left { height: 8px; width: 6px; float: left; overflow: hidden; background: url(../images/rounded_boxes/blue/bottom_left.gif) no-repeat; }
+		.blue_box_bottom .blue_box_right { height: 8px; width: 6px; float: right; overflow: hidden; background: url(../images/rounded_boxes/blue/bottom_right.gif) no-repeat; }
+
+
+

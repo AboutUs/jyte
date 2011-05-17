@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+#require File.dirname(__FILE__) + '/../config/boot'
+
+def create_index
+  require 'ferret'
+  include Ferret::Index
+
+  # This script is to (re)create the ferret index from the claims database
+
+  # define the fields to go in the index
+  fi = FieldInfos.new
+  fi.add_field(:claim_id, :index => :no, :term_vector => :no)
+  fi.add_field(:title, :store => :no)
+  fi.add_field(:openid, :index => :untokenized)
+
+  # Create the index, overwriting the old one, if present
+  index = Index.new(:path => "#{RAILS_ROOT}/index", :create => true, :field_infos => fi)
+
+  # Fill the index with the claims
+  Claim.find(:all).each do |c|
+    index.add_document({:claim_id => c.id,:title => c.title,:openid => c.subject_openid})
+  end
+
+  index.optimize
+  return index
+end

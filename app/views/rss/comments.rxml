@@ -1,0 +1,24 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0"){
+  xml.channel {
+    xml.title("Jyte " + @title)
+    xml.link(@link)
+    xml.description(@description) if @description
+    xml.language("en-us")
+    @comments.each {|c| u = c.user
+      xml.item {
+        claim = c.claim
+        xml.pubDate(c.created_at.strftime("%a, %d %b %Y %H:%M:%S %z"))
+        if c.parent_id
+          pu = c.parent.user
+          xml.title("#{u.nickname}(#{u.openid})'s response to #{pu.nickname}(#{pu.openid})'s comment on '#{claim.title}'")
+        else
+          xml.title("#{u.nickname}(#{u.openid})'s comment on '#{claim.title}'")
+        end
+        xml.link(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => claim.id, :anchor => "comment_#{c.id}"))
+        xml.description(c.body)
+        xml.guid(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => claim.id, :anchor => "comment_#{c.id}"))
+      }
+    }
+  }
+}

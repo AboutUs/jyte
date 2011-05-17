@@ -1,0 +1,56 @@
+<h1>
+<a href="<%=claim_url(:urlslug=>@claim.urlslug)%>"><%=render_claim_title(@claim,false)%></a>
+</h1>
+<br/>
+<h2>
+<% if @voted == 'yes' -%>
+<%= @votes.total_entries %> users <span class="agreed">agreed</span>.
+<% elsif @voted == 'no' -%>
+<%= @votes.total_entries %> users <span class="disagreed">disagreed</span>.
+<% else -%>
+<%= @votes.total_entries %> total voters.
+<% end -%>
+</h2>
+
+<div id="sub_navigation">
+  <a href="<%=url_for(:action=>'votes',:id=>@claim.id)%>"
+     class="<%='selected' unless @voted%>">all voters</a>
+  <a href="<%=url_for(:action=>'votes',:id=>@claim.id,:votes=>'yes')%>"
+     class="<%='selected' if @voted == 'yes'%>">agreed</a>
+  <a href="<%=url_for(:action=>'votes',:id=>@claim.id,:votes=>'no')%>"
+     class="<%= 'selected' if @voted=='no' %>">disagreed</a>
+</div>
+
+<br/><br/>
+
+<% if @votes.total_entries > 0 %>
+<table>
+<% start = 0 %>
+<% @votes.each_with_index { |v,i_| -%>
+
+  <% if i_ % 6 == 0 -%>
+    <tr>
+    <% start = 0 %>
+  <% end -%>
+  
+  <td style="padding:5px;">
+    <%= icon_image(:user => v.user,:size=>'thumb') %>
+    <a href="<%=xprofile_url(v.user.s)%>">
+      <%= truncate(v.user.dn,20) %></a>
+    <% if !@voted -%>
+    <% aord = v.vote ? 'agreed' : 'disagreed' %>
+    <br/><span class="<%=aord%>"><%=aord%></span>
+    <% end -%>
+    <% start += 1%>
+  </td>
+  
+  <% if (start-6) == 0 or i_ == @votes.length-1 -%>
+    </tr>
+  <% end -%>
+    
+<% } -%> 
+</table>
+
+<%= will_paginate @votes %>
+
+<% end -%>

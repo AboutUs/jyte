@@ -1,0 +1,12 @@
+<a href="<%= xprofile_url @user.openid, :show => name %>"
+   id="<%=name%>_tab"
+   class="history_tab <% if @profile_section == name %>current<% end %>"
+   onclick="updateTab('<%=name%>_tab');
+            var hb = $('history_box');
+            var hgt = hb.offsetHeight;
+            hb.innerHTML = '<div style=\'height:'+hgt+'px;\'><br/><span class=\'spinner\'>Loading...</span></div>';
+            new Ajax.Updater('history_box', 
+               '<%= url_for :action => "profile_"+name, :user_id => @user.id %>',
+               {asynchronous:true, evalScripts:true});
+            return false;"><%= display_tab(text) %></a>
+

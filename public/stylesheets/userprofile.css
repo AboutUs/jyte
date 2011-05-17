@@ -1,0 +1,104 @@
+/*
+
+	Table of Contents:
+
+		Jyte Defaults
+		Profile Layout Right Side
+		Profile Layout Left Side
+		Profile Layout Bottom
+		
+*/
+
+
+
+/* Jyte Defaults
+---------------------------------------------------------------------------------------------------- */
+@import "global.css";
+
+
+
+
+/* Profile Layout Right Side ( Username, Description, OpenID, ect. )
+---------------------------------------------------------------------------------------------------- */
+#user_info_box { float: right; width: 425px; }
+	
+	/* Email Links */
+	#user_contact { text-align: left; margin-bottom: .8em; color: #839CAF; }
+		#user_contact a { color: #9a89cb; margin-left: .5em; }
+	
+	/* Username */
+	h1#username { margin: 0; }
+	
+	/* User's Description */
+	#user_info_box p { color: #41525F; }
+	
+	/* OpenID URL */
+	#openid_url { background-color: #EBF3FA; -moz-border-radius: 5px; color: #59788F; float: left; padding: .7em; margin-bottom: .5em; }
+		#openid_url a { color: #59788F; margin-left: .3em; }
+	
+	/* Interests */
+	#user_interests { clear: left; padding-top: 1em; }
+	
+	
+	
+/* Profile Layout Left Side ( User Avatar, Stats, & Qualities)
+---------------------------------------------------------------------------------------------------- */
+#left_side_box { float: left; width: 194px; }
+
+	/* User's Picture */
+	#profile_image { margin: 0 auto .5em auto; max-width: 180px; max-height: 180px; }
+	
+	/* User's Cred Score */
+	#user_creds_box { text-align: center; padding: 9px 10px 0 10px; }
+		#user_creds_box h1 { font: bold 3.7em Arial, Verdana, sans-serif; color: #000; }
+		#user_creds_box h3 { font: bold 1.2em Arial, Verdana, sans-serif; margin: -.3em 0 1.2em 0; }
+		#user_creds_box h3 a { font: .9em Arial, Verdana, sans-serif; color: #999; }
+	
+	#user_stats_box { padding: 0 .4em; margin-top: .4em; }
+		/* Best Qualities */
+		#left_side_box h4#best_qualities { margin-bottom: .4em; border-top: 1px solid #b7b0cb; padding-top: 1.3em; background-color: #fff; }
+		
+		/* List of Stats */
+		#left_side_box ul { list-style-type: none; padding-left: .1em; margin: 0; }
+			#left_side_box ul li { clear: left; text-align: right; }
+				#left_side_box a.attribute { float: left; text-decoration: none; padding-left: 18px; margin-left: -18px; }
+				#left_side_box a.attribute:hover { text-decoration: underline; }
+				#left_side_box .score { }
+				
+			#left_side_box li#show_more_stats { padding-bottom: 1em; }
+				#left_side_box li#show_more_stats a { color: #666; padding-left: 0; margin-left: 0; }
+				
+		/* Hidden Stats */
+		ul#remaining_stats { padding-bottom: 1em; }
+
+
+
+
+/* Profile Layout Bottom ( Tabs and User History )
+---------------------------------------------------------------------------------------------------- */
+#history_container { clear: both; padding-top: 30px; }
+
+	#tab_nav { border-bottom: 1px solid #808080; height: auto; }
+	
+		#tab_nav a { display: block; float: left; font: .9em Arial; text-decoration: none; color: #7f9dbb; background-color: #eef4fa; margin-left: 2px; }
+		
+		#tab_nav a.current { background: url(../images/tabs/white/top.gif) repeat-x; border-bottom: 1px solid #fff; color: #000; font-weight: bold; margin-bottom: -1px; }
+			a.current .left_tab_corner { background: url(../images/tabs/white/left.gif) no-repeat; }
+			a.current .right_tab_corner { background: url(../images/tabs/white/right.gif) no-repeat; }
+		
+		#tab_nav span { font: bold .9em Arial; padding: .7em .7em 0 2em; display: block; float: left; }
+	
+	.history_tab { cursor: pointer; background: url(../images/tabs/blue/top.gif) repeat-x; }
+		.history_tab .left_tab_corner { cursor: pointer; height: 26px; width: 5px; float: left; overflow: hidden; background: url(../images/tabs/blue/left.gif) no-repeat; }
+		.history_tab .tab_content { cursor: pointer; float: left; padding: .6em .7em 0 .7em; }
+		.history_tab .right_tab_corner { cursor: pointer; height: 26px; width: 5px; float: left; overflow: hidden; background: url(../images/tabs/blue/right.gif) no-repeat; }
+		
+	.history_box { padding: 0 1.7em; }
+	
+	#history_container h2 { margin: 1em 0 .3em 0; }
+	#history_container table { width: 100%; }
+		#history_container table tr.alternate { background-color: #F4F8FC; }
+		#history_container table td { padding: .4em 0; }
+		#history_container table td.claim_score { font: bold 1.2em Arial, Verdana, serif; padding: .4em; width: 6%; }
+				#history_container td.claim_score span{ color: #666; font-weight: normal; margin-right: .2em; }
+		#history_container table td.claim_text { font: normal 1.6em Helvetica, Arial, Verdana, serif; }

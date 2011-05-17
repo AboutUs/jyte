@@ -1,0 +1,14 @@
+<h3>Jyte Ecosystem</h3>
+
+<p>Rating and tagging claims improves your Jyte score and
+  makes the system better for everybody.  Do it!</p>
+
+<% if @claims.empty? -%>
+Nothing for you to vote on right now!
+<% else -%>
+
+<% @claims.each do |c| -%>
+  <%= c.title %>
+<% end -%>
+
+<% end -%>

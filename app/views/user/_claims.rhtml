@@ -1,0 +1,18 @@
+  <a href="<%=@rss_about_link%>"
+     title="Claims about <%=h(@user.dn)%> feed">
+    <img src="<%=image_path('feed-icon-16x16.gif')%>" style="float:right;"/>
+  </a>
+
+<h2><%= @headline %></h2>
+<% if @claims.empty? %>
+None yet.
+<% else %>
+<% if @more_url %>
+<h4><%= link_to "More...", @more_url %></h4>
+<% end %>
+<table>
+  <% @claims.each_with_index {|c, i| %>
+  <%= render :partial => '/claim', :locals => {:claim => c, :tr_class => ("alternate" if i.odd?)} %>
+  <% } %>
+</table>
+<% end %>

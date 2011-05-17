@@ -1,0 +1,24 @@
+<div id="group_invite_wrap" style="padding:0;margin:0;">
+<% form_remote_tag(
+    :url => {:action => 'invite', :group_id => @group.id},
+    :update => 'group_invite_wrap',
+    :before => "if($F('openid_or_email') == 'OpenID or Email') {$('openid_or_email').value='';}"
+ ) do
+%>
+<% if @invite_msg -%>
+<span class="small" id="group_invite_msg"><%= @invite_msg %></span>
+<% else -%>
+<span class="small" id="group_invite_msg">Invite someone to <%=h(@group.name)%></span><% end -%>
+<br/>
+  <input type="text" name="openid_or_email" id="openid_or_email"
+         value="OpenID or Email" onclick="this.value='';" />
+
+  <% if @group.can_invite_as_moderator?(liu) -%>
+  Moderator?
+  <%= check_box_tag 'mod' %>
+  <% end -%>
+
+  <%= hidden_field_tag :group_id, @group.id %>
+  <%= submit_tag 'Invite' %>
+<% end %>
+</div>

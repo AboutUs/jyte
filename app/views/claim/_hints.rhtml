@@ -1,0 +1,38 @@
+<% unless hints.empty? -%>
+<h4>Are you trying to make a claim about?</h4>
+
+<ul>
+   <% hints.each {|k, ids| -%>
+    <li>
+      <%= h(k) %> - 
+      <% ids.each_with_index {|i, index| -%>
+        <%= icon_image :user_id => i.user_id, :size => 'favicon' %>
+        <a href="#"
+         onclick="$('claim_box').value=$F('claim_box').replace('<%=h(k)%>','<%=i.display_url%>');changed();return false;">
+          
+          <%= i.display == i.display_url ?  i.display : "(#{i.display}) #{i.display_url}" %>
+        </a>
+        <%= ', ' if index == ids.length %>
+      <% } -%>
+
+    </li>
+  <% } -%>
+</ul>
+<% end -%>
+
+<% unless about.empty? -%>
+<h4>Jyte thinks this claim is about</h4>
+<ul>
+   <% about.each {|i| -%>
+    <li>
+     <% if i.class == String -%>
+       <%= i %>
+     <% else -%>
+       <%= icon_image :user_id => i.user_id, :size => 'favicon' %>
+       <%= i.user_id ? user_display(:user_id => i.user_id) : i.value %>
+     <% end -%>
+    </li>
+  <% } -%>
+</ul>
+<% end -%>
+

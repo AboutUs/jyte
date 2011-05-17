@@ -1,0 +1,9 @@
+<% unless @invitations.nil? or @invitations.empty? %>
+  <h4>Invitations</h4>
+  <% @invitations.each {|i| %>
+    <%= render :partial => 'invitation', :locals => {:invitation => i} %>
+    <%= link_to_remote "(dismiss)", {:url => {:action => 'dismiss_invitation', :id => i.id},
+                       :update => 'invitations'}, {:class => 'subtle small'} -%><br/>
+  <% } -%>
+<% end %>
+

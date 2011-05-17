@@ -1,0 +1,12 @@
+<h3>Jyte Group API</h3>
+You can use Jyte groups from your site:
+
+<h4>Group Roster</h4>
+<%= url_for :only_path => false, :controller => 'group', :action => 'roster', :id => 'GROUP_ID' %>
+with GROUP_ID replaced by the id of the group you want.  You'll get a newline separated list of OpenIDs.
+
+<h4>Test for group membership</h4>
+
+<%= url_for :only_path => false, :controller => 'group', :action => 'roster', :group_id => 'GROUP_ID', :openid => 'OPENID' %>
+with GROUP_ID replaced with the group you are querying, and OPENID replaced with the OpenID you are asking about.  You'll get a plain text response,
+'true' if the OpenID is a member of the group and 'false' if not.

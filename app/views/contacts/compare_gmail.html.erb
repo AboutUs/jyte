@@ -1,0 +1,36 @@
+Your Gmail contact list contains <%= @contacts.size %> people. <br/>
+Among those people, <%= @jyters.size %> have a jyte account. <br/>
+<%= @jyters.size - @missing_jyters.size %> of those jyte accounts are listed as a contact of yours. <br/>
+<br/>
+ <%= @missing_jyters.size %> of your Gmail contacts that use jyte are not a contact of yours. <br/>
+Check off any of the users you would like to make one of your jyte contacts.
+
+<% form_tag do %>
+ <table>
+ <% @missing_jyters.each_slice(3) do |js| %>
+  <tr>
+  <% js.each do |j| %>
+    <td style="padding: 1em;">
+      <table>
+      <tr>
+      <td>
+      <a href="<%=xprofile_url(j.s) %>" class="avatar">
+        <%= icon_image :user_id => j.id, :size => 'thumb', :linked=>false, :width => 48, :height => 48 %>
+      </a>
+      </td>
+      <td>
+       <%= truncate((j.nickname.blank? ? j.email : j.nickname), :length => 22) %>  <br/>
+       <%= link_to_remote t_image_tag('add-icon.png', :id => "adduser#{j.id}"),
+                          :url => {:controller => :contacts, :action => :add_submit,
+                                   :user_id => j.id, :contact_tags => ""},
+                          :loading => "$('adduser#{j.id}').src = '/images/bouncing_ball.gif'",
+                          :success => "$('adduser#{j.id}').src = '/images/added-icon.png'" %>
+      </td>
+      </tr>
+      </table>
+    </td>
+   <% end %>
+  </tr>
+ <% end %>
+ </table>
+<% end %>

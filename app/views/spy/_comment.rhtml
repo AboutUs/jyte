@@ -1,0 +1,7 @@
+<% claim = comment.claim -%>
+<div class="spy_section">
+  <%= user_link({:user => comment.user}, :target=>'jyte_spy') %> commented on
+  <a href="<%=claim_url(:urlslug => claim.urlslug)%>" target="jyte_spy">
+    <%= render_claim_title(claim,false) %>
+  </a>
+</div>

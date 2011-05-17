@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg1965"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docbase="/home/dag/jyte"
+   sodipodi:docname="logo.svg">
+  <defs
+     id="defs1967">
+    <linearGradient
+       id="linearGradient4175">
+      <stop
+         style="stop-color:#272375;stop-opacity:1;"
+         offset="0"
+         id="stop4177" />
+      <stop
+         style="stop-color:#5c5caf;stop-opacity:1;"
+         offset="1"
+         id="stop4179" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4175"
+       id="linearGradient4181"
+       x1="92.934036"
+       y1="135.14368"
+       x2="92.934036"
+       y2="533.1438"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-56.5685,64.64976)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4175"
+       id="linearGradient4203"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-56.5685,64.64976)"
+       x1="92.934036"
+       y1="135.14368"
+       x2="92.934036"
+       y2="533.1438" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="62.040643"
+     inkscape:cy="624.49103"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="908"
+     inkscape:window-height="611"
+     inkscape:window-x="959"
+     inkscape:window-y="178" />
+  <metadata
+     id="metadata1970">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:0.6;fill:none;fill-opacity:0;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2034"
+       width="442.85715"
+       height="444.28571"
+       x="132.85715"
+       y="89.505043" />
+    <rect
+       style="opacity:0.6;fill:none;fill-opacity:0;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2039"
+       width="444.28571"
+       height="445.71429"
+       x="132.85715"
+       y="89.505043"
+       rx="90"
+       ry="35" />
+    <g
+       id="g4199"
+       transform="translate(22.22336,38.3858)"
+       inkscape:export-filename="/home/dag/jytetm.png"
+       inkscape:export-xdpi="43.200001"
+       inkscape:export-ydpi="43.200001">
+      <rect
+         ry="72"
+         rx="72"
+         y="177.01195"
+         x="139.14572"
+         height="445.71429"
+         width="444.28571"
+         id="rect2930"
+         style="opacity:1;fill:url(#linearGradient4203);fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="csssssssscss"
+         id="path3213"
+         d="M 366.96248,213.6097 C 383.97367,206.94632 382.76582,236.73611 391.01501,261.59348 C 400.87987,291.31937 408.45458,310.76414 425.23252,337.54675 C 441.85868,364.08706 453.67829,369.21908 459.50983,395.62785 C 471.13372,448.26788 487.11886,534.90902 439.25074,570.67358 C 421.95629,583.5951 390.03816,583.26511 349.10393,581.65859 C 290.51996,579.35937 286.49168,582.28015 266.0075,543.13829 C 252.99362,518.27091 241.19657,410.09878 253.02173,398.17931 C 269.76663,381.30087 286.68767,378.78964 305.01151,372.7237 C 321.2996,367.33168 354.4903,371.78377 372.34701,373.68503 C 367.44811,338.58303 340.51086,320.00443 340.3859,284.1956 C 340.28169,254.33418 342.85221,223.05383 366.96248,213.6097 z "
+         style="fill:white;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:56px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="153.52287"
+       y="724.86969"
+       id="text4205"
+       inkscape:export-filename="/home/dag/jytetm.png"
+       inkscape:export-xdpi="43.200001"
+       inkscape:export-ydpi="43.200001"><tspan
+         sodipodi:role="line"
+         id="tspan4207"
+         x="153.52287"
+         y="724.86969">Spread the Cred</tspan></text>
+  </g>
+</svg>

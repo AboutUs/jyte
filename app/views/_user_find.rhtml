@@ -1,0 +1,6 @@
+<label for="user_find"><h2>Find OpenIDs for Jyte Users</h2>
+<%= form_remote_tag :url => {:controller => 'user', :action => 'quick_find'}, :update => 'user_find_results' %>
+<input type="text" name="uq" id="user_find"/></label>
+<input type="submit" value="Search" />
+</form>
+<div id="user_find_results"></div>

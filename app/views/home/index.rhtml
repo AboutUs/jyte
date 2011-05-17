@@ -1,0 +1,166 @@
+<%= render :partial => 'tabs' %>
+<div id="history_box" class="history_box"
+     style="margin-top:2em;padding-left:0;">
+
+<% unless @dispatches.empty? %>
+<div style="float:right;font-size:smaller;">
+  <a href="<%=url_for(:action=>'clear_activity')%>">catch up</a>
+</div>
+<% end %> 
+
+    <% if @user_events.size > 0%>
+    <h2>Other users connecting with you  &nbsp;<a href="<%=url_for(:action=>'clear',:t=>'users')%>"
+      style="font-weight:normal;font-size:12px;">clear</a>
+</h2>
+
+    <table class="msg_table">
+      <% @user_events.each_with_index {|d,i| %>
+
+      <tr class="<%='alternate' if i.odd? %>">
+        <td class="icon">
+          <%= icon_image(:user =>
+          d.dispatchable,:size=>'thumb')%></td>
+        <td>
+          <a href="<%=xprofile_url(d.dispatchable.s)%>">
+            <%= d.dispatchable.dn%></a> <%= d.reason %>
+        </td>
+      </tr>
+
+      <% } %>
+    </table>
+    <br/>
+
+    <% end %>
+    
+    <% if @group_invites.size > 0 %>
+    <h2>Group Invites</h2>
+    <table class="msg_table">
+      <% @group_invites.each_with_index {|inv,i| %>
+      <tr class="<%='alternate' if i.odd? %>">
+        <td class="icon">
+          <%= group_icon(:group => inv.group,:size=>'thumb')%></td>
+        <td>
+          <%= user_link(:user=>inv.sender)%> invited you to
+             <%= 'moderate' if inv.group_moderator %>
+             <%=link_to(h(inv.group.name), gurl(inv.group))%>
+        </td>
+      </tr>
+
+      <% } %>
+    </table>
+    <br/>
+    <% end %> 
+
+
+    <% if @claim_invites.size > 0 %>
+    <h2>Claim Invites</h2>
+    <table class="msg_table">
+      <% @claim_invites.each_with_index {|d,i| %>
+      <tr class="<%='alternate' if i.even? %>">
+        <td class="icon">
+          <%=icon_image(:user => d.sender, :size=>'thumb') %>
+        </td>
+        <td>
+      <%= user_link(:user=>d.sender) %> invited you to
+      <%= link_to(render_claim_title(d.dispatchable,false),claim_url(:urlslug => d.dispatchable.urlslug)) %>
+      </td></tr>
+      <% } %>
+    </table>
+    <br/>
+    <% end %>
+
+<h2>Recent activity on
+  claims <a href="<%=find_claims_url(:by=>liu.s)%>">by</a>,
+  <a href="<%=find_claims_url(:about=>liu.s)%>">about</a>,
+  and <a href="<%=find_claims_url(:watched=>'on')%>">watched</a> by you.</h2>
+<p>
+
+<% if @dispatches.size > 0 %>
+<table class="msg_table">
+<%- @dispatches.each_with_index {|d,i| -%>
+<% item = d.dispatchable %>
+
+
+<tr class="<%='alternate' if i.odd? %>">
+
+<% if d.dispatchable_type == 'Comment' %>
+  <td class="icon">
+    <%= icon_image(:user => item.user,:size=>'thumb') %>
+  </td>
+
+  <td>
+  <%= user_link(:user => item.user) %> commented on
+  <%= link_to(render_claim_title(item.claim, false), claim_url(:urlslug=>item.claim.urlslug)) %><br/>
+  <div style="font-size:.8em;margin-top:3px;">
+    <blockquote><%= truncate(strip_tags(safe_formatted(item.body)), 50, '') %>
+      <%= link_to('...', claim_url(:urlslug=>item.claim.urlslug,:anchor=>'comment_'+item.id.to_s)) %></blockquote>
+  </div>
+  </td>
+
+<% elsif d.dispatchable_type == 'Claim' and d.reason == 'mentioned' %>
+
+  <td class="icon">
+    <%= icon_image(:user => item.user,:size=>'thumb') %>
+  </td>
+
+  <td>
+  <%= user_link(:user => item.user) %> mentioned you in
+  <%= link_to(render_claim_title(item, false), claim_url(:urlslug=>item.urlslug)) %>
+  </td>
+
+<% elsif d.dispatchable_type == 'Claim' and ['inspired','inspired by watched'].member?(d.reason) %>
+  
+  <td class="icon">
+    <%= icon_image(:user => item.user,:size=>'thumb') %>
+  </td>
+
+  <td>
+  <% inspired_by_claim = item.inspired_by_claims[0] %>
+  
+  <% if inspired_by_claim %>
+  <%= link_to(render_claim_title(inspired_by_claim,false),claim_url(:urlslug=>inspired_by_claim.urlslug)) %> 
+  inspired 
+  <%= user_link(:user => item.user) %>'s claim
+  <%= link_to(render_claim_title(item, false),claim_url(:urlslug=>item.urlslug)) %> 
+  <% elsif inspired_by_comment = item.inspired_by_comments[0] %>
+  Your <%= link_to "comment", claim_url(:urlslug=>inspired_by_comment.claim.urlslug,:anchor=>'comment_'+inspired_by_comment.id.to_s) %> on 
+    <%= link_to(render_claim_title(inspired_by_comment.claim,false),claim_url(:urlslug=>inspired_by_comment.claim.urlslug)) %> 
+  inspired 
+  <%= user_link(:user => item.user) %>'s claim
+  <%= link_to(render_claim_title(item, false),claim_url(:urlslug=>item.urlslug)) %> 
+  
+  <% else %>
+  <%= link_to(render_claim_title(item, false),claim_url(:urlslug=>item.urlslug)) %> 
+  <% end %>
+
+  </td>
+
+<% else %>
+
+<!--
+<tr>
+  <td></td>
+  <td>Don't know how to render "<%=d.dispatchable_type%>" with
+    reason "<%=d.reason%>"</td>
+</tr>
+-->
+
+<% end %>
+
+</td></tr>
+
+
+
+<%- } -%>
+</table>
+
+<%= will_paginate @dispatches %>
+
+<% else %>
+No new activity.  
+<% end %>
+</p>
+<br/><br/>
+<%= link_to "Claims with new comments after yours", find_claims_url(:comments_by => liu.openid, :new_comments => 'on') %> <em><small>(If this link doesn't work, please click the eye on claims you care about to 'watch' and be notified about changes to them. Sorry for the inconvenience and thank you for your understanding.)</small></em>
+
+</div>

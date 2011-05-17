@@ -1,0 +1,7 @@
+config/database.yml
+config/settings.yml
+log/*.log
+tmp/**/*
+db/schema.rb
+*\.swp
+

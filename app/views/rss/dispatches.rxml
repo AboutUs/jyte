@@ -1,0 +1,49 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.rss(:version=>"2.0"){
+  xml.channel {
+    xml.title(@title)
+    xml.link(@link)
+    xml.description(@description)
+    xml.language("en-us")
+    @user.dispatches.each { |d|
+      xml.item do 
+        xml.pubDate(d.created_at.strftime("%a, %d %b %Y %H:%M:%S %z"))
+        case d.dispatchable.class.to_s
+        # I wish these could be partials but that doesn't seem to work
+
+        when 'Claim':
+          c = d.dispatchable
+          u = c.user
+          xml.title(c.title)
+          xml.link(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => c.id))
+          xml.description("#{u.nickname}(#{u.openid}) made this claim.  #{c.yeas} agree and #{c.nays} disagree.  #{c.comments.length} comments")
+          xml.guid(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => c.id))
+        when 'Comment':
+          c = d.dispatchable
+          u = c.user
+          claim = c.claim
+          if c.parent_id
+            pu = c.parent.user
+            xml.title("#{u.nickname}(#{u.openid})'s response to {pu.nickname}(#{pu.openid})'s comment on '#{claim.title}'")
+          else
+            xml.title("#{u.nickname}(#{u.openid})'s comment on '#{claim.title}'")
+          end
+          xml.link(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => claim.id, :anchor => "comment_#{c.id}"))
+          xml.description(c.body)
+          xml.guid(url_for(:only_path => false, :controller => 'claim', :action => 'show', :id => claim.id, :anchor => "comment_#{c.id}"))
+
+        when 'Group':
+          group = d.dispatchable
+          xml.title("Group: #{group.name}")
+          xml.link(url_for(:only_path => false, :controller => 'group', :action => 'show', :id => group.id))
+          xml.category('group')
+          xml.description(group.description)
+          xml.guid(url_for(:only_path => false, :controller => 'group', :action => 'show', :id => group.id))
+
+        else
+          
+        end
+      end
+    }
+  }
+}

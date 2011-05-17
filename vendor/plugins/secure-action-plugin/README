@@ -1,0 +1,65 @@
+secure-action-plugin
+====================
+
+A Ruby on Rails plugin for defending against assumed logged in attacks.
+
+Author: Brian Ellin, brian at janrain.com
+Copyright: 2006 JanRain, Inc.
+License: MIT
+
+Installation
+------------
+
+In your RAILS_ROOT/app/vendor/plugins
+
+svn checkout http://secure-action-plugin.googlecode.com/svn/trunk/ secure-action-plugin
+
+Edit your RAILS_ROOT/app/controllers/application.rb to have a private
+method named session_id_salt that returns a large random string.  For
+additional security add some extra salt for the logged in user, like
+their last logged in time.  This string should not change between
+requests.
+
+ApplicationController < ActionController::Base
+  private
+  def session_id_salt
+    'bigrandomstring'
+  end
+end
+
+Usage
+-----
+
+Call the secure_actions method in the controllers you'd like to
+secure.  secure_actions accepts :all or :only|:except => [:action].
+
+class AccountController < ApplicationController
+
+  secure_actions :only => [:change_email]
+  # or secure_actions :except => [:index, :foo]
+  # or secure_actions :all
+
+  def change_email
+    user = logged_in_user
+    user.email = params[:email]
+    user.save
+  end
+
+end
+
+This above code adds a signature to all URLs generated that point to
+that action, and creates a filter that verifies the signature before
+running the action.  It ensures that the correct user has generated
+the form or link for the action to be executed, preventing malicious
+URLs from harming your users.
+
+Handling Bad Signatures
+-----------------------
+
+When a bad or missing signature is encountered, the bad_sig_handler is
+called.  By default this method raises SecureAction::BadSignature,
+though you may override it in ApplicationController with a custom
+implementation. For example, you may have the bad_sig_handler redirect
+to the homepage with an error message, or render a page that plays an
+audio message alerting the user that the site they are visiting is
+malicious.

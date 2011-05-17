@@ -1,0 +1,14 @@
+<ul class="plain_list">
+  <% if saved_searches = liu.settings[:saved_searches] %>
+    <% saved_searches.sort{|(a,z),(b,y)|a<=>b}.each{|name,params| %>
+      <li>
+        <%= link_to h(name), params.update(:controller => 'claim', :action => 'find') %>  
+        <%= link_to_remote "remove", :url => {:action => 'remove_saved_search', :name => name},
+                                     :update => 'saved_searches',
+                                     :confirm => "Really remove saved search #{h(name)}?" %>
+      </li>
+    <% } %>
+  <% else %>
+   <li>None yet.</li>
+  <% end %>
+</ul>

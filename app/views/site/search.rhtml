@@ -1,0 +1,86 @@
+<div id="content_lead">
+<h1>Search</h1>
+<% if @search_string.nil? %>
+<h3>Not very useful unless you type something into the box.</h3>
+<% else %>
+<h3><%= h(@search_string) %></h3>
+<% end %>
+<div id="sub_navigation">
+<% if @page > 1 %>
+<%= link_to "Previous", :q => @search_string, :page => (@page-1) %>
+<% end %>
+<% if @search_string and (@claims.size == 10 or @comments.size == 10 or @cred_users.size == 10 or @tag_users.size == 10 or @groups.size == 10) %>
+<%= link_to "Next", :q => @search_string, :page => (@page+1) %>
+<% end %>
+</div>
+</div>
+<div id="results_box">
+<% unless @search_string.nil? or (@claims.empty? and @comment_claims.empty? and @tag_claims.empty?) %>
+<h2>Claims</h2>
+  <div id="listing_container">
+    <% unless @claims.empty? %>
+    <h4 style="margin-bottom:1em">By contents</h4>
+    <table>
+    <%= render :partial => '/claim', :collection => @claims %>
+    </table>
+    <% end %>
+    <% unless @comment_claims.empty? %>
+    <h4 style="margin-bottom:1em">Comments match</h4>
+      <table>
+      <%= render :partial => '/claim', :collection => @comment_claims %>
+      </table>
+    <% end %>
+    <% unless @tag_claims.nil? or @tag_claims.empty? %>
+    <h4 style="margin-bottom:1em">Tagged with <%= h(@tag_names) %></h4>
+      <table>
+      <%= render :partial => '/claim', :collection => @tag_claims %>
+      </table>
+    <% end %>
+    </div>
+<% end %>
+</div>
+
+<div id="left_side_box">
+  <% unless @users.nil? or @users.empty? %>
+  <h4 title="by display name, description or email">Users</h4>
+  <ul class="plain_list">
+    <% @users.each {|u| -%>
+     <li>
+      <%= link_to truncate("#{u.display_name}", 20), xprofile_url(u.s), :title => "Profile for #{u.ss}" %>
+     </li>
+    <% } -%>
+  </ul>
+  <% end %>
+  <% unless @tag_users.nil? or @tag_users.empty? %>
+  <h4>Users interested in <%= h(@tag_names) %></h4>
+  <ul class="plain_list">
+    <% @tag_users.each {|u| -%>
+     <li>
+      <%= link_to truncate("#{u.display_name}", 20), xprofile_url(u.s), :title => "Profile for #{u.ss}" %>
+     </li>
+    <% } -%>
+  </ul>
+  <% end %>
+  <br/>
+
+  <% unless @cred_users.nil? or @cred_users.empty? -%>
+  <h4>Users with <%=h(@tag_names)%> cred</h4>
+  <ul class="plain_list">
+   <% @cred_users.each {|u| -%>
+     <li>
+      <%= link_to truncate("#{u.display_name}", 20), xprofile_url(u.s), :title => "Profile for #{u.ss}" %>
+     </li>
+   <% } -%>
+  </ul>
+  <% end -%>
+  <br/>
+
+  <% unless @groups.nil? or @groups.empty? %>
+  <h4>Groups related to <%= h(@tag) %></h4>
+  <ul class="plain_list">
+  <% @groups.each {|g| -%>
+    <li><%= link_to h(g.name), group_url(:urlslug => g.urlslug) %></li>
+  <% } -%>
+  </ul>
+  <% end -%>
+</div>

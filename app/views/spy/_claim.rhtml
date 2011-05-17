@@ -1,0 +1,6 @@
+<div class="spy_section">
+  <a href="<%=claim_url(:urlslug=>claim.urlslug)%>" target="jyte_spy">
+    <%= render_claim_title(claim,false) %>
+  </a>
+  by <%= user_link({:user => claim.user},:target=>'jyte_spy') %>
+</div>

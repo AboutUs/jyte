@@ -1,0 +1,10 @@
+<% claim = vote.claim -%>
+<div class="spy_section">
+  <%= user_link({:user => vote.user}, :target=>'jyte_spy') %>
+  <span class="<%= vote.vote ? 'agreed' : 'disagreed' %>">
+    <%= vote.vote ? 'agreed' : 'disagreed' %>
+  </span> with 
+  <a href="<%=claim_url(:urlslug => claim.urlslug)%>" target="jyte_spy">
+    <%= render_claim_title(claim,false) %>
+  </a>
+</div>

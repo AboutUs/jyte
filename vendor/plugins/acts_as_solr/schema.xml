@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<!-- 
+The Solr schema file. This file should be named "schema.xml" and should be in the conf directory under the solr home
+(i.e. ./solr/conf/schema.xml by default) or located where the classloader for the Solr webapp can find it.
+
+For more information, on how to customize this file, please see...  http://wiki.apache.org/solr/SchemaXml
+-->
+
+<schema name="acts_as_solr" version="1.1">
+  <types>
+    <fieldtype name="string" class="solr.StrField" sortMissingLast="true"/>
+    <fieldtype name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldtype name="integer" class="solr.IntField"/>
+    <fieldtype name="long" class="solr.LongField"/>
+    <fieldtype name="float" class="solr.FloatField"/>
+    <fieldtype name="double" class="solr.DoubleField"/>
+    <fieldtype name="sint" class="solr.SortableIntField" sortMissingLast="true"/>
+    <fieldtype name="slong" class="solr.SortableLongField" sortMissingLast="true"/>
+    <fieldtype name="sfloat" class="solr.SortableFloatField" sortMissingLast="true"/>
+    <fieldtype name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true"/>
+    <fieldtype name="date" class="solr.DateField" sortMissingLast="true"/>
+    <fieldtype name="text_lu" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory"/>
+        <filter class="solr.EnglishPorterFilterFactory"/>
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+    </fieldtype>
+    <fieldtype name="text_ws" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      </analyzer>
+    </fieldtype>
+    <fieldtype name="text" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+          <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+          <filter class="solr.StopFilterFactory" ignoreCase="true"/>
+          <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
+          <filter class="solr.LowerCaseFilterFactory"/>
+          <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/>
+          <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+          <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+          <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+          <filter class="solr.StopFilterFactory" ignoreCase="true"/>
+          <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+          <filter class="solr.LowerCaseFilterFactory"/>
+          <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/>
+          <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+    </fieldtype>
+    <fieldtype name="textTight" class="solr.TextField" positionIncrementGap="100" >
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true"/>
+        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+    </fieldtype>
+ </types>
+ <fields>
+   <field name="id" type="string" indexed="true" stored="true"/> 
+   <field name="default" type="text" indexed="true" stored="true"/> 
+   <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
+   <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
+   <dynamicField name="*_l"  type="slong"   indexed="true"  stored="true"/>
+   <dynamicField name="*_t"  type="text"    indexed="true"  stored="true"/>
+   <dynamicField name="*_b"  type="boolean" indexed="true"  stored="true"/>
+   <dynamicField name="*_f"  type="sfloat"  indexed="true"  stored="true"/>
+   <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
+   <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
+ </fields>
+ <uniqueKey>id</uniqueKey>
+ <defaultSearchField>default</defaultSearchField>
+ <solrQueryParser defaultOperator="AND"/>
+</schema>

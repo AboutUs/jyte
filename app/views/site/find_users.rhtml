@@ -1,0 +1,13 @@
+<h3>Other users interested in <%= @tag %></h3>
+
+<% if @users.empty? -%>
+None
+<% else -%>
+
+<% @users.each {|u| -%>
+  <%= icon_image(:user => u, :size => 'favicon') %>
+  <%= user_link :user => u %>
+  <br/>
+<% } -%>
+
+<% end -%>

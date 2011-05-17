@@ -1,0 +1,487 @@
+
+<div id="claim_box">
+  <h1 id="claim"><%= render_claim_title(@claim) %></h1>
+  <h4 id="claim_made_by">
+    By
+    <%=cred_img(@claim.user_id)%>
+    <%= user_link(:user_id => @claim.user_id) %>
+    on <%= @claim.created_at.strftime('%B %d, %Y') %>
+    <%- if @claim.group_id -%>
+    for <%= link_to h(@claim.group.name), group_url(:urlslug=>@claim.group.urlslug) %>
+    <%- end -%>
+  </h4>
+  
+  <% if @claim.has_supporting_material? or liuid == @claim.user_id %>
+  <div id="supporting_material">
+    <% if @claim.body -%>
+    <p><%= safe_formatted(@claim.body, user_allowed_links?(@claim.user_id)) %></p>
+    <% end -%>
+    
+    <% if @claim.image -%>
+    <img src="<%=image_url(@claim.image,'claim')%>"
+         alt="claim image"
+         style="max-width:550px;"
+         />
+    <% end -%>
+    <div id="claim_tags" class="claim_tags">
+    <%= render :partial => 'tags', :locals => {:claim => @claim} %>
+    </div>
+  </div>
+  <% end %>
+
+
+</div>
+
+<script type="text/javascript">
+liu_current_votes[<%=@claim.id%>] = <%= @liuvote.nil? ? 'null' : (@liuvote.vote ? 'true' : 'false') %>;
+</script>
+
+<% if logged_in? -%>
+<%vote_up_url=url_for(:controller=>'claim',:action=>'vote',:claim_id=>@claim.id,:vote=>'yes')-%>
+<%vote_down_url=url_for(:controller=>'claim',:action=>'vote',:claim_id=>@claim.id,:vote=>'no')-%>
+<% else -%>
+<%vote_up_url=vote_down_url=url_for(:controller=>'auth',:action=>'login',:dest=>claim_url(:urlslug=>@claim.urlslug))%>
+
+<% end -%>
+
+<div id="at_the_polls_box">
+
+<% if logged_in? %> 
+<% if liuid == @claim.user_id and @claim.yeas + @claim.nays + @claim.comments_count == 1 %>
+<div id="retract_box">
+  <%= link_to "retract claim", :action => 'publish', :id => @claim.id, :retract => 'yes' %>
+</div>
+<% end -%>
+  <div id="claim_marking_box">
+    <% flag = @claim.flag_by(liu) %>
+      <div id="stop_watching_claim" 
+      <% unless flag and flag.watch %>style="display:none;"<% end %>
+      title="Stop watching this claim"
+      >
+        <%= link_to_remote t_image_tag('eye.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :watch => 'n'},
+        :after => "Element.hide('stop_watching_claim');
+                   Element.show('watch_claim');
+                   Element.show('trash_claim');
+                   " },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :watch => 'n'})}
+        %>
+      </div>
+      <div id="watch_claim"
+      <% if flag and (flag.watch or flag.trash) %>style="display:none;"<% end %>
+      title="Watch this claim"
+      >
+        <%= link_to_remote t_image_tag('eye_faint.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :watch => 'y'},
+        :after => "Element.hide('watch_claim');
+                   Element.hide('trash_claim');
+                   Element.show('stop_watching_claim');" },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :watch => 'y'})}
+        %>
+      </div>
+      <div style="padding-top:5px; padding-left: 2px;
+      <% if flag and (flag.watch or flag.trash) %>display:none;<% end %>"
+      id="trash_claim"
+      title="Filter out this claim"
+      >
+        <%= link_to_remote t_image_tag('trash.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :trash => 'y'},
+        :after => "Element.hide('trash_claim');
+                   Element.hide('watch_claim');
+                   Element.show('untrash_claim');" },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :trash => 'y'})}
+        %>
+      </div>
+      <div style="padding-top:5px; padding-left: 2px;
+      <% unless flag and flag.trash %>display:none;<% end %>"
+      id="untrash_claim"
+      title="Unfilter this claim"
+      >
+        <%= link_to_remote t_image_tag('trash_remove.png'), {
+        :url => {:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :trash => 'n'}, 
+        :after => "Element.hide('untrash_claim');
+                   Element.show('trash_claim');
+                   Element.show('watch_claim');" },
+        {:href => url_for({:controller => 'claim', :action => 'mark', :claim_id => @claim.id, :trash => 'n'})}
+        %>
+      </div>
+  </div>
+
+<% if liu.can_flag(@claim) %>
+  <div id="flag_box">
+    <%= link_to("red flag",{:action=>'flag',:claim_id=>@claim.id},{:confirm=>'are you sure?'}) %>
+  </div>
+<% end -%>
+<% end -%>
+
+
+  <div id="make_a_vote_box">
+  
+    <div id="showing_vote"
+         class="showing_votes <%=cw_class(@claim)%>"
+         onmouseover="Element.show('making_vote');">
+      <a id="votes_left" rel="nofollow"
+         href="<%=vote_up_url%>"
+         rev="vote-for"
+         class="left_value <%='selected' if @liuvote and @liuvote.vote%>">
+        <span id="votes_left_text" style="color:#fff;"><%=@claim.yeas%></span>
+      </a>
+      <a id="votes_right" rel="nofollow"
+         href="<%=vote_down_url%>"
+         rev="vote-against"
+         class="right_value <%='selected' if @liuvote and @liuvote.vote==false%>">
+        <span id="votes_right_text" style="color:#fff;"><%=@claim.nays%></span>
+      </a>
+    </div>
+    
+    <div id="making_vote"
+         class="making_a_vote"
+         style="display:none;"
+         onmouseover="Element.show(this);"
+         onmouseout="Element.hide(this);">
+
+      <a id="votes_for"
+         class="left_value" rel="nofollow"
+         rev="vote-for"
+         href="<%= vote_up_url %>"
+         <% if liuid -%>
+         onclick="vote_for(this,'left',null,'<%=vote_up_url%>',<%=@claim.id%>);return false;"
+         <% end -%>
+         onmouseover="position_claim_background(this);"
+         onmouseout="reposition_claim_background(this);">
+        <span id="voting_left_text" style="color:#fff;"><%= @claim.yeas %></span>
+      </a>
+      <a id="votes_against" rel="nofollow"
+         class="right_value"
+         href="<%= vote_down_url %>"
+         rev="vote-against"
+         <% if liuid -%>
+         onclick="vote_for(this,'right',null,'<%=vote_down_url%>',<%=@claim.id%>);return false;"
+         <% end -%>
+         onmouseover="position_claim_background(this);"
+         onmouseout="reposition_claim_background(this);">
+        <span id="voting_right_text" style="color:#fff;"><%= @claim.nays %></span>
+      </a>
+      
+    </div>
+    
+  </div>
+
+  <% if liuid -%>
+  <div id="meta_y_user_link" class="<%=cred_class(liuid)%> your_vote" style="display:none;">
+  <%= user_link :user => liu %>
+  <%= cred_img liuid %>
+  </div>
+  <div id="meta_n_user_link" class="<%=cred_class(liuid)%> your_vote" style="display:none;">
+  <%= cred_img liuid %>
+  <%= user_link :user => liu %>
+  </div>
+  <% end -%>
+  
+
+  <% trunc = 17 -%>
+  <div id="agreed_disagreed_box">
+    
+    <div id="votes_for_box">
+      <h4>Agreed</h4>
+
+      <% lhs_users = (@yea_vote_users[5...10] or []) -%>
+      <% rhs_users = (@yea_vote_users[0...5] or []) -%>
+      <% remaining = @claim.yeas - (lhs_users.length + rhs_users.length) -%>
+      <table>
+        <tr>
+          <td>
+            <ul class="plain_list dots_on_right">
+              <% lhs_users.each {|u| -%>
+              <li class="<%=cred_class(u.id)%>">
+                <%= user_link({:user => u,:truncate=>trunc}, html_ops_for_voter(@claim,u)) %>
+                <%= cred_img u.id %>
+              </li>
+              <% } -%>
+          </ul>
+          </td>
+          <td>              
+            <ul id="agreed_list" class="plain_list dots_on_right">
+              <% if @yea_vote_users.length > 0 -%>
+              <% rhs_users.each {|u| -%>
+              <li class="<%=cred_class(u.id)%> <%='your_vote' if u==liu%>"
+                  <%if u==liu%>id="your_vote"<%end%>
+                  >
+                <%= user_link({:user => u,:truncate=>trunc}, html_ops_for_voter(@claim,u))%>
+                <%= cred_img u.id %>
+              </li>
+              <% } -%>
+              <% end -%>
+
+              <li id="nobody_agrees"
+                 <%='style="display:none;"' if @yea_vote_users.length > 0%>
+                >
+                Nobody agrees
+              </li>
+            </ul>
+
+          </td>
+
+        </tr>
+      </table>
+
+      <div class="fine_print list_of_groups">
+        <% if remaining > 0 -%>
+        <a href="<%=url_for(:action=>'votes',:votes=>'yes',:id=>@claim.id)%>">
+        And <%=remaining%> more
+        </a>
+        <% end -%>
+      </div>
+
+    </div>
+    
+    <div id="votes_against_box">
+
+      <h4>Disagreed</h4>
+      
+      <% rhs_users = (@nay_vote_users[5...10] or []) -%>
+      <% lhs_users = (@nay_vote_users[0...5] or []) -%>
+      <% remaining = @claim.nays - (lhs_users.length + rhs_users.length) -%>
+      <table>
+        <tr>
+          <td>
+
+            <ul id="disagreed_list" class="plain_list">
+            <% if @nay_vote_users.length > 0 -%>
+              <% lhs_users.each {|u| -%>
+              <li class="<%=cred_class(u.id)%> <%='your_vote' if u==liu%>"
+                  <%if u==liu%>id="your_vote"<%end-%>
+                  >
+                <%= cred_img u.id %>
+                <%= user_link({:user=>u,:truncate=>trunc},html_ops_for_voter(@claim,u)) %>
+              </li>
+              <% } -%>
+              <% end -%>
+
+              <li id="nobody_disagrees"
+                 <%='style="display:none;"' if @nay_vote_users.length > 0%>
+                >
+                Nobody disagrees
+              </li>
+
+            </ul>
+          </td>
+          <td>
+            <ul class="plain_list">
+              <% rhs_users.each {|u| -%>
+              <li class="<%=cred_class(u.id)%>">
+                <%= cred_img u.id %>
+                <%= user_link({:user=>u,:truncate=>trunc}, html_ops_for_voter(@claim,u)) %>
+              </li>
+              <% } -%>              
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <div class="fine_print list_of_groups">
+        <% if remaining > 0 -%>
+        <a href="<%=url_for(:action=>'votes',:id=>@claim.id,:votes=>'no')%>">
+        And <%=remaining%> more
+        </a>
+        <% end -%>
+      </div>
+
+    </div>
+    <div class="clear"></div>
+
+  </div>
+  
+</div>
+
+<%- unless @claim.group_id -%>
+<div id="claim_actions_box" class="fine_print">
+  
+  <b>Embed Claim</b>
+  <input type="text"
+         onclick="this.select();"
+         value="<iframe src=&quot;<%=url_for(:controller=>'widget',:action=>'claim',:urlslug=>@claim.urlslug,:only_path=>false)%>&quot; style=&quot;width:400px;height:60px;border:1px solid #777;&quot; scrolling=&quot;no&quot;></iframe>" />
+
+  <%- unless @claim.group_id -%>
+  <%= link_to('Make a related claim', :action => 'new', :claimable_type => 'Claim', :claimable_id => @claim.id) %>
+  <%- end -%>
+
+  <% if logged_in? and not ie6? %>
+  <span id="claim_invite_link" style="display:none;">
+    <a href="#" onclick="Element.show('overlay'); Element.show('claim_invite_form'); return false;">Invite</a>
+  <script type="text/javascript">
+  Element.show("claim_invite_link");
+  </script>
+  </span>
+  <% end %>
+
+</div>
+<%- end -%>
+<br/>
+<div style="text-align:center;">
+<script type="text/javascript"><!--
+google_ad_client = "pub-9800907689614283";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "text";
+google_ad_channel = "";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "3b296f";
+google_color_text = "000000";
+google_color_url = "319440";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+
+<div id="claims_spun_off_this">
+
+  <% if @claim.claimings.length > 0 -%>
+  <h2>This claim was inspired by</h2>
+  <ul class="plain_list">
+    <% @claim.inspired_by_claims.each {|c| -%>
+    <li>
+      <a href="<%= claim_url :urlslug=>c.urlslug %>">
+        <span class="inline_score <%= cw_class(c) %>">
+          <%= c.yeas.to_s+'-'+c.nays.to_s %>
+        </span>
+        <%= render_claim_title(c,false) %>
+      </a>
+    </li>
+    <% } -%>
+    <% @claim.inspired_by_comments.each {|c| cc = c.claim -%>
+    <li>
+      <a href="<%= claim_url :urlslug=>cc.urlslug, :anchor => "comment_#{c.id}" %>"><%= c.user.dn %>'s comment</a> on <a href="<%= claim_url :urlslug=>c.claim.urlslug %>">
+        <%= render_claim_title(c.claim,false) %>
+      </a>
+    </li>
+    <% } -%>
+  </ul>
+  <% end -%>
+
+  <% if @claim.inspired_claims.length > 0 -%>
+  <h2>Claims inspired by this one</h2>
+  <ul class="plain_list">
+    <% @claim.inspired_claims.each {|c| -%>
+    <li>
+      <a href="<%= claim_url :urlslug=>c.urlslug %>">
+        <span class="inline_score <%= cw_class(c) %>">
+          <%= c.yeas.to_s+'-'+c.nays.to_s %>
+        </span>
+        <%= render_claim_title(c,false) %>
+      </a>
+    </li>
+    <% } -%>
+  </ul>
+  <% end -%>
+
+  <% if @similar.length > 0 -%>
+  <h2>Similar claims</h2>
+  <ul class="plain_list">
+    <% @similar.each {|c| -%>
+    <li>
+      <a href="<%= claim_url :urlslug=>c.urlslug %>">
+        <span class="inline_score <%= cw_class(c) %>">
+          <%= c.yeas.to_s+'-'+c.nays.to_s %>
+        </span>
+        <%= render_claim_title(c,false) %>
+      </a>
+    </li>
+    <% } -%>
+  </ul>
+  <% end -%>
+
+</div>
+
+
+
+<div id="comments">
+  <h2>Discussion
+    <%- if @comments.size > 0 -%>(<%=@comments.size%>)<%- end -%>
+  </h2>
+  
+  <div id="all_comments">
+  <%= render :partial => 'comment', :collection => @comments %>
+  </div>
+  
+  <!-- Add a Comment -->
+  <% if liuid -%>
+  <label for="new_comment_textarea">
+  <h3 id="new_comment">Make a new comment</h3>
+  </label>
+
+  <div id="comment_preview"></div>
+
+  <% form_tag :action => 'comment' do %>
+  <%= hidden_field_tag :claim_id, @claim.id %>
+  <textarea id="new_comment_textarea" name="body"></textarea>
+  <noscript>
+  <%= submit_tag "Publish comment" %>
+  </noscript>
+  <div id="ajax_comment_buttons" style="display:none;">
+    <%= submit_to_remote('preview', 'Preview', 
+           :url => {:action => 'comment'}, 
+           :update => 'comment_preview', 
+           :with => 'Form.serialize(this.form) + "&preview=t"', 
+           :after => "Element.show('comment_spinner');", 
+           :loaded => "Element.hide('comment_spinner');")
+        %>
+    <%= submit_to_remote('publish', 'Publish', 
+           :url => {:action => 'comment'}, 
+           :html => {:id => 'publish'},
+           :update => 'all_comments', 
+           :with => 'Form.serialize(this.form) + "&publish=t"', 
+           :before => 'this.disabled = true;',
+           :after => "Element.show('comment_spinner');", 
+           :loaded => "Element.hide('comment_spinner'); $('publish').disabled = false;")
+        %>
+  <span id='comment_spinner' class='spinner' style="margin-left: 1em; display:none;" />
+  </div>
+  <script type="text/javascript">
+    Element.show("ajax_comment_buttons");
+  </script>
+  <% end %>
+  <% else -%>
+  <%= link_to 'Sign in',:controller=>'auth',:action=>'login'%> in to leave a comment.
+  <% end -%>
+
+</div>
+
+
+<div id="claim_invite_form" style="display:none;">
+  <a style="float:right;text-decoration: none;" href="#" onclick="Element.hide('claim_invite_form'); Element.hide('overlay'); return false;">X</a>
+  <div>
+    <h2>Send an invitation to this claim</h2>
+    <% form_remote_tag(
+        :url => {:action => 'invite'},
+        :update => 'claim_invite_message',
+        :before => "if($F('openid_or_email') == 'OpenID or Email') {$('openid_or_email').value='';}"
+     ) do
+    %>
+    <p>
+      Enter an OpenID to invite a Jyter to this claim, or an email address to invite someone new to Jyte.
+    </p>
+    <center>
+    <div>
+    <input type="text" name="openid_or_email" id="openid_or_email"
+         value="OpenID or Email" onclick="if(this.value == 'OpenID or Email') {this.value='';};" />
+    <%= hidden_field_tag :claim_id, @claim.id %>
+    <%= submit_tag 'Invite' %>
+    </div>
+    </center>
+    <% end %>
+
+    <center>
+    <div id="claim_invite_message"></div>
+    <hr/>
+    <div id="user_find">
+      <%= render :partial => '/user_find' %>
+    </div>
+    </center>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,13 @@
+<a id="<%=name%>_tab_selected"
+   href="<%= url_for(:controller=>'home',:action => name) %>"
+   class="history_tab current"
+   <% unless @action_name == name %>style="display:none;"<% end %>
+   ><%= display_tab(text) %></a>
+
+<a href="<%= url_for(:controller=>'home',:action => name) %>"
+   id="<%=name%>_tab"
+   class="history_tab <%='new' if new_count > 0 %>"
+  <% if @action_name == name %>style="display:none;"<% end %>
+  ><%= display_tab(text) %>
+</a>
+

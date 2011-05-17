@@ -1,0 +1,28 @@
+<% if @users.size == 20 %>
+<%= link_to_remote 'Next 20', :controller => 'user', :action => 'quick_find', :update => 'user_find_results' %>
+<% end %>
+<table style="width:80%;">
+<tr>
+<td>
+<% unless users.empty? %>
+<ul class="plain_list">
+<% users[0...10].each{|u| %>
+<li>
+<%= user_link :user => u %>&nbsp;&nbsp;<%= u.ss %>
+</li>
+<% } %>
+</ul>
+<% end %>
+</td>
+<td>
+<% if users.size > 10 %>
+<ul class="plain_list">
+<% users[10...20].each{|u| %>
+<li>
+<%= user_link :user => u %>&nbsp;&nbsp;<%= u.ss %>
+</li>
+<% } %>
+</ul>
+<% end %>
+</td>
+</table>

@@ -1,0 +1,13 @@
+<h2>Jyte Account Settings</h2>
+<br/><br/>
+<% unless liu.blocked_users.empty? %>
+  <h2>Ignored Users</h2>
+  <% liu.blocked_users.each {|u| %>
+    <span id="ignoring_<%= u.id %>">
+    <%= render :partial => 'ignoring', :locals => {:user => u, :ignoring => true} %>
+    </span>
+    <br/>
+  <% } %>
+<% end %>
+
+<br/>

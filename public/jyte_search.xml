@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Jyte</ShortName>
+  <Description>Search for people and claims on Jyte.</Description>
+  <Tags>cred claims people jyte</Tags>
+  <Contact>support@jyte.com</Contact>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Url type="text/html" template="http://jyte.com/site/search?q={searchTerms}"/>
+  <Image height="16" width="16" type="image/vnd.microsoft.icon">http://jyte.com/favicon.ico</Image>
+  <Query role="example" searchTerms="cycling foo"/>
+  <Language>en-us</Language>
+</OpenSearchDescription>

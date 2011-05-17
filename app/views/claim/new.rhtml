@@ -1,0 +1,84 @@
+<h1><label for="new_claim_box">Make a claim
+<%- if @group -%>
+for the
+<%= link_to h(@group.name),group_url(:urlslug=>@group.urlslug)
+  %> group
+<%- end -%>
+<%- if @claimable -%>
+  <%- c = @claimable -%>
+  <% if @claimable_type == "Comment" -%>
+     inspired by <%= user_link :id=>c.user_id %>'s comment on
+    <%= link_to(render_claim_title(c.claim, false),:action =>'show',:id =>c.claim_id) %> 
+  <% elsif @claimable_type == "Claim" -%>
+    inspired by <%= link_to render_claim_title(c, false), :action => 'show', :id =>c.id %>
+  <% end -%>
+<%- end -%>
+</label></h1>
+<br/>
+
+<table>
+<tr><td>
+<% form_tag :action => 'new_submit' do %>
+
+  <%- if @group -%>
+    <%= hidden_field_tag :group_id, h(@group.id) %>
+  <%- end -%>
+
+  <% if @claimable -%>
+    <% c = @claimable %>
+    <%= hidden_field_tag :claimable_type, h(@claimable_type) %>
+    <%= hidden_field_tag :claimable_id, h(@claimable_id) %>
+  <% end -%>  
+
+  <% text = (params[:text] or "") -%>
+  <input type="text"
+         name="new_claim_text"
+         value="<%= strip_tags(text) %>"
+         class="claim_edit_box claim_text_size"
+         style="width:632px;"
+         id="new_claim_box"
+         spellcheck="true"
+         />
+</td></tr>
+<tr><td>
+  <div class="under_claim">
+    <div style="padding:1em;">
+      <input type="submit" value="Claim it!"  style="font-size:1.8em;float:right;margin-bottom:1em;margin-left:2em;"/>
+
+      <h2>What's a claim?</h2>
+      <p>A claim is a statement about someone or something. Really, it
+      can be anything you want.  Be creative.
+        </p>
+
+      <p>      
+        When making a claim about yourself or someone else, <b>use their OpenID</b>.
+      </p>
+
+      <h2>Example claims</h2>
+      <div style="padding-left:.5em;">
+        &rarr;&nbsp;kveton.com lives in Oregon<br/>
+        &rarr;&nbsp;brianellin.com speaks Klingon<br/>
+        &rarr;&nbsp;Portland, Oregon has the best coffee in the world<br/>
+        &rarr;&nbsp;Borat is funny<br/>
+        &rarr;&nbsp;For more examples, browse
+        <%= link_to "everyone's claims", :controller=>'claim',:action=>'find'%>
+      </div>
+    </div>
+    <div class="clear"></div>
+
+  </div>
+
+<% end %>
+
+      <br/>
+      <div id="user_find">
+        <%= render :partial => '/user_find' %>
+      </div>
+
+</div>
+
+</td></tr></table>
+
+<script type="text/javascript">
+$('new_claim_box').focus();
+</script>

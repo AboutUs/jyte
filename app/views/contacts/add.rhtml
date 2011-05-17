@@ -1,0 +1,34 @@
+<h2>Add <%= @user.display_name %> to your contacts</h2>
+<br/>
+<% form_tag :action => 'add_submit', :user_id => @user.id do %>
+
+<div class="accent_box" style="width:30em;">
+
+<span style="color:#000;">Optionally describe your relationship</span>
+<br/>
+<span style="font-size:smaller;">
+<% if @all_tags.length > 0 %>
+Your other relations:
+<% @all_tags.each {|t| -%>
+  <%= contact_rel_link(t) %>
+<% } -%>
+<% else %>
+Examples:
+<%= contact_rel_link 'friend' %>
+<%= contact_rel_link 'family' %>
+<%= contact_rel_link 'met' %>
+<%= contact_rel_link 'co-worker' %>
+<% end %>
+</span>
+
+<input type="text"
+       name="contact_tags"
+       id="contact_tags"
+       style="width:27em;margin-top:.2em;" />
+
+</div>
+
+<%= submit_tag 'Add contact' %> or <a href="#"
+                                      onclick="history.go(-1);return false;">cancel</a>
+<% end %>
+

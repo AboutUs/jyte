@@ -1,0 +1,68 @@
+<%= render :partial => 'tabs' %>
+<div id="history_box" class="history_box" style="margin-top:2em;padding-left:0;">
+
+<h2>Contact's Claims</h2>
+<p>
+Below are all the claims made by your
+<%=link_to('contacts',:controller=>'contacts',:id=>liuid)%>.
+Find more <%= link_to('contacts from gmail', :controller => :contacts, :action => :compare)%>.
+</p>
+
+<%- if @contact_ids.empty? -%>
+You don't have any contacts.  Click the "Add contact" link on a user's
+profile page for their claims to show up here.
+
+<%- else -%>
+<div id="listing_container">
+
+<div id="results_box">
+
+<%= page_entries_info  @claims %>
+
+<div id="listings_container">
+  <%- if @claims.size > 0 -%>
+  <table>
+    <%= render :partial => '/claim', :collection => @claims %>
+  </table>
+  <%- else -%>
+  No claims 
+  <%- end -%>
+
+  <%= will_paginate @claims %>
+</div>
+
+</div>
+</div>
+
+<div id="left_side_box">
+
+  <table style="border-collapse:collapse;">
+
+    <% cols = 2.0 %>
+    <% rows = (@showing_contacts.size / cols).ceil %>
+    <% g = 0 %>
+    
+    <% for i in 0...rows %>
+    <tr>
+      <% for j in 0...cols %>
+      <td style="padding:5px;">
+        <% if g < @showing_contacts.size %>
+           <%= icon_image(:user => @showing_contacts[g].contact,:size=>'thumb') %>
+        <% else %>
+        &nbsp;
+        <% end %>
+        <% g += 1 %>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </table>
+
+
+
+
+</div>
+
+<%- end -%>
+
+</div>

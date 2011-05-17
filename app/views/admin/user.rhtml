@@ -1,0 +1,44 @@
+<h2>User Admin</h2>
+
+<%= link_to 'admin home', :action => 'index' %>
+<br/><br/>
+<h4><%=@user.dn%></h4>
+
+<ul style="margin-left:2em;">
+  <li><a href="<%=xprofile_url(@user.s)%>">view profile</a></li>
+  <li>State: <%= @user.get_state.to_s %></li>
+  <li>Created IP: <%= @user.created_ip %></li>
+  <li>Last login IP: <%= @user.last_login_ip %></li>
+  <li>Email: <%= @user.email %></li>
+</ul>
+
+<table>
+  <tr></tr>
+</table>
+
+
+<div>
+<h2>Log in as</h2>
+<% form_tag :action => 'log_in_as', :user_id => @user.id do %>
+ <%= submit_tag 'Log in as '+@user.dn %>
+<% end %>
+</div>
+
+<br/>
+
+<% if @user.get_state != :suspended -%>
+<div>
+  <h2>Suspend account</h2>
+
+  <% form_tag :action => 'suspend_submit',:user_id=>@user.id do %>
+  
+  <%= check_box_tag 'red_flag_claims', '1', checked=true %>
+  Red flag all claims
+  <br/>
+
+  <%= submit_tag 'Suspend account' %>
+
+  <% end %>
+
+</div>
+<% end -%> 

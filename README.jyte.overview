@@ -1,0 +1,73 @@
+Here's a high level overview of Jyte.
+
+Overview
+---------
+Jyte runs on two machines: japp1, jdb1
+
+japp1:
+We use apache to reverse-proxy to the mongrel based rails app servers.  There are roughly 8 mongrels serving the dynamic parts of the Jyte website.  Static files including CSS, images, and javascript are served directly by apache.  We use a forking mongrel server which is bound to a single port.  To control the rails server, use the following command:
+
+/etc/init.d/mongrel2 start|stop|restart
+
+This command will start running the rails code that is in /var/jyte/jyte/current
+
+jdb1:
+Here lives the MySql database.  We also run an Apache Solr instance here which powers the full-text indexing and search capability of the site.
+
+Release Cutting
+---------------
+At launch we used capistrano to manage release cutting, but it burned us so many times that we ditched it for a simpler approach.  There is a darcs repo at /var/jyte/jyte/current.  On our code server (janrain internal) we managed several code branches (jyte-development, jyte-production, etc).  When code is ready to deploy on the live site, we would simply push the patches from jyte-production to japp1:/var/jyte/jyte/current and then restart the service.  If migrations were involved, we would run them manually before restarting the app server.  This approach does result in a few seconds of service downtime, so there is much room for improvement there.
+
+
+Important Models
+---------------
+
+User:
+This model represents a user of the site.  Just about every other model in the system references the User model. A user has many Identifier(s).
+
+
+Identifier:
+OpenID identifier.  This may or may not be tied to a user.  It is used as the unique id for signing a user in to Jyte, as well as identifying the user in a claim about a person.
+
+
+Claim:
+The model that contains all the information about a claim.  A claim has votes, tags, and comments.
+
+
+FeaturedClaim:
+This model has a hard coded algorithm which examines claims to see if they should be featured.  Newly featured claims show up on the homepage.  The algoithm is something simple like: set Featured if Claim.votes > X  && Claim.comments > Y 
+
+Vote:
+Represents a vote on a claim by a user.
+
+
+Comment:
+Belongs to a Claim.
+
+
+Cred:
+An object that stores the actual gift from one user to another.  Underneath it uses the taggable interface, just like a claim, to manage the cred strings.
+
+
+CredScore:
+Where the acutal cred scores are stored during the cred calculation.  See the Rakefile for the code that processes cred and generates scores.  It was triggered by a cron every 15 minutes before it got too big for memory.
+
+
+Tag, Tagging, Taggable:
+We the acts_as_taggable rails plugin
+
+Caching:
+Jyte does not use memcahe or any other caching tool.  Some models like Claims have vote counter caches, but that's about it.
+
+
+Things I would do to Jyte:
+----------------------
+* Get rid of apache and use nginix instead.  It's faster, simpler, and doesn't crash randomly.
+* Split out cred processing to another server.  In it's current form it uses too much memory to run on the appserver.
+* Remove OpenID as a first class thing on website, and remove the display of OpenID identifiers.  OpenID didn't catch on in a visible way on the web, and the service should be re-focused on the User instead of their OpenID.  Additionally, many OpenIDs are opaque, non human readable strings, which doesn't work with the original Jyte approach.
+* Re-evaluate SOLR.  I was never thrilled with our search capability and it is a total black box.  It still works, but I have no idea what is going on inside.
+* Check the database indexes.  I bet there are many optimizations that could be made by tweaking these.
+* Make sure rails is up to date.  We only updated rails once during Jyte's lifetime and I'm sure it's running a very old and insecure version
+* Update the app server OS.
+* Test infrastructure. Add tests. Jyte was written *very* quickly, and with our limited resources we focused on creating a fun site instead of writing correct and bug-free code.  Some tests would probably be good for Jyte.
+

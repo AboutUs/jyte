@@ -1,0 +1,43 @@
+
+<div style="margin-bottom:1em;">
+  <%= icon_image :user=>liu,:size=>'thumb',:style=>'float:left;' %>
+  <div style="float:left;padding-left:1em;">
+    <h1>Hello, <a href="<%=xprofile_url(liu.s)%>" title="view your profile" style="text-decoration:none;"><%=liu.dn%></a></h1>
+    <%= link_to('edit profile', :controller=>'user',:action=>'account') %>
+    <%= link_to('make a claim about yourself', :controller => 'claim',:action => 'new', :text => liu.s) %>
+
+  </div>
+  <div style="margin-bottom:.3em;" class="clear"></div>
+</div>
+
+<div id="tab_nav">
+
+  <%= render(:partial => 'home_tab',
+             :locals => {:name => 'index', :text => 'Recent Activity', :new_count => @activity_count}) %>
+
+  <%= render(:partial => 'home_tab',
+             :locals => {:name => 'contact_claims', :text =>
+             "Contact's Claims", :new_count => 0})
+             %>
+
+  <%= render(:partial => 'home_tab',
+             :locals => {:name => 'interests', :text => 'Interests',
+             :new_count => 0})
+             %>
+
+  <div style="float:right;margin-right:5px;">
+  <%= render(:partial => 'home_tab',
+             :locals => {:name => 'drafts', :text => 'Drafts',
+             :new_count => 0}) %>
+
+  <%= render(:partial => 'home_tab',
+             :locals => {:name => 'settings', :text => 'Settings',
+             :new_count => 0})
+             %>
+  </div>
+
+    <div class="clear"></div>
+</div>
+
+
+

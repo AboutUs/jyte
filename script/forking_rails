@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+DAEMON = ARGV.member? "-d"
+
+require 'mongrel_hack2'
+load 'mongrel_rails'

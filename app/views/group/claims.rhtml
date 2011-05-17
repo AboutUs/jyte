@@ -1,0 +1,20 @@
+<div id="results_box">
+<h2>Claims by <%= h(@group.name) %> members</h2>
+<br/>
+<div id="listing_container">
+  <table>
+    <%= render :partial => '/claim', :collection => @claims %>
+  </table>
+</div>
+<%= will_paginate @claims %>
+</div>
+<div id="left_side_box">
+<%= link_to "Main group page", :action => 'show', :urlslug => @group.urlslug %>
+<br/><br/>
+<ul class="plain_list">
+<li><h4><%= h(@group.name) %> member list</h4></li>
+<% @group.users.each {|u| %>
+<li><%= link_to truncate("#{u.display_name}", 20), xprofile_url(u.s), :title => "Profile for #{u.ss}" %></li>
+<% } %>
+</ul>
+</div>

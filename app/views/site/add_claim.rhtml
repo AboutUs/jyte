@@ -1,0 +1,43 @@
+<h3>Make a Claim about someone else</h3>
+
+<% form_tag :controller => 'site', :action => 'add_claim_submit' do %>
+
+<label>Who is this claim about?</label><br/>
+<%= text_field_tag :subject_openid%><br/><br/>
+
+<label>Claim:</label><br/>
+<%= text_field_tag :title, @claim_title %>
+<br/><br/>
+
+<%= submit_tag 'Make claim' %>
+<% end %>
+
+<br/>
+<h3>Or, make a claim about yourself</h3>
+
+<span class="subtle small">Example: <%= logged_in_user.openid %> has brown hair</span>
+<br/><br/>
+<% form_tag :controller => 'site', :action =>'add_claim_submit' do %>
+
+<%= hidden_field_tag :subject_openid, logged_in_user.openid %>
+
+<%= h(logged_in_user.openid) %>&nbsp;<%= text_field_tag :title, @claim_title %>
+
+<%= submit_tag 'Make claim' %>
+
+<% end %>
+<br/>
+<h3>Or, make a social claim</h3>
+
+<% form_tag :controller => 'site', :action => 'add_social_claim' do %>
+
+<%= text_field_tag :subject_openid, logged_in_user.openid %>
+<select name="relationship">
+<%  xfn_order.each {|rel| -%>
+  <option value="<%= rel %>"><%= xfn_hash[rel] %></option>
+<% } -%>
+</select>
+<%= text_field_tag :object_openid %>
+<%= submit_tag 'Make claim' %>
+
+<% end %>

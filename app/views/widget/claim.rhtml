@@ -1,0 +1,80 @@
+<html>
+  <head>
+
+    <base target="_jyte" />
+    <%= stylesheet_link_tag 'j' %>
+
+    <style type="text/css">
+      body {background-color:#fff;}
+      a { color: #3b296f; outline: none; text-decoration:none; }
+      td {padding:5px;}
+      .claim_attributes a {text-decoration:underline;}
+      #widget {
+      width:100px;
+      height:50px;
+      background:url('/images/claim_embed_widget.png') no-repeat;
+      }
+    </style>
+
+    <% if RAILS_ENV == 'production' -%>
+    <script src="http://www.google-analytics.com/urchin.js"
+            type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      _uacct = "UA-72622-11";
+      urchinTracker();
+    </script>
+    <% end -%>
+    
+  </head>
+
+  <body>
+
+    <%claim_url=url_for(:controller=>'claim',:action=>'show',:urlslug=>@claim.urlslug)-%>
+
+    <table><tr>
+        <td style="width:100px;">
+          
+          <div id="widget" <% if params[:vertical] %>style="margin-left:auto;margin-right:auto;"<% end %>>
+               
+               <a href="<%= claim_url %>"
+                  class="left_value big_number"
+                  title="Vote at jyte.com"
+                  >
+                 <span style="color:#fff;"><%=@claim.yeas%></span>
+               </a>
+               
+               <a href="<%= claim_url %>"
+                  class="right_value big_number"
+                  title="Vote at jyte.com"
+                  >
+                 <span style="color:#fff;"><%=@claim.nays%></span>
+               </a>
+               
+          </div>
+
+        </td>
+        <% if params[:vertical] %>
+        </tr><tr>
+        <% end %>
+        <td style="padding-top:0;vertical-align:middle;">
+            <% rendered = render_claim_title(@claim,false) -%>
+            <% truncated = truncate(rendered, 60) -%>
+          <a href="<%=claim_url%>"
+             title="<%=rendered.gsub('"','&quot;')%>"
+             style="<%= 'font-size:1.5em;' if truncated.length < 20 %>">
+            <%= truncated %>
+          </a>
+  
+          <div class="claim_attributes">
+            By <span class="inline_dot <%=cred_class(@claim.user)%>">
+              <%= user_link(:user=>@claim.user)%></span>
+            at <a href="http://jyte.com/">Jyte.com</a>
+          </div>
+        </td>
+
+      </tr>
+    </table>
+    
+  </body>
+</html>

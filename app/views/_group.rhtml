@@ -1,0 +1,20 @@
+<table class="group" style="margin-bottom:.5em;">
+  <tr>
+    <td>
+      <a href="<%=gurl(group)%>" class="avatar">
+        <img src="<%= group_icon(:group=>group,:size=>'thumb',:url=>1) %>" />
+      </a>
+    </td>
+    <td class="group_text">
+      <a href="<%=gurl(group)%>"><%= h(group.name) %></a>
+      <div class="group_attributes">
+        <span class="group_members"><%=group.users.length%> members</span>
+      </div>
+      <div class="group_description">
+        <% if group.description -%>
+        <%= truncate(strip_tags(group.description),40) %>
+        <% end -%>
+      </div>
+    </td>
+  </tr>
+</table>
